@@ -1,5 +1,4 @@
-//Module Dependencies
 import Server from "./Server";
 
-//Set the app
+// Create the app
 let app: Server = new Server();

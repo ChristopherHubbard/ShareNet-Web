@@ -1,20 +1,18 @@
-//Module imports
 import * as Router from "koa-router"
 
-//Route Class
+// Class to create custom routers in a more structured manner
 export abstract class CustomRouter
 {
     public router: Router;
 
     protected title : string;
 
-    //Constructor
-    public constructor(title : string)
+    public constructor(title : string, prefix?: string)
     {
         this.title = title;
-        this.router = new Router();
+        this.router = new Router({ prefix: prefix });
 
-        // Create the routes? Should be defined in the sub class, so this should call that method?
+        // Create the routes -- will call the implemented method
         this.CreateRoutes();
     }
 

@@ -30,7 +30,6 @@ export class UserRouter extends CustomRouter
 
         this.router.get('/authenticate', async (ctx: Context): Promise<any> =>
         {
-            await 1
         });
     }
 }
