@@ -1,1 +1,0 @@
-{"version":3,"file":"CustomRouter.js","sourceRoot":"","sources":["../../../../../src/server/koa/routers/CustomRouter.ts"],"names":[],"mappings":";;AAAA,gBAAgB;AAChB,qCAAoC;AAEpC,aAAa;AACb,MAAsB,YAAY;IAM9B,aAAa;IACb,YAAmB,KAAc;QAE7B,IAAI,CAAC,KAAK,GAAG,KAAK,CAAC;QACnB,IAAI,CAAC,MAAM,GAAG,IAAI,MAAM,EAAE,CAAC;QAE3B,0FAA0F;QAC1F,IAAI,CAAC,YAAY,EAAE,CAAC;IACxB,CAAC;CAIJ;AAlBD,oCAkBC"}

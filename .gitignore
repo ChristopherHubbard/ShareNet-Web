@@ -61,4 +61,16 @@ typings/
 .next
 
 # package-lock.json
-.package-lock.json
+package-lock.json
+
+# Ignore IDEA and serverless cache files
+.idea
+.serverless
+
+# Ignore transpiled output
+/dist
+/distlib
+/tmp
+/out-tsc
+*.js
+*.js.map
