@@ -1,7 +1,5 @@
 //Module Dependencies
-import { Server } from "./Server";
-import * as Koa from 'koa';
+import Server from "./Server";
 
 //Set the app
-let Server: Server = new Server();
-
+let app: Server = new Server();

@@ -1,7 +1,7 @@
 // Import base route class
+import { Context } from "koa";
+import * as sender from "koa-send";
 import { CustomRouter } from "./CustomRouter";
-
-const sender: any = require('koa-send');
 
 // Defines the routes used at the index of the application
 export class IndexRouter extends CustomRouter
@@ -10,12 +10,11 @@ export class IndexRouter extends CustomRouter
     protected CreateRoutes(): void
     {
         //Add home page route
-        this.router.get('/', async (ctx) =>
+        this.router.get('/', async (ctx: Context): Promise<any> =>
         {
-            // This will serve the files from the directory specified -- should 
-            let dist: string = './dist'
+            // Send back the index HTML
             await sender(ctx, ctx.path, {
-                root: __dirname + dist
+                root: __dirname + "/index.html"
             });
         });
     }
