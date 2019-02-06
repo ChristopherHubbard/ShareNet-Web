@@ -5,6 +5,9 @@ import { reducer as form } from 'redux-form';
 import thunk from 'redux-thunk';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 
+// Import Styles?
+import './styles/test.scss';
+
 // Combine the reducers into a top level reducer
 const rootReducer = combineReducers({
     form: form
@@ -16,7 +19,7 @@ const store = createStore(rootReducer, compose(applyMiddleware(thunk)));
 // Render the top level app component -- provide the store
 render(
     <Provider store={store}>
-        <h2> This is a test </h2>
+        <h1 className="App"> It worked! </h1>
     </Provider>,
     document.getElementById('app')
 );
