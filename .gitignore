@@ -74,3 +74,9 @@ package-lock.json
 /out-tsc
 *.js
 *.js.map
+
+# Include the jest config
+!jest.config.js
+
+# Exclude binaries
+.DS_Store
