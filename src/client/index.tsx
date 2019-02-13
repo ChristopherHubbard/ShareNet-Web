@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { reducer as form } from 'redux-form';
 import thunk from 'redux-thunk';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import { App } from './components';
 
 // Import Styles?
 import './styles/test.scss';
@@ -19,7 +20,7 @@ const store = createStore(rootReducer, compose(applyMiddleware(thunk)));
 // Render the top level app component -- provide the store
 render(
     <Provider store={store}>
-        <h1 className="App"> It worked! </h1>
+        <App/>
     </Provider>,
     document.getElementById('app')
 );
