@@ -7,8 +7,8 @@
     "start": "npm run build && node --inspect-brk ./distlib/src/server/index.js",
     "build": "npm run copy && tsc -p ./ && webpack --config ./distlib/webpack.config.js --mode development",
     "deploy": "aws s3 sync --acl public-read --sse --delete ./dist/ s3://www.dn.com",
-    "copy": "copyfiles src/**/*.png distlib/",
-    "test": ""
+    "copy": "copyfiles src/**/*.png distlib/ && copyfiles src/**/*.scss distlib/",
+    "test": "jest --coverage --collectCoverageFrom=src/**/*.{ts,tsx}"
   },
   "repository": {
     "type": "git",
@@ -29,24 +29,41 @@
     "@types/react": "^16.8.1",
     "@types/react-dom": "^16.0.11",
     "@types/react-redux": "^7.0.1",
+    "@types/react-router-dom": "^4.3.1",
     "@types/redux-form": "^7.4.16",
     "copy-webpack-plugin": "^4.6.0",
     "copyfiles": "^2.1.0",
+    "css-loader": "^2.1.0",
     "koa": "^2.7.0",
     "koa-combine-routers": "^4.0.2",
     "koa-mount": "^4.0.0",
     "koa-router": "^7.4.0",
     "koa-send": "^5.0.0",
     "koa-static": "^5.0.0",
+    "node-sass": "^4.11.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-redux": "^6.0.0",
+    "react-router-dom": "^4.3.1",
     "redux": "^4.0.1",
     "redux-form": "^8.1.0",
     "redux-thunk": "^2.3.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "typings-for-css-modules-loader": "^1.7.0",
     "webpack": "^4.29.1"
   },
   "devDependencies": {
+    "@types/enzyme": "^3.1.16",
+    "@types/jest": "^24.0.0",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.9.1",
+    "enzyme-to-json": "^3.3.5",
+    "jest": "^24.1.0",
+    "jest-cli": "^24.1.0",
+    "redux-mock-store": "^1.5.3",
+    "ts-jest": "^23.10.5",
+    "typescript": "^3.3.1",
     "webpack-cli": "^3.2.3"
   }
 }
