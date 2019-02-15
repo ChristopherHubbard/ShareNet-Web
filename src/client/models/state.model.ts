@@ -1,4 +1,5 @@
 import { User } from './user.model';
+import { Device } from './device.model';
 
 export interface AuthenticationState
 {
@@ -11,4 +12,9 @@ export interface RegistrationState
 {
     registering?: boolean,
     registered?: boolean
+}
+
+export interface DeviceState
+{
+    devices?: Array<Device>
 }

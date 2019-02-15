@@ -4,5 +4,5 @@ import * as TestUtils from 'react-dom/test-utils';
 
 it("Test check on the index", () => {
 
-    expect("Hello").toEqual("Hello")
+    expect("Hello").toEqual("Hello");
 });
