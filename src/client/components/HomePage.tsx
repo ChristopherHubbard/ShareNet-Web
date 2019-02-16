@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect, DispatchProp } from 'react-redux';
-import { indexActions, predictionActions } from '../actions';
+import { indexActions } from '../actions';
 
 interface HomeProps
 {
@@ -28,9 +28,6 @@ class HomePage extends React.Component<HomeProps & DispatchProp<any>, {}>
         // When the index changes, dispatch the prediction action
         const { dispatch } = this.props;
         const selectedIndex = event.target.value;
-
-        // When the index changes -- dispatch the prediction action, which should first crawl on this index and then predict
-        dispatch(predictionActions.predict(selectedIndex));
     }
 
     public render(): React.ReactNode
@@ -50,7 +47,7 @@ class HomePage extends React.Component<HomeProps & DispatchProp<any>, {}>
 function mapStateToProps(state: any): HomeProps
 {
     // Extract the state from the action
-    const { } = state.companies;
+    const { } = state;
     return {
         
     };

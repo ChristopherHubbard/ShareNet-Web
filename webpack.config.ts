@@ -72,6 +72,11 @@ module.exports = {
           from: "./src/**/*.css",
           to: "",
           flatten: true
+        },
+        {
+          from: "./src/**/*.ico",
+          to: "",
+          flatten: true
         }
       ])
   ],

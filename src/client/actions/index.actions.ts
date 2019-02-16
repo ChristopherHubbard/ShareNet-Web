@@ -4,7 +4,6 @@ import { IndexService } from '../services';
 import { alertActions } from './alert.actions';
 import { Dispatch } from 'redux';
 import { history } from '../services';
-import { Company } from '../models/company.model';
 
 // Interfaces for the models
 interface IIndexActions
@@ -30,17 +29,7 @@ function getCompanyList(): (dispatch: Dispatch<any>) => void
         // Check type for this response
         try
         {
-            // Should be a post so no real response
-            const companies: Array<Company> = await IndexService.getCompanyList();
-
-            // Send success dispatches -- include the company list
-            dispatch(<IAction> {
-                type: indexConstants.GET_COMPANIES_SUCCESS,
-                companies: companies
-            });
-
-            // Dispatch the sucess
-            dispatch(alertActions.success('Companies retrieved'));
+            // Dispatch any actions for the homepage
         }
         catch(error)
         {

@@ -89,7 +89,7 @@ class RegisterPage extends React.Component<RegisterProps & DispatchProp<any> & I
                         <Field name="firstname" label="First name" type="text" validate={[required]} component={CustomInput} onChange={this.handleChange}/>
                     </div>
                     <div>
-                        <Field name="lastname" label="First name" type="text" validate={[required]} component={CustomInput} onChange={this.handleChange}/>
+                        <Field name="lastname" label="Last name" type="text" validate={[required]} component={CustomInput} onChange={this.handleChange}/>
                     </div>
                     <div>
                         <button type="submit" disabled={registering || invalid}> Submit </button>
