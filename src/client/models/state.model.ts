@@ -16,5 +16,7 @@ export interface RegistrationState
 
 export interface DeviceState
 {
-    devices?: Array<Device>
+    loadingDevices?: boolean
+    devices?: Array<Device>,
+    error?: string
 }

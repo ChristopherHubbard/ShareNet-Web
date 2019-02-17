@@ -8,5 +8,6 @@ export interface IAction
     message?: string,
     error?: string,
     user?: User,
-    devices?: Array<Device>
+    devices?: Array<Device>,
+    device?: Device
 }
