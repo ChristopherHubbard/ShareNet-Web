@@ -30,6 +30,7 @@ export class UserRouter extends CustomRouter
 
         this.router.get('/authenticate', async (ctx: Context): Promise<any> =>
         {
+            ctx.body = "Hello";
         });
     }
 }

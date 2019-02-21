@@ -3,18 +3,18 @@ import { Link } from 'react-router-dom';
 import { connect, DispatchProp } from 'react-redux';
 import { reduxForm, Field, Form, isPristine, InjectedFormProps } from 'redux-form';
 import { userActions } from '../actions';
-import { AuthenticationState as LoginProps } from '../models';
+import { LoginState as LoginProps } from '../models';
 import { CustomInput } from './CustomInput';
-import { required, validateUsername, validatePassword } from '../services';
+import { required, validateEmail, validatePassword } from '../services';
 
 interface LoginState
 {
-    username: string,
+    email: string,
     password: string,
     submitted: boolean
 }
 
-class LoginPage extends React.Component<LoginProps & DispatchProp<any> & InjectedFormProps, LoginState>
+export class LoginPage extends React.Component<LoginProps & DispatchProp<any> & InjectedFormProps, LoginState>
 {
     constructor(props: LoginProps & DispatchProp<any> & InjectedFormProps)
     {
@@ -25,7 +25,7 @@ class LoginPage extends React.Component<LoginProps & DispatchProp<any> & Injecte
         dispatch(userActions.logout());
 
         this.state = {
-            username: '',
+            email: '',
             password: '',
             submitted: false
         };
@@ -56,12 +56,12 @@ class LoginPage extends React.Component<LoginProps & DispatchProp<any> & Injecte
             submitted: true
         });
 
-        const { username, password } = this.state;
+        const { email, password } = this.state;
         const { dispatch } = this.props;
         
         // Dispatch the user login -- create user object -- no need for phone or email on login
         dispatch(userActions.login({
-            username,
+            email,
             password
         }));
     }
@@ -72,10 +72,10 @@ class LoginPage extends React.Component<LoginProps & DispatchProp<any> & Injecte
 
         return (
             <div>
-                <h1> Log in to Crypto </h1>
+                <h1> Log in to smart sharing </h1>
                 <Form onSubmit={this.handleSubmit}>
                     <div>
-                        <Field name="username" type="text" label="Username" component={CustomInput} validate={[required, validateUsername]} onChange={this.handleChange}/>
+                        <Field name="email" type="text" label="Email" component={CustomInput} validate={[required, validateEmail]} onChange={this.handleChange}/>
                     </div>
                     <div>
                         <Field name="password" type="password" label="Password" component={CustomInput} validate={[required, validatePassword]} onChange={this.handleChange}/>
@@ -94,7 +94,7 @@ class LoginPage extends React.Component<LoginProps & DispatchProp<any> & Injecte
 
 function mapStateToProps(state: any): LoginProps
 {
-    const { loggingIn } = state.authentication;
+    const { loggingIn } = state.login;
     return {
         loggingIn
     };

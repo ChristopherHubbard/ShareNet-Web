@@ -6,8 +6,8 @@
   "scripts": {
     "start": "npm run build && node --inspect-brk ./distlib/src/server/index.js",
     "build": "npm run copy && tsc -p ./ && webpack --config ./distlib/webpack.config.js --mode development",
-    "deploy": "aws s3 sync --acl public-read --sse --delete ./dist/ s3://www.dn.com",
-    "copy": "copyfiles src/**/*.png distlib/ && copyfiles src/**/*.scss distlib/",
+    "deploy": "npm run build && aws s3 sync dist/ s3://codius-smart-sharing-s3",
+    "copy": "copyfiles src/**/*.png distlib/ && copyfiles src/**/*.scss distlib/ && copyfiles src/**/*.ico distlib/",
     "test": "jest --coverage --collectCoverageFrom=src/**/*.{ts,tsx}"
   },
   "repository": {
@@ -21,16 +21,18 @@
   },
   "homepage": "https://github.com/ChristopherHubbard/codius-smart-sharing#readme",
   "dependencies": {
+    "@types/enzyme-adapter-react-16": "^1.0.4",
     "@types/koa": "^2.0.48",
     "@types/koa-mount": "^3.0.1",
     "@types/koa-router": "^7.0.39",
     "@types/koa-send": "^4.1.1",
     "@types/koa-static": "^4.0.0",
-    "@types/react": "^16.8.1",
+    "@types/react": "^16.8.4",
     "@types/react-dom": "^16.0.11",
     "@types/react-redux": "^7.0.1",
     "@types/react-router-dom": "^4.3.1",
     "@types/redux-form": "^7.4.16",
+    "axios": "^0.18.0",
     "copy-webpack-plugin": "^4.6.0",
     "copyfiles": "^2.1.0",
     "css-loader": "^2.1.0",
@@ -41,7 +43,7 @@
     "koa-send": "^5.0.0",
     "koa-static": "^5.0.0",
     "node-sass": "^4.11.0",
-    "react": "^16.7.0",
+    "react": "^16.8.2",
     "react-dom": "^16.7.0",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
@@ -54,14 +56,17 @@
     "webpack": "^4.29.1"
   },
   "devDependencies": {
-    "@types/enzyme": "^3.1.16",
+    "@types/enzyme": "^3.1.18",
     "@types/jest": "^24.0.0",
+    "@types/redux-mock-store": "^1.0.0",
+    "@types/sinon": "^7.0.6",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "enzyme-to-json": "^3.3.5",
     "jest": "^24.1.0",
     "jest-cli": "^24.1.0",
     "redux-mock-store": "^1.5.3",
+    "sinon": "^7.2.4",
     "ts-jest": "^23.10.5",
     "typescript": "^3.3.1",
     "webpack-cli": "^3.2.3"
