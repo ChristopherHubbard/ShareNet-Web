@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { connect, DispatchProp } from 'react-redux';
-import { reduxForm, Field, Form, isPristine, InjectedFormProps } from 'redux-form';
 import { deviceActions, alertActions } from '../actions';
 import { DeviceState as DeviceListProps, Device, User } from '../models';
 import { CustomInput } from './CustomInput';
@@ -9,22 +8,27 @@ import DeviceItem from './DeviceItem';
 
 interface DeviceListState
 {
-    newDevice: Device | undefined
+    newDevice: Device,
+    openNewDeviceDialog: boolean
 }
 
-class DeviceList extends React.Component<DeviceListProps & DispatchProp<any> & InjectedFormProps, DeviceListState>
+export class DeviceList extends React.Component<DeviceListProps & DispatchProp<any>, DeviceListState>
 {
-    constructor(props: DeviceListProps & DispatchProp<any> & InjectedFormProps)
+    constructor(props: DeviceListProps & DispatchProp<any>)
     {
         super(props);
         
         // Logout the user if not already logged out
         const { dispatch } = this.props;
 
+        let user: User = {
+            email: ''
+        };
+
         try
         {
             // Dispatch the event to get THIS user's devices
-            const user: User = JSON.parse(localStorage.getItem('user') as string);
+            user = JSON.parse(localStorage.getItem('user') as string);
             dispatch(deviceActions.get(user));
         }
         catch (error)
@@ -32,12 +36,53 @@ class DeviceList extends React.Component<DeviceListProps & DispatchProp<any> & I
             dispatch(alertActions.error('User not signed in'));
         }
 
+        // Set initial state to empty object
         this.state = {
-            newDevice: undefined
+            newDevice: {
+                name: '',
+                owner: user,
+                code: '',
+                contractURL: ''
+            },
+            openNewDeviceDialog: false
         };
 
         // Bind methods
+        this.handleChange = this.handleChange.bind(this);
+        this.handleOpenAddDevice = this.handleOpenAddDevice.bind(this);
+        this.handleCloseAddDevice = this.handleCloseAddDevice.bind(this);
         this.handleAddDevice = this.handleAddDevice.bind(this);
+    }
+
+    private handleChange(event: any): void
+    {
+        event = event as React.ChangeEvent<HTMLInputElement>;
+        const { name, value } = event.target;
+
+        // Update state -- why does this method not work?
+        this.setState((prevState) => ({
+            ...prevState,
+            newDevice: {
+                ...prevState.newDevice,
+                [name]: value
+            }
+        }));
+    }
+
+    private handleOpenAddDevice(): void
+    {
+        this.setState((prevState) => ({
+            ...prevState,
+            openNewDeviceDialog: true
+        }));
+    }
+
+    private handleCloseAddDevice(): void
+    {
+        this.setState((prevState) => ({
+            ...prevState,
+            openNewDeviceDialog: false
+        }));
     }
 
     private handleAddDevice(): void
@@ -46,31 +91,52 @@ class DeviceList extends React.Component<DeviceListProps & DispatchProp<any> & I
         const { dispatch } = this.props;
 
         // This is just a test device
-        const device: Device = {
-            name: 'Bar',
-            owner: JSON.parse(localStorage.getItem('user') as string),
-            code: '1234',
-            contractURL: ''
-        };
+        const { newDevice }  = this.state;
+
+        dispatch(deviceActions.add(newDevice));
+
+        // Close the dialog box and reset the new device state
+        const user: User = JSON.parse(localStorage.getItem('user') as string);
         this.setState({
-            newDevice: device
+            newDevice: {
+                name: '',
+                owner: user,
+                code: '',
+                contractURL: ''
+            },
+            openNewDeviceDialog: false
         });
-
-        // const device: Device = this.state.newDevice as Device;
-
-        dispatch(deviceActions.add(device))
     }
 
     public render(): React.ReactNode
     {
         const { devices } = this.props;
 
-        // Setup the device items
+        const { openNewDeviceDialog } = this.state
 
         return (
             <div>
                 Your devices
-                <button onClick={this.handleAddDevice}> Add Device </button>
+                <button name="openAdd" onClick={this.handleOpenAddDevice}> Add Device </button>
+                {
+                    openNewDeviceDialog && 
+                        (<div>
+                            <div>
+                                <label> Enter the device name </label>
+                                <input type="text" name="name" onChange={this.handleChange}/>
+                            </div>
+                            <div>
+                                <label> Enter the device code </label>
+                                <input type="text" name="code" onChange={this.handleChange}/>
+                            </div>
+                            <div>
+                                <label> Enter the contract URL </label>
+                                <input type="text" name="contractURL" onChange={this.handleChange}/>
+                            </div>
+                            <button name="cancelAdd" onClick={this.handleCloseAddDevice}> Cancel </button>
+                            <button name="add" onClick={this.handleAddDevice}> Add </button>
+                        </div>)
+                }
                 <ul>
                     {devices && devices.map((device: Device) => <DeviceItem device={device}/>)}
                 </ul>

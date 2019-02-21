@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { connect, DispatchProp } from 'react-redux';
-import { indexActions } from '../actions';
 
 interface HomeProps
 {
     
 }
 
-class HomePage extends React.Component<HomeProps & DispatchProp<any>, {}>
+export class HomePage extends React.Component<HomeProps & DispatchProp<any>, {}>
 {
     constructor(props: HomeProps & DispatchProp<any>)
     {
@@ -15,19 +14,6 @@ class HomePage extends React.Component<HomeProps & DispatchProp<any>, {}>
         
         // Get the dispatch function from the props
         const { dispatch } = this.props;
-
-        // On initialization set dispatch the action to get the indicies and then send the dispatch action
-        dispatch(indexActions.getCompanyList());
-
-        // Bind methods
-        this.onIndexChange = this.onIndexChange.bind(this);
-    }
-
-    private onIndexChange(event: React.ChangeEvent<HTMLSelectElement>): void
-    {
-        // When the index changes, dispatch the prediction action
-        const { dispatch } = this.props;
-        const selectedIndex = event.target.value;
     }
 
     public render(): React.ReactNode

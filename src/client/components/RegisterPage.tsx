@@ -15,7 +15,7 @@ interface RegisterState
 }
 
 // Register page should have both props and state
-class RegisterPage extends React.Component<RegisterProps & DispatchProp<any> & InjectedFormProps, RegisterState>
+export class RegisterPage extends React.Component<RegisterProps & DispatchProp<any> & InjectedFormProps, RegisterState>
 {
     constructor(props: RegisterProps & DispatchProp<any> & InjectedFormProps)
     {

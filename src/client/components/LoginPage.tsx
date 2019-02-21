@@ -14,7 +14,7 @@ interface LoginState
     submitted: boolean
 }
 
-class LoginPage extends React.Component<LoginProps & DispatchProp<any> & InjectedFormProps, LoginState>
+export class LoginPage extends React.Component<LoginProps & DispatchProp<any> & InjectedFormProps, LoginState>
 {
     constructor(props: LoginProps & DispatchProp<any> & InjectedFormProps)
     {

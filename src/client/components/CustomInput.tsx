@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 // Custom input component -- stateless component (handles re-rendering better if state isnt needed)
-export const CustomInput = ({ input, label, type, meta: { error, touched } }: any) => {
-
+export const CustomInput = ({ input, label, type, meta: { error, touched } }: any) =>
+{
     return (
         <div className="row-md">
             <div>

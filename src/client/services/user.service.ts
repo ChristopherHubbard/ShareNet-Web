@@ -46,20 +46,20 @@ export abstract class UserService
             const response: AxiosResponse = await axios.get(`${Config.apiUrl}/users/login`, requestOptions);
 
             // Check for the response token -- this proves authentication
-            const user = await response.data;
-            if (user.token)
+            const user: User = response.data;
+            if (user)
             {
                 // Add the user to the localStorage
                 localStorage.setItem('user', JSON.stringify(user));
             }
 
             // Return the user -- not necessarily authenticated
-            return await user;
+            return user;
         }
         catch(error)
         {
             // Log the error
-            console.log(error);
+            console.error(error);
         }
     }
 

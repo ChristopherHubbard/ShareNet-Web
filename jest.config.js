@@ -13,5 +13,10 @@ module.exports = {
       "json",
       "node"
     ],
-    "verbose": true
+    "verbose": true,
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/client/index.tsx",
+      "<rootDir>/src/client/components/LoginPage.tsx",
+      "<rootDir>/src/client/components/RegisterPage.tsx"
+    ]
   }

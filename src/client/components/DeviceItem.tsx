@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { connect, DispatchProp } from 'react-redux';
-import { InjectedFormProps } from 'redux-form';
 import { Device } from '../models';
 import { deviceActions } from '../actions';
 
@@ -15,9 +14,9 @@ interface DeviceItemState
 }
 
 // Not stateless -- should change on the click event
-class DeviceItem extends React.Component<DeviceItemProps & DispatchProp<any> & InjectedFormProps, DeviceItemState>
+export class DeviceItem extends React.Component<DeviceItemProps & DispatchProp<any>, DeviceItemState>
 {
-    public constructor(props: DeviceItemProps & DispatchProp<any> & InjectedFormProps)
+    public constructor(props: DeviceItemProps & DispatchProp<any>)
     {
         super(props);
 
@@ -70,16 +69,18 @@ class DeviceItem extends React.Component<DeviceItemProps & DispatchProp<any> & I
             el = (<div>
                     <div> Connection Code: {device.code} </div>
                     <div> Contract URL: {device.contractURL} </div>
-                    <div> Owner: {device.owner} </div>
+                    <div> Owner: {device.owner.email} </div>
 
                     <button onClick={this.handleRemoveDevice}> Remove Device </button>
                   </div>);
         }
 
         return (
-            <li onMouseLeave={this.onMouseLeave} onMouseOver={this.onMouseOver}>
+            <li onMouseLeave={this.onMouseLeave} onMouseOver={this.onMouseOver} key={device.code}>
                 {device.name}
-                {el}
+                <div>
+                    {el}
+                </div>
             </li>
         )
     }
