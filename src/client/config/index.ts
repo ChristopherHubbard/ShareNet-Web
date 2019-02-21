@@ -5,7 +5,7 @@ const allConfigs: any =
 {
     LOCAL: 
     {
-        apiUrl: 'http://localhost:8080'
+        apiUrl: 'http://localhost:8000'
     },
     DEV:
     {
@@ -17,11 +17,6 @@ const allConfigs: any =
     }
 };
 
-let config: any;
-
-if (typeof process.env.ENV === 'string')
-{
-    config = allConfigs[process.env.ENV];
-}
+let config: any = allConfigs['LOCAL'];
 
 export default config;
