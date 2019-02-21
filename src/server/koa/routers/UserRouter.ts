@@ -1,4 +1,4 @@
-import { Context } from "koa";
+import { Context, Request } from "koa";
 
 // Import base route class
 import { CustomRouter } from "./CustomRouter";
@@ -12,25 +12,32 @@ export class UserRouter extends CustomRouter
     // Implement the route creating method
     protected CreateRoutes(): void
     {
-        this.router.post('/register', async (ctx: Context): Promise<any> =>
+        this.router.post('/register', async (ctx: any): Promise<any> =>
         {
             // Hash and salt the password -- make sure all the info arrived
-            const user = ctx.body;
+            const user = ctx.request.body.body;
 
-            if (user.username === '' || user.password === '' || user.phone === '' || user.email === '')
+            if (user.email === '' || user.password === '' || user.firstname === '' || user.lastname === '')
             {
                 // Send no authorization response
+                ctx.status = 404;
             }
             else
             {
                 // Save user to the DB
                 users.push(user);
+                ctx.body = user;
+                ctx.status = 200;
             }
         });
 
-        this.router.get('/authenticate', async (ctx: Context): Promise<any> =>
+        this.router.get('/login', async (ctx: Context): Promise<any> =>
         {
-            ctx.body = "Hello";
+            if (users.find(((user: any) => user.email === ctx.query.email && user.password === ctx.query.password)))
+            {
+                ctx.body = ctx.query;
+                ctx.status = 200;
+            }
         });
     }
 }
