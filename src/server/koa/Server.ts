@@ -1,7 +1,7 @@
 import * as Koa from "koa";
 import * as combineRouters from "koa-combine-routers";
 import * as serve from "koa-static";
-import { UserRouter } from "./routers";
+import { UserRouter, DeviceRouter } from "./routers";
 
 let path: any = require("path");
 let bodyParser: any = require('koa-bodyparser');
@@ -42,7 +42,7 @@ export default class Server
     {
         // Attach all the routers
         const combinedRouter = combineRouters(
-            //new IndexRouter("This is the homepage router for client testing.").router,
+            new DeviceRouter("This is the device router for client testing.").router,
             new UserRouter("This is the router to handle mocked user registration and login", "/users").router
         );
         

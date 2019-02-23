@@ -1,0 +1,15 @@
+interface IConnectionConstants
+{
+    GET_CONNECTION_REQUEST: string,
+    GET_CONNECTION_SUCCESS: string,
+    GET_CONNECTION_ERROR: string,
+    CONNECT_SUCCESS: string
+}
+
+export const connectionConstants: IConnectionConstants =
+{
+    GET_CONNECTION_REQUEST: 'GET_CONNECTION_REQUEST',
+    GET_CONNECTION_SUCCESS: 'GET_CONNECTION_SUCCESS',
+    GET_CONNECTION_ERROR: 'GET_CONNECTION_ERROR',
+    CONNECT_SUCCESS: 'CONNECT_SUCCESS'
+}

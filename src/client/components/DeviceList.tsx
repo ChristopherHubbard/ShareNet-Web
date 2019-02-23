@@ -116,8 +116,13 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
 
         return (
             <div>
-                Your devices
-                <button name="openAdd" onClick={this.handleOpenAddDevice}> Add Device </button>
+                <h2> Your devices </h2>
+                {
+                    !openNewDeviceDialog &&
+                        (<div>
+                            <button name="openAdd" onClick={this.handleOpenAddDevice}> Add Device </button>
+                         </div>)
+                }
                 {
                     openNewDeviceDialog && 
                         (<div>
@@ -133,8 +138,8 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                                 <label> Enter the contract URL </label>
                                 <input type="text" name="contractURL" onChange={this.handleChange}/>
                             </div>
-                            <button name="cancelAdd" onClick={this.handleCloseAddDevice}> Cancel </button>
                             <button name="add" onClick={this.handleAddDevice}> Add </button>
+                            <button name="cancelAdd" onClick={this.handleCloseAddDevice}> Cancel </button>
                         </div>)
                 }
                 <ul>

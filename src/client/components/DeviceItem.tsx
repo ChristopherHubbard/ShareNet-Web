@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect, DispatchProp } from 'react-redux';
-import { Device } from '../models';
+import { Device, User } from '../models';
 import { deviceActions } from '../actions';
 
 interface DeviceItemProps
@@ -25,25 +25,29 @@ export class DeviceItem extends React.Component<DeviceItemProps & DispatchProp<a
             selected: false
         };
 
-        this.onMouseLeave = this.onMouseLeave.bind(this);
-        this.onMouseOver = this.onMouseOver.bind(this);
+        this.onBlur = this.onBlur.bind(this);
+        this.onClick = this.onClick.bind(this);
         this.handleRemoveDevice = this.handleRemoveDevice.bind(this);
     }
 
-    private onMouseLeave(event: React.MouseEvent<HTMLElement>): void
+    private onBlur(event: React.FocusEvent<HTMLElement>): void
     {
-        event.preventDefault();
-
         // Set the selected state to false
-        this.setState({
-            selected: false
-        });
+        var currentTarget = event.currentTarget;
+
+        setTimeout(() => 
+        {
+            if (!currentTarget.contains(document.activeElement))
+            {
+                this.setState({
+                    selected: false
+                });
+            }
+        }, 0);
     }
 
-    private onMouseOver(event: React.MouseEvent<HTMLElement>): void
+    private onClick(event: React.MouseEvent<HTMLElement>): void
     {
-        event.preventDefault();
-
         // Set the selected state to true
         this.setState({
             selected: true
@@ -61,25 +65,19 @@ export class DeviceItem extends React.Component<DeviceItemProps & DispatchProp<a
     public render(): React.ReactNode
     {
         const { device } = this.props;
-
-        // If selected create the extra info -- code and link using url
-        let el: JSX.Element = <div/>
-        if (this.state.selected)
-        {
-            el = (<div>
-                    <div> Connection Code: {device.code} </div>
-                    <div> Contract URL: {device.contractURL} </div>
-                    <div> Owner: {device.owner.email} </div>
-
-                    <button onClick={this.handleRemoveDevice}> Remove Device </button>
-                  </div>);
-        }
+        const { selected } = this.state;
 
         return (
-            <li onMouseLeave={this.onMouseLeave} onMouseOver={this.onMouseOver} key={device.code}>
-                {device.name}
+            <li tabIndex={-1} onBlur={this.onBlur} onClick={this.onClick} key={device.code}>
+                <h3> {device.name} </h3>
                 <div>
-                    {el}
+                    {selected && (<div>
+                                    <div> Device Name: {device.name} </div>
+                                    <div> Connection Code: {device.code} </div>
+                                    <div> Contract URL: {device.contractURL} </div>
+
+                                    <button onClick={this.handleRemoveDevice}> Remove Device </button>
+                                  </div>)}
                 </div>
             </li>
         )

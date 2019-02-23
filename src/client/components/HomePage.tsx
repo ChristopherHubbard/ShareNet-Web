@@ -1,19 +1,11 @@
 import * as React from 'react';
-import { connect, DispatchProp } from 'react-redux';
+import Menu from './Menu';
 
-interface HomeProps
+export default class HomePage extends React.Component<{}, {}>
 {
-    
-}
-
-export class HomePage extends React.Component<HomeProps & DispatchProp<any>, {}>
-{
-    constructor(props: HomeProps & DispatchProp<any>)
+    public constructor(props: any)
     {
         super(props);
-        
-        // Get the dispatch function from the props
-        const { dispatch } = this.props;
     }
 
     public render(): React.ReactNode
@@ -25,20 +17,8 @@ export class HomePage extends React.Component<HomeProps & DispatchProp<any>, {}>
         return (
             <div>
                 Smart Bar prototype
+                <Menu/>
             </div>
         )
     }
 }
-
-function mapStateToProps(state: any): HomeProps
-{
-    // Extract the state from the action
-    const { } = state;
-    return {
-        
-    };
-}
-
-export default connect<HomeProps>(
-    mapStateToProps
-)(HomePage);
