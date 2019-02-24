@@ -103,6 +103,7 @@ function logout(): IAction
 {
     // Call a service to remove the user from the store
     UserService.logout();
+    history.push('/');
     // Return sucessful logout action
     return <IAction> {
         type: userConstants.LOGOUT_SUCCESS

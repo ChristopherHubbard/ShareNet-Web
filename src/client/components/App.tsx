@@ -1,13 +1,10 @@
 import * as React from 'react';
-import { Router, Route, HashRouter } from 'react-router-dom';
+import { Router, Route } from 'react-router-dom';
 import RegisterPage from './RegisterPage';
 import LoginPage from './LoginPage';
 import HomePage from './HomePage';
 import { PrivateRoute } from './PrivateRoute';
 import { history } from '../services';
-import DeviceList from './DeviceList';
-import DeviceConnection from './DeviceConnection';
-import OrderPage from './OrderPage';
 
 export class App extends React.Component<{}, {}>
 {
@@ -24,12 +21,9 @@ export class App extends React.Component<{}, {}>
                     <div className="col-sm-8 col-sm-offset-2">
                         <Router history={history}>
                             <div>
-                                <PrivateRoute exact path="/" component={HomePage}/>
-                                <Route path="/login" component={LoginPage}/>
-                                <Route path="/register" component={RegisterPage}/>
-                                <PrivateRoute exact path="/devices" component={DeviceList}/>
-                                <PrivateRoute exact path="/connect" component={DeviceConnection}/>
-                                <PrivateRoute exact path="/order" component={OrderPage}/>
+                                <Route exact path="/login" component={LoginPage}/>
+                                <Route exact path="/register" component={RegisterPage}/>
+                                <PrivateRoute path="/" component={HomePage}/>
                             </div>
                         </Router>
                     </div>

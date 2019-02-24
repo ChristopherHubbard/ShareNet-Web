@@ -22,7 +22,7 @@ export class LoginPage extends React.Component<LoginProps & DispatchProp<any> & 
         
         // Logout the user if not already logged out
         const { dispatch } = this.props;
-        dispatch(userActions.logout());
+        // dispatch(userActions.logout());
 
         this.state = {
             email: '',

@@ -1,14 +1,16 @@
 import * as React from 'react';
+import { connect, DispatchProp } from 'react-redux';
 import { history } from '../services';
+import { userActions } from '../actions';
 
 interface MenuState
 {
     showMenu: boolean
 }
 
-export default class Menu extends React.Component<{}, MenuState>
+export class Menu extends React.Component<DispatchProp<any>, MenuState>
 {
-    public constructor(props: any)
+    public constructor(props: DispatchProp<any>)
     {
         super(props);
 
@@ -20,14 +22,17 @@ export default class Menu extends React.Component<{}, MenuState>
         this.onCloseMenu = this.onCloseMenu.bind(this);
         this.onDevices = this.onDevices.bind(this);
         this.onConnectToNew = this.onConnectToNew.bind(this);
+        this.onLogout = this.onLogout.bind(this);
     }
 
     private onShowMenu(event: React.MouseEvent<HTMLElement>): void
     {
         event.preventDefault();
+
+        const { showMenu } = this.state; 
         
         this.setState({
-            showMenu: true
+            showMenu: !showMenu
         });
     }
 
@@ -60,6 +65,15 @@ export default class Menu extends React.Component<{}, MenuState>
         history.push('/connect');
     }
 
+    private onLogout(event: React.MouseEvent<HTMLElement>): void
+    {
+        event.preventDefault();
+
+        const { dispatch } = this.props;
+
+        dispatch(userActions.logout());
+    }
+
     public render(): React.ReactNode
     {
         const { showMenu } = this.state;
@@ -76,8 +90,23 @@ export default class Menu extends React.Component<{}, MenuState>
                                 <div>
                                     <button onClick={this.onConnectToNew}> Connect to New Device </button>
                                 </div>
+                                <div>
+                                    <button onClick={this.onLogout}> Logout </button>
+                                </div>
                             </div>}
             </div>
         )
     }
 }
+
+function mapStateToProps(state: any): any
+{
+    return {
+
+    };
+}
+
+// Connect store and set up redux form
+export default connect<any>(
+    mapStateToProps
+)(Menu as any);
