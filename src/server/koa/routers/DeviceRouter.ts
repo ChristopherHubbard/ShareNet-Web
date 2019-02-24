@@ -41,5 +41,16 @@ export class DeviceRouter extends CustomRouter
             };
             ctx.status = 200;
         });
+
+        this.router.get('/connect', async (ctx: any): Promise<any> =>
+        {
+            const code = ctx.request.query.code;
+            
+            const device = devices.find((device) => device.code === code);
+            ctx.body = {
+                device: device
+            };
+            ctx.status = 200;
+        });
     }
 }

@@ -70,8 +70,12 @@ export default class Menu extends React.Component<{}, MenuState>
                 <button onClick={this.onShowMenu}> Menu </button>
                 
                 {showMenu && <div className="menu">
-                                <button onClick={this.onDevices}> My Devices </button>
-                                <button onClick={this.onConnectToNew}> Connect to New Device </button>
+                                <div>
+                                    <button onClick={this.onDevices}> My Devices </button>
+                                </div>
+                                <div>
+                                    <button onClick={this.onConnectToNew}> Connect to New Device </button>
+                                </div>
                             </div>}
             </div>
         )
