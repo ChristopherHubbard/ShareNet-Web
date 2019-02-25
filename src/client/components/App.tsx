@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Router, Route, HashRouter } from 'react-router-dom';
+import { Router, Route } from 'react-router-dom';
 import RegisterPage from './RegisterPage';
 import LoginPage from './LoginPage';
 import HomePage from './HomePage';
@@ -21,9 +21,10 @@ export class App extends React.Component<{}, {}>
                     <div className="col-sm-8 col-sm-offset-2">
                         <Router history={history}>
                             <div>
+                                <Route exact path="/login" component={LoginPage}/>
+                                <Route exact path="/register" component={RegisterPage}/>
                                 <PrivateRoute exact path="/" component={HomePage}/>
-                                <Route path="/login" component={LoginPage}/>
-                                <Route path="/register" component={RegisterPage}/>
+                                <PrivateRoute path="/home" component={HomePage}/>
                             </div>
                         </Router>
                     </div>

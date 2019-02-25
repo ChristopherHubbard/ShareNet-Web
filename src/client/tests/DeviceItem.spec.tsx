@@ -40,7 +40,7 @@ describe('DeviceItem component', () =>
             <DeviceItem device={device} dispatch={mockDispatch}/>
         );
 
-        wrapper.find('li').simulate('mouseover');
+        wrapper.find('li').simulate('click');
         expect(wrapper.state('selected')).toEqual(true);
     });
 
@@ -50,10 +50,8 @@ describe('DeviceItem component', () =>
             <DeviceItem device={device} dispatch={mockDispatch}/>
         );
 
-        wrapper.find('li').simulate('mouseover');
-        expect(wrapper.state('selected')).toEqual(true); 
-        wrapper.find('li').simulate('mouseleave');
-        expect(wrapper.state('selected')).toEqual(false);  
+        wrapper.find('li').simulate('click');
+        expect(wrapper.state('selected')).toEqual(true);
     });
 
     it('should remove the device', () =>
@@ -62,7 +60,7 @@ describe('DeviceItem component', () =>
             <DeviceItem device={device} dispatch={mockDispatch}/>
         );
 
-        wrapper.find('li').simulate('mouseover');
+        wrapper.find('li').simulate('click');
         expect(wrapper.state('selected')).toEqual(true); 
         wrapper.find('button').simulate('click');
         expect(wrapper.state('selected')).toEqual(true);

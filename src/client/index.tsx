@@ -5,7 +5,7 @@ import { reducer as form } from 'redux-form';
 import thunk from 'redux-thunk';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { App } from './components';
-import { login, registration, devices } from './reducers';
+import { login, registration, devices, connection, order } from './reducers';
 
 // Import Styles?
 import './styles/test.scss';
@@ -15,6 +15,8 @@ const rootReducer = combineReducers({
     devices,
     login,
     registration,
+    connection,
+    order,
     form: form
 });
 

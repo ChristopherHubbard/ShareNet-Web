@@ -1,19 +1,17 @@
 import * as React from 'react';
-import { connect, DispatchProp } from 'react-redux';
+import { Router, Route } from 'react-router-dom';
+import { history } from '../services';
+import { PrivateRoute } from './PrivateRoute';
+import Menu from './Menu';
+import DeviceList from './DeviceList';
+import DeviceConnection from './DeviceConnection';
+import OrderPage from './OrderPage';
 
-interface HomeProps
+export default class HomePage extends React.Component<{}, {}>
 {
-    
-}
-
-export class HomePage extends React.Component<HomeProps & DispatchProp<any>, {}>
-{
-    constructor(props: HomeProps & DispatchProp<any>)
+    public constructor(props: any)
     {
         super(props);
-        
-        // Get the dispatch function from the props
-        const { dispatch } = this.props;
     }
 
     public render(): React.ReactNode
@@ -24,21 +22,20 @@ export class HomePage extends React.Component<HomeProps & DispatchProp<any>, {}>
         // Render the props on the combobox -- Make sure there is no issue with map on empty array
         return (
             <div>
-                Smart Bar prototype
+                <div>
+                    <Menu/>
+                </div>
+                <div>
+                    <h1> Smart Bar prototype </h1>
+                </div>
+                <Router history={history}>
+                    <div>
+                        <PrivateRoute path="/home/devices" component={DeviceList}/>
+                        <PrivateRoute path="/home/connect" component={DeviceConnection}/>
+                        <PrivateRoute path="/home/order" component={OrderPage}/>
+                    </div>
+                </Router>
             </div>
         )
     }
 }
-
-function mapStateToProps(state: any): HomeProps
-{
-    // Extract the state from the action
-    const { } = state;
-    return {
-        
-    };
-}
-
-export default connect<HomeProps>(
-    mapStateToProps
-)(HomePage);

@@ -93,7 +93,7 @@ export class RegisterPage extends React.Component<RegisterProps & DispatchProp<a
                     </div>
                     <div>
                         <button type="submit" disabled={registering || invalid}> Submit </button>
-                        <Link to="/"> Cancel </Link>
+                        <Link to="/home"> Cancel </Link>
                     </div>
                 </Form>
             </div>
