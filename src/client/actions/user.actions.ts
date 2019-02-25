@@ -84,7 +84,7 @@ function login(user: User): (dispatch: Dispatch<any>) => void
             dispatch(alertActions.success('Login Success'));
 
             // Send to the home route
-            history.push('/');            
+            history.push('/home');            
         }
         catch(error)
         {
@@ -103,7 +103,7 @@ function logout(): IAction
 {
     // Call a service to remove the user from the store
     UserService.logout();
-    history.push('/');
+    history.push('/home');
     // Return sucessful logout action
     return <IAction> {
         type: userConstants.LOGOUT_SUCCESS

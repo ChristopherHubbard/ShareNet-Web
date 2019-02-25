@@ -50,7 +50,7 @@ export class DeviceConnection extends React.Component<DeviceConnectionProps & Di
         dispatch(connectionActions.connect(searchedDevice));
 
         // Forward to the order page
-        history.push('/order');
+        history.push('/home/order');
     }
 
     public render(): React.ReactNode

@@ -55,14 +55,14 @@ export class Menu extends React.Component<DispatchProp<any>, MenuState>
     {
         event.preventDefault();
 
-        history.push('/devices');
+        history.push('/home/devices');
     }
 
     private onConnectToNew(event: React.MouseEvent<HTMLElement>): void
     {
         event.preventDefault();
 
-        history.push('/connect');
+        history.push('/home/connect');
     }
 
     private onLogout(event: React.MouseEvent<HTMLElement>): void

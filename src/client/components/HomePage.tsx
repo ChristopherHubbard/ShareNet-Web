@@ -30,9 +30,9 @@ export default class HomePage extends React.Component<{}, {}>
                 </div>
                 <Router history={history}>
                     <div>
-                        <PrivateRoute exact path="/devices" component={DeviceList}/>
-                        <PrivateRoute exact path="/connect" component={DeviceConnection}/>
-                        <PrivateRoute exact path="/order" component={OrderPage}/>
+                        <PrivateRoute path="/home/devices" component={DeviceList}/>
+                        <PrivateRoute path="/home/connect" component={DeviceConnection}/>
+                        <PrivateRoute path="/home/order" component={OrderPage}/>
                     </div>
                 </Router>
             </div>
