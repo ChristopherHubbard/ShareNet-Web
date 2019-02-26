@@ -12,7 +12,9 @@ export abstract class DeviceService
         const requestOptions: any =
         {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             params: user
         };
 
@@ -38,8 +40,10 @@ export abstract class DeviceService
         const requestOptions: any =
         {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: device
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(device)
         };
 
         // Try catch for the new Async-Await structure -- hopefully works
@@ -64,8 +68,10 @@ export abstract class DeviceService
         const requestOptions: any =
         {
             method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            data: device
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(device)
         };
 
         // Try catch for the new Async-Await structure -- hopefully works

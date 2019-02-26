@@ -11,7 +11,9 @@ export abstract class ConnectionService
         const requestOptions: any =
         {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             params: {
                 code: code
             }

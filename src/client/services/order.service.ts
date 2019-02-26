@@ -8,7 +8,9 @@ export abstract class OrderService
         const requestOptions: any =
         {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json'
+            },
             params: {}
         };
 
@@ -35,7 +37,9 @@ export abstract class OrderService
         const requestOptions: any =
         {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             params: {}
         };
 
@@ -61,7 +65,9 @@ export abstract class OrderService
         const requestOptions: any =
         {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             params: {
                 action: action
             }
@@ -88,7 +94,9 @@ export abstract class OrderService
         const requestOptions: any =
         {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             params: {
                 action: action
             }
