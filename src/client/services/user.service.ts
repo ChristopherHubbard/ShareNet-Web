@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { User } from '../models';
 import Config from '../config';
 
@@ -12,8 +12,10 @@ export abstract class UserService
         const requestOptions: any =
         {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: user
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
         };
 
         try
@@ -35,7 +37,9 @@ export abstract class UserService
         const requestOptions: any =
         {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             params: user
         };
 

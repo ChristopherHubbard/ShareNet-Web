@@ -9,7 +9,7 @@ const allConfigs: any =
     },
     DEV:
     {
-        apiUrl: ''
+        apiUrl: 'https://8k3zb9t689.execute-api.us-east-2.amazonaws.com/dev'
     },
     PROD:
     {
@@ -17,6 +17,6 @@ const allConfigs: any =
     }
 };
 
-let config: any = allConfigs['LOCAL'];
+let config: any = allConfigs['DEV'];
 
 export default config;
