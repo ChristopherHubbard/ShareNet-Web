@@ -37,5 +37,6 @@ export interface OrderPageState
     infoFields: Array<string>,
     canOrder: boolean,
     ordering: boolean,
-    ordered: boolean
+    ordered: boolean,
+    paymentPointer: string
 }

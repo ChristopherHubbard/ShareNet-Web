@@ -87,16 +87,20 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+  node: {
+    fs: 'empty'
+  }
 }
 
 if (process.env.NODE_ENV === 'production') {
+  console.log('Production build')
   module.exports.devtool = '#source-map'
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: '"production"'
+        NODE_ENV: '"PROD"'
       }
     }),
     new webpack.optimize.UglifyJsPlugin({

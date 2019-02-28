@@ -15,7 +15,7 @@ export class DeviceRouter extends CustomRouter
         this.router.post('/devices', async (ctx: any): Promise<any> =>
         {
             // Hash and salt the password -- make sure all the info arrived
-            const device = ctx.request.body.body;
+            const device = JSON.parse(ctx.request.body.body);
 
             devices.push(device)
 

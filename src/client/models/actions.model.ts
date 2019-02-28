@@ -1,5 +1,6 @@
 import { User } from "./user.model";
 import { Device, PriceInfo } from "./device.model";
+import { Receipt } from "ilp";
 
 // This IAction interface might want to be moved over to some interfaces folder
 export interface IAction
@@ -14,5 +15,7 @@ export interface IAction
     actions?: Array<string>
     canOrder?: boolean
     priceInfo?: PriceInfo
-    info?: Array<string>
+    info?: Array<string>,
+    paymentPointer?: string,
+    receipt?: Receipt
 }

@@ -5,11 +5,13 @@ const allConfigs: any =
 {
     LOCAL: 
     {
-        apiUrl: 'http://localhost:8000'
+        apiUrl: 'http://localhost:8000',
+        moneydUrl: 'http://localhost:7770'
     },
     DEV:
     {
-        apiUrl: 'https://8k3zb9t689.execute-api.us-east-2.amazonaws.com/dev'
+        apiUrl: 'https://8k3zb9t689.execute-api.us-east-2.amazonaws.com/dev',
+        moneydUrl: 'http://localhost:7770'
     },
     PROD:
     {
