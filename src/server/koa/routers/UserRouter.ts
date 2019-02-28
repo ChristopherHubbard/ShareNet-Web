@@ -15,7 +15,7 @@ export class UserRouter extends CustomRouter
         this.router.post('/register', async (ctx: any): Promise<any> =>
         {
             // Hash and salt the password -- make sure all the info arrived
-            const user = ctx.request.body.body;
+            const user = JSON.parse(ctx.request.body.body);
 
             if (user.email === '' || user.password === '' || user.firstname === '' || user.lastname === '')
             {
