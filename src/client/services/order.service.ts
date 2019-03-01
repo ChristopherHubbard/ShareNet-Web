@@ -1,6 +1,7 @@
 import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import Config from '../config';
 import { PriceInfo } from '../models';
+import config from '../config';
 
 const NUM_RETRIES: number = 3;
 // Abstract since totally static class
@@ -62,7 +63,29 @@ export abstract class OrderService
         }
     }
 
-    public static async getPriceInfo(contractURL: string, action: string): Promise<any>
+    public static async getClientAsset(): Promise<any>
+    {
+        const requestOptions: any =
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        try
+        {
+            const response: AxiosResponse = await axios.get(`${Config.moneydUrl}/asset`, requestOptions);
+
+            return response.data;
+        }
+        catch (error)
+        {
+            console.error(error);
+        }
+    }
+
+    public static async getPriceInfo(contractURL: string, action: string, clientAsset: string): Promise<any>
     {
         // Create the options for the request -- type?
         const requestOptions: any =
@@ -72,7 +95,8 @@ export abstract class OrderService
                 'Content-Type': 'application/json'
             },
             params: {
-                action: action
+                action: action,
+                clientAsset: clientAsset
             }
         };
 
@@ -137,7 +161,7 @@ export abstract class OrderService
             // Await the response
             const response: AxiosResponse = await axios.get(`${contractURL}/invoice`, requestOptions);
 
-            // Return the invoice and the invoiceNo to the user
+            // Return the paymentPointer to user
             return response.data;
         }
         catch (error)
@@ -147,7 +171,7 @@ export abstract class OrderService
         }
     }
 
-    public static async payInvoice(contractURL: string, action: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo): Promise<any>
+    public static async payInvoice(contractURL: string, action: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number): Promise<any>
     {
         const infoFieldJSON: any = Array.from(
                 infoFields.entries()
@@ -178,7 +202,7 @@ export abstract class OrderService
             },
             body: JSON.stringify({
                 receiver: paymentPointer,
-                amount: priceInfo.price
+                amount: priceInfo.price * Math.pow(10, assetScale)
             })
         }
 

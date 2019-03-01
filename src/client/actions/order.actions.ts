@@ -12,7 +12,7 @@ interface IOrderActions
     getPriceInfo: (contractURL: string, selectedAction: string) => ((dispatch: Dispatch<any>) => void)
     getCanOrder: (contractURL: string, selectedAction: string) => ((dispatch: Dispatch<any>) => void)
     getInvoice: (contractURL: string, selectedAction: string) => ((dispatch: Dispatch<any>) => void)
-    payInvoice: (contractURL: string, selectedAction: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo) => ((dispatch: Dispatch<any>) => void)
+    payInvoice: (contractURL: string, selectedAction: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number) => ((dispatch: Dispatch<any>) => void)
 }
 
 // Export the user actions
@@ -107,11 +107,13 @@ function getPriceInfo(contractURL: string, selectedAction: string): (dispatch: D
 
         try
         {
-            const priceInfo: PriceInfo = await OrderService.getPriceInfo(contractURL, selectedAction);
+            const { asset, assetScale } = await OrderService.getClientAsset();
+            const priceInfo: PriceInfo = await OrderService.getPriceInfo(contractURL, selectedAction, asset);
             
             dispatch(<IAction> {
                 type: orderConstants.GET_PRICE_SUCCESS,
-                priceInfo: priceInfo
+                priceInfo: priceInfo,
+                assetScale: assetScale
             });
 
             dispatch(alertActions.success('Get price info success'));
@@ -190,7 +192,7 @@ function getInvoice(contractURL: string, selectedAction: string): (dispatch: Dis
     }
 }
 
-function payInvoice(contractURL: string, selectedAction: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo): (dispatch: Dispatch<any>) => void
+function payInvoice(contractURL: string, selectedAction: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number): (dispatch: Dispatch<any>) => void
 {
     return async (dispatch: Dispatch<any>) =>
     {
@@ -200,7 +202,7 @@ function payInvoice(contractURL: string, selectedAction: string, paymentPointer:
 
         try
         {
-            const receipt: any = await OrderService.payInvoice(contractURL, selectedAction, paymentPointer, infoFields, priceInfo);
+            const receipt: any = await OrderService.payInvoice(contractURL, selectedAction, paymentPointer, infoFields, priceInfo, assetScale);
 
             dispatch(<IAction> {
                 type: orderConstants.PAY_INVOICE_SUCCESS,
