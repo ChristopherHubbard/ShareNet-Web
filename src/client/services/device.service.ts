@@ -43,17 +43,15 @@ export abstract class DeviceService
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(device)
+            body: device
         };
 
         // Try catch for the new Async-Await structure -- hopefully works
         try
         {
             // Await the response
-            const response: AxiosResponse = await axios.post(`${Config.apiUrl}/devices`, requestOptions);
-
-            // Return the updated devices for this user -- should another get request occur?
-            return response.data.devices;
+            await axios.post(`${Config.apiUrl}/devices`, requestOptions);
+            return await this.get(device.owner as User);
         }
         catch (error)
         {
@@ -78,10 +76,10 @@ export abstract class DeviceService
         try
         {
             // Await the response
-            const response: AxiosResponse = await axios.delete(`${Config.apiUrl}/devices`, requestOptions);
+            await axios.delete(`${Config.apiUrl}/devices`, requestOptions);
 
             // Return the updated devices for this user -- should another get request occur?
-            return response.data.devices;
+            return await this.get(device.owner as User);
         }
         catch (error)
         {

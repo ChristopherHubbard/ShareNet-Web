@@ -12,6 +12,7 @@ const initState: OrderPageState = {
         price: 0.00,
         baseCurrency: 'USD'
     },
+    assetScale: 1,
     infoFields: [],
     canOrder: false,
     ordering: false,
@@ -54,7 +55,8 @@ export function order(state: OrderPageState = initState, action: IAction): Order
         case orderConstants.GET_PRICE_SUCCESS:
             return <OrderPageState> {
                 ...state,
-                priceInfo: action.priceInfo
+                priceInfo: action.priceInfo,
+                assetScale: action.assetScale
             };
         case orderConstants.GET_PRICE_ERROR:
             return <OrderPageState> {

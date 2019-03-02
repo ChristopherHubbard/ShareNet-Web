@@ -34,6 +34,7 @@ export interface OrderPageState
     device: Device,
     actions: Array<string>,
     priceInfo: PriceInfo,
+    assetScale: number,
     infoFields: Array<string>,
     canOrder: boolean,
     ordering: boolean,

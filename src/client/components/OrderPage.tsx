@@ -45,7 +45,7 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
     {
         event.preventDefault();
 
-        const { dispatch, device, paymentPointer, priceInfo } = this.props;
+        const { dispatch, device, paymentPointer, priceInfo, assetScale } = this.props;
         const { selectedAction, infoFieldMap } = this.state;
 
         // How to get the invoice?
@@ -77,7 +77,8 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
                     selectedAction,
                     paymentPointer,
                     infoFieldMap,
-                    priceInfo
+                    priceInfo,
+                    assetScale
                 )
             );
 
@@ -136,7 +137,7 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
     public render(): React.ReactNode
     {
         // Extract prop data
-        const { device, actions, priceInfo, infoFields, canOrder, ordering, ordered } = this.props;
+        const { device, actions, priceInfo, assetScale, infoFields, canOrder, ordering, ordered } = this.props;
 
         // Render the props on the combobox -- Make sure there is no issue with map on empty array
         return (
@@ -175,12 +176,13 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 function mapStateToProps(state: any): OrderPageProps
 {
     const { connectedDevice } = state.connection;
-    const { actions, priceInfo, infoFields, canOrder, ordering, ordered, paymentPointer } = state.order;
+    const { actions, priceInfo, assetScale, infoFields, canOrder, ordering, ordered, paymentPointer } = state.order;
 
     return {
         device: connectedDevice,
         actions,
         priceInfo,
+        assetScale,
         infoFields,
         canOrder,
         ordering,

@@ -18,7 +18,7 @@
             "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceFolder}/distlib/src/server/koa/index.js",
-            "preLaunchTask": "npm: build",
+            "preLaunchTask": "npm: build-dev",
             "outFiles": [
                 "${workspaceFolder}/distlib/src/server/index.js"
             ]

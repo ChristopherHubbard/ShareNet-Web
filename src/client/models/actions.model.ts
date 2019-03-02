@@ -15,7 +15,8 @@ export interface IAction
     actions?: Array<string>
     canOrder?: boolean
     priceInfo?: PriceInfo
-    info?: Array<string>,
-    paymentPointer?: string,
+    assetScale?: number
+    info?: Array<string>
+    paymentPointer?: string
     receipt?: Receipt
 }
