@@ -31,7 +31,7 @@ export abstract class UserService
     }
 
     // Static async method to login with user and password -- should probably have better return type here
-    public static async login(user: User): Promise<any>
+    public static async login(user: User, checked: boolean): Promise<any>
     {
         // Create the options for the request -- type?
         const requestOptions: any =
@@ -51,10 +51,14 @@ export abstract class UserService
 
             // Check for the response token -- this proves authentication
             const user: User = response.data;
-            if (user)
+            if (user && checked)
             {
                 // Add the user to the localStorage
                 localStorage.setItem('user', JSON.stringify(user));
+            }
+            else if (user)
+            {
+                sessionStorage.setItem('user', JSON.stringify(user));
             }
 
             // Return the user -- not necessarily authenticated
@@ -71,5 +75,6 @@ export abstract class UserService
     {
         // Remove the user from the localStorage
         localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
     }
 }

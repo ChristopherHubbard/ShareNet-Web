@@ -1,7 +1,7 @@
 import { userConstants } from '../constants';
 import { User, LoginState, IAction } from '../models';
 
-const user: User = JSON.parse(JSON.stringify(localStorage.getItem('user')));
+const user: User = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) : JSON.parse(sessionStorage.getItem('user') as string);
 const initialState: LoginState = user ? { loggedIn: true, user: user } : {};
 
 export function login(state: LoginState = initialState, action: IAction): LoginState

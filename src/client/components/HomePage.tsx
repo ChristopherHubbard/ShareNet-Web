@@ -21,21 +21,20 @@ export default class HomePage extends React.Component<{}, {}>
 
         // Render the props on the combobox -- Make sure there is no issue with map on empty array
         return (
-            <div>
-                <div>
-                    <Menu/>
+            <div id="outer-container" style={{ height: '100%'}}>
+                <Menu/>
+                <div style={{ height: '100%', textAlign: 'center'}}>
+                    <main id="page-wrapper" style={{ height: '100%', overflow: 'auto'}}>
+                        <Router history={history}>
+                            <div style={{display: 'inline-block'}}>
+                                <PrivateRoute path="/home/devices" component={DeviceList}/>
+                                <PrivateRoute path="/home/connect" component={DeviceConnection}/>
+                                <PrivateRoute path="/home/order" component={OrderPage}/>
+                            </div>
+                        </Router>
+                    </main>
                 </div>
-                <div>
-                    <h1> Smart Bar prototype </h1>
-                </div>
-                <Router history={history}>
-                    <div>
-                        <PrivateRoute path="/home/devices" component={DeviceList}/>
-                        <PrivateRoute path="/home/connect" component={DeviceConnection}/>
-                        <PrivateRoute path="/home/order" component={OrderPage}/>
-                    </div>
-                </Router>
             </div>
-        )
+        );
     }
 }
