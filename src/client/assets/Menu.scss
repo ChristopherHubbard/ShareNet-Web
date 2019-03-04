@@ -5,7 +5,7 @@
   width: 60px;
   height: 60px;
   left: 36px;
-  top: 36px;
+  top: 5px;
 
   &:hover {
     opacity: 0.5;
@@ -27,6 +27,7 @@
 
 .bm-menu {
   background: $green;
+  text-align: left;
 
   a {
     color: $white;
@@ -34,8 +35,7 @@
     border-bottom-color: $white;
     border-bottom-width: 10px;
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: $dark-green
     }
 

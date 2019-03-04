@@ -3,7 +3,7 @@ import { connect, DispatchProp } from 'react-redux';
 import { history } from '../services';
 import { userActions } from '../actions';
 
-import { slide as CollapseMenu } from 'react-burger-menu';
+import { stack as CollapseMenu } from 'react-burger-menu';
 
 // Import styles
 import '../assets/Menu.scss';

@@ -3,9 +3,10 @@ import { connect, DispatchProp } from 'react-redux';
 import { orderActions } from '../actions';
 import { OrderPageState as OrderPageProps } from '../models';
 import PaymentButton from './PaymentRequestButton';
-import { PaymentRequestParams } from 'react-payment-request-api';
+import PaymentRequestButton from './PaymentRequestButton';
 
 // Try to work around webpack?
+const SERVICE_WORKER_URL: string = window.location.origin + '/interledger.js';
 
 interface OrderPageState
 {
@@ -34,6 +35,10 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
         this.onOrder = this.onOrder.bind(this);
         this.selectionChangeEvent = this.selectionChangeEvent.bind(this);
         this.onUpdateInfoField = this.onUpdateInfoField.bind(this);
+        this.registerPaymentService = this.registerPaymentService.bind(this);
+        this.addInstruments = this.addInstruments.bind(this);
+
+        this.registerPaymentService();
     }
 
     private onActionChange(event: React.ChangeEvent<HTMLSelectElement>): void
@@ -52,8 +57,10 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 
         const methodData = [
             {
-                supportedMethods: ['interledger'],
-                data: paymentPointer
+                supportedMethods: Array<string>('interledger'),
+                data: {
+                    paymentPointer
+                }
             }
         ];
 
@@ -69,7 +76,7 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 
         try
         {
-            //const result: PaymentResponse = await new PaymentRequest(methodData, details).show();
+            const result: PaymentResponse = await new PaymentRequest(methodData, details).show();
 
             dispatch(orderActions
                 .payInvoice(
@@ -82,7 +89,8 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
                 )
             );
 
-            //result.complete();
+            // Emit a successful completion -- but the event was dispatched not fulfilled?
+            result.complete('success');
         }
         catch (error)
         {
@@ -134,6 +142,45 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
         }
     }
 
+    private registerPaymentService(): void
+    {
+        navigator.serviceWorker.register(SERVICE_WORKER_URL).then((registration: any) =>
+        {
+            console.log('registration', registration);
+            if (!registration.paymentManager)
+            {
+                registration.unregister().then((success: any) => {});
+                console.log('Payment app capability not present. Enable flags?');
+                return;
+            }
+            this.addInstruments(registration).then(function () {
+              console.log('Successfully registered!');
+            })
+        })
+        .catch((error) =>
+        {
+            console.log('Service worker registration error', error);
+        })
+    }
+
+    private addInstruments(registration: any)
+    {
+        registration.paymentManager.userHint = 'test@interledgerpay.xyz';
+        return Promise.all([
+          registration.paymentManager.instruments.set(
+            '5c077d7a-0a4a-4a08-986a-7fb0f5b08b13',
+            {
+              name: 'ILP',
+              icons: [{
+                src: '/src/client/assets/ilp_icon.png',
+                sizes: '32x32',
+                type: 'image/png'}
+              ],
+              method: 'interledger'
+            })
+        ]);
+    }
+
     public render(): React.ReactNode
     {
         // Extract prop data
@@ -166,7 +213,7 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 
                     {priceInfo ? <p> Price: {priceInfo.price} {priceInfo.baseCurrency}</p> : null}
 
-                    <button onClick={this.onOrder} disabled={ordering || !canOrder}> Pay </button>
+                    <PaymentRequestButton show={this.onOrder} disabled={ordering || !canOrder}/>
                 </div>
             </div>
         )

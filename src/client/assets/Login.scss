@@ -1,9 +1,13 @@
 @import 'Colors';
 
-.login-wrapper {
+.form-wrapper {
     width: auto;
     max-width: 585px;
     margin: 0 auto 10px;
+    padding: 0 10px;
+    display: block;
+    clear: both;
+    text-align: left;
 }
 
 .page-canvas {

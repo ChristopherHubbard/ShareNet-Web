@@ -11,6 +11,8 @@ import '../assets/Register.scss';
 import '../assets/Login.scss';
 import '../assets/Utilities.scss';
 
+const spinner: any = require('../assets/loading-spinner.svg');
+
 interface LoginState
 {
     email: string,
@@ -90,7 +92,7 @@ export class LoginPage extends React.Component<LoginProps & DispatchProp<any> & 
 
         return (
             <div className="page-canvas">
-                <div className="login-wrapper">
+                <div className="form-wrapper">
                     <h1 className="white-header"> Log in to ShareNet </h1>
                     <Form onSubmit={this.handleSubmit}>
                         <div>
@@ -101,17 +103,21 @@ export class LoginPage extends React.Component<LoginProps & DispatchProp<any> & 
                         </div>
                         <div>
                             <button type="submit" disabled={loggingIn || invalid}> Log in </button>
-                            <div>
-                                <label>
-                                    <input type="checkbox" name="remember_me" checked={checked} onChange={this.onChecked}/>
+                            <div style={{display: "inline-block", marginLeft: "20px"}}>
+                                <label className="white-header" style={{lineHeight: "30px"}}>
+                                    <input className="checkbox" type="checkbox" name="remember_me" checked={checked} onChange={this.onChecked}/>
                                     Remember me
                                 </label>
+                                {
+                                    loggingIn &&
+                                        <img src={spinner} style={{width: "40px", height: "40px"}}/>
+                                }
                             </div>
                         </div>
                     </Form>
                 </div>
                 <div className="registerDiv">
-                    <p> No Account? <Link to="/register"> Sign up now </Link> </p>
+                    <p> No account? <Link to="/register" className="link-style"> Sign up now </Link> </p>
                 </div>
             </div>
         );

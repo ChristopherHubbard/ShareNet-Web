@@ -7,6 +7,8 @@ import DeviceList from './DeviceList';
 import DeviceConnection from './DeviceConnection';
 import OrderPage from './OrderPage';
 
+const headerIcon: any = require('../assets/header-logo.svg');
+
 export default class HomePage extends React.Component<{}, {}>
 {
     public constructor(props: any)
@@ -22,8 +24,14 @@ export default class HomePage extends React.Component<{}, {}>
         // Render the props on the combobox -- Make sure there is no issue with map on empty array
         return (
             <div id="outer-container" style={{ height: '100%'}}>
-                <Menu/>
-                <div style={{ height: '100%', textAlign: 'center'}}>
+                <header style={{textAlign: "center"}}>
+                    <Menu/>
+                    <div style={{display: "inline"}}>
+                        <img src={headerIcon} style={{width: "55px", height: "55px"}}/>
+                        <h1 className="white-header" style={{textAlign: "center", verticalAlign: "middle", lineHeight: "70px", display: "inline"}}> ShareNet </h1>
+                    </div>
+                </header>
+                <div style={{ height: '100%', textAlign: 'center', position: "relative", top: "100px"}}>
                     <main id="page-wrapper" style={{ height: '100%', overflow: 'auto'}}>
                         <Router history={history}>
                             <div style={{display: 'inline-block'}}>

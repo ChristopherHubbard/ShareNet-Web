@@ -1,3 +1,11 @@
+@import 'Colors';
+
 .registerDiv {
-    background-color: lightgrey;
+    background-color: $extremely-dark-green;
+    width: auto;
+    padding: 20px 10px;
+
+    p {
+        color: #8899a6;
+    }
 }

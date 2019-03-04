@@ -6,6 +6,8 @@ import HomePage from './HomePage';
 import { PrivateRoute } from './PrivateRoute';
 import { history } from '../services';
 
+import '../assets/App.scss';
+
 export class App extends React.Component<{}, {}>
 {
     constructor(props: any)
@@ -16,7 +18,7 @@ export class App extends React.Component<{}, {}>
     public render(): React.ReactNode
     {
         return (
-            <div style={{ height: '100%' }}>
+            <div className="page-container">
                 <Router history={history}>
                     <div>
                         <div style={{ height: '100%', textAlign: 'center'}}>
