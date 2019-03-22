@@ -116,6 +116,29 @@ export abstract class OrderService
         }
     }
 
+    public static async getPaymentMethods(contractURL: string): Promise<any>
+    {
+        const requestOptions: any =
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        try
+        {
+            const response: AxiosResponse = await axios.get(`${contractURL}/paymentMethods`, requestOptions);
+
+            return response.data.supportedMethods;
+        }
+        catch (error)
+        {
+            // How to handle no supported methods? Need better error handling
+            console.error(error);
+        }
+    }
+
     public static async getCanOrder(contractURL: string, action: string): Promise<any>
     {
         const requestOptions: any =

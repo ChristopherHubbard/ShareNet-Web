@@ -1,0 +1,15 @@
+interface IPaymentConstants
+{
+    REGISTER_SUCCESS: string,
+    REGISTER_ERROR: string,
+    UNREGISTER_SUCCESS: string,
+    UNREGISTER_ERROR: string
+}
+
+export const paymentConstants: IPaymentConstants =
+{
+    REGISTER_SUCCESS: 'REGISTER_SUCCESS',
+    REGISTER_ERROR: 'REGISTER_ERROR',
+    UNREGISTER_SUCCESS: 'UNREGISTER_SUCCESS',
+    UNREGISTER_ERROR: 'UNREGISTER_ERROR'
+}

@@ -10,6 +10,7 @@ interface IOrderActions
     getActions: (contractURL: string) => ((dispatch: Dispatch<any>) => void),
     getInfo: (contractURL: string) => ((dispatch: Dispatch<any>) => void),
     getPriceInfo: (contractURL: string, selectedAction: string) => ((dispatch: Dispatch<any>) => void)
+    getPaymentMethods: (contractURL: string) => ((dispatch: Dispatch<any>) => void)
     getCanOrder: (contractURL: string, selectedAction: string) => ((dispatch: Dispatch<any>) => void)
     getInvoice: (contractURL: string, selectedAction: string) => ((dispatch: Dispatch<any>) => void)
     payInvoice: (contractURL: string, selectedAction: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number) => ((dispatch: Dispatch<any>) => void)
@@ -21,6 +22,7 @@ export const orderActions: IOrderActions =
     getActions: getActions,
     getInfo: getInfo,
     getPriceInfo: getPriceInfo,
+    getPaymentMethods: getPaymentMethods,
     getCanOrder: getCanOrder,
     getInvoice: getInvoice,
     payInvoice: payInvoice
@@ -126,6 +128,37 @@ function getPriceInfo(contractURL: string, selectedAction: string): (dispatch: D
             });
 
             dispatch(alertActions.error('Get price info error'));
+        }
+    }
+}
+
+function getPaymentMethods(contractURL: string): (dispatch: Dispatch<any>) => void
+{
+    return async (dispatch: Dispatch<any>) =>
+    {
+        dispatch(<IAction> {
+            type: orderConstants.GET_SUPPORTEDMETHODS_REQUEST
+        });
+
+        try
+        {
+            const supportedMethods: Array<string> = await OrderService.getPaymentMethods(contractURL);
+
+            dispatch(<IAction> {
+                type: orderConstants.GET_SUPPORTEDMETHODS_SUCCESS,
+                supportedMethods: supportedMethods
+            });
+
+            dispatch(alertActions.success('Get supported methods success'));
+        }
+        catch (error)
+        {
+            dispatch(<IAction> {
+                type: orderConstants.GET_SUPPORTEDMETHODS_ERROR,
+                error: error.toString()
+            });
+
+            dispatch(alertActions.error('Get supported methods error'));
         }
     }
 }

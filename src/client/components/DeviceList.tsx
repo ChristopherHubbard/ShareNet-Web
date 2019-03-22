@@ -14,6 +14,8 @@ interface DeviceListState
     openNewDeviceDialog: boolean
 }
 
+const ROW_LENGTH: number = 4;
+
 export class DeviceList extends React.Component<DeviceListProps & DispatchProp<any>, DeviceListState>
 {
     constructor(props: DeviceListProps & DispatchProp<any>)
@@ -122,7 +124,9 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
     {
         const { devices } = this.props;
 
-        const { openNewDeviceDialog } = this.state
+        const { openNewDeviceDialog } = this.state;
+
+        const sortedDevices: Array<Device> = devices !== undefined ? devices.sort(((d1, d2) => d1.name > d2.name ? 1 : -1)) : new Array<Device>();
 
         return (
             <div>
@@ -152,9 +156,11 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                             <button name="cancelAdd" onClick={this.handleCloseAddDevice}> Cancel </button>
                         </div>)
                 }
-                <ul>
-                    {devices && devices.map((device: Device) => <DeviceItem device={device}/>)}
-                </ul>
+                <div className="grid-container">
+                    {
+                        sortedDevices.length > 0 && sortedDevices.map((device) => <DeviceItem device={device}/>)
+                    }
+                </div>
             </div>
         );
     }

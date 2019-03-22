@@ -68,18 +68,20 @@ export class DeviceItem extends React.Component<DeviceItemProps & DispatchProp<a
         const { selected } = this.state;
 
         return (
-            <li tabIndex={-1} onBlur={this.onBlur} onClick={this.onClick} key={device.code}>
-                <h3> {device.name} </h3>
-                <div>
-                    {selected && (<div>
-                                    <div> Device Name: {device.name} </div>
-                                    <div> Connection Code: {device.code} </div>
-                                    <div> Contract URL: {device.contractURL} </div>
+            <div className="card" tabIndex={-1} onBlur={this.onBlur} onClick={this.onClick} key={device.code}>
+                <div className="content">
+                    <h3> {device.name} </h3>
+                    <div>
+                        {selected && (<div>
+                                        <div> Device Name: {device.name} </div>
+                                        <div> Connection Code: {device.code} </div>
+                                        <div> Contract URL: {device.contractURL} </div>
 
-                                    <button onClick={this.handleRemoveDevice}> Remove Device </button>
-                                  </div>)}
+                                        <button onClick={this.handleRemoveDevice}> Remove Device </button>
+                                    </div>)}
+                    </div>
                 </div>
-            </li>
+            </div>
         )
     }
 }
