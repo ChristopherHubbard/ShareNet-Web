@@ -7,6 +7,8 @@ import DeviceList from './DeviceList';
 import DeviceConnection from './DeviceConnection';
 import OrderPage from './OrderPage';
 
+const headerIcon: any = require('../assets/header-logo.svg');
+
 export default class HomePage extends React.Component<{}, {}>
 {
     public constructor(props: any)
@@ -21,21 +23,26 @@ export default class HomePage extends React.Component<{}, {}>
 
         // Render the props on the combobox -- Make sure there is no issue with map on empty array
         return (
-            <div>
-                <div>
+            <div id="outer-container" style={{ height: '100%'}}>
+                <header style={{textAlign: "center"}}>
                     <Menu/>
-                </div>
-                <div>
-                    <h1> Smart Bar prototype </h1>
-                </div>
-                <Router history={history}>
-                    <div>
-                        <PrivateRoute path="/home/devices" component={DeviceList}/>
-                        <PrivateRoute path="/home/connect" component={DeviceConnection}/>
-                        <PrivateRoute path="/home/order" component={OrderPage}/>
+                    <div style={{display: "inline"}}>
+                        <img src={headerIcon} style={{width: "55px", height: "55px"}}/>
+                        <h1 className="white-header" style={{textAlign: "center", verticalAlign: "middle", lineHeight: "70px", display: "inline"}}> ShareNet </h1>
                     </div>
-                </Router>
+                </header>
+                <div style={{ height: '100%', textAlign: 'center', position: "relative", top: "100px"}}>
+                    <main id="page-wrapper" style={{ height: '100%', overflow: 'auto'}}>
+                        <Router history={history}>
+                            <div style={{display: 'inline-block'}}>
+                                <PrivateRoute path="/home/devices" component={DeviceList}/>
+                                <PrivateRoute path="/home/connect" component={DeviceConnection}/>
+                                <PrivateRoute path="/home/order" component={OrderPage}/>
+                            </div>
+                        </Router>
+                    </main>
+                </div>
             </div>
-        )
+        );
     }
 }

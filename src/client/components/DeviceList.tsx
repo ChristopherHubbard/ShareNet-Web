@@ -6,6 +6,8 @@ import { DeviceState as DeviceListProps, Device, User } from '../models';
 import { CustomInput } from './CustomInput';
 import DeviceItem from './DeviceItem';
 
+import '../assets/Device.scss';
+
 interface DeviceListState
 {
     newDevice: Device,
@@ -28,7 +30,15 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
         try
         {
             // Dispatch the event to get THIS user's devices
-            user = JSON.parse(localStorage.getItem('user') as string);
+            if (localStorage.getItem('user'))
+            {
+                user = JSON.parse(localStorage.getItem('user') as string);
+            }
+            else
+            {
+                user = JSON.parse(sessionStorage.getItem('user') as string);
+            }
+
             dispatch(deviceActions.get(user));
         }
         catch (error)
@@ -96,7 +106,7 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
         dispatch(deviceActions.add(newDevice));
 
         // Close the dialog box and reset the new device state
-        const user: User = JSON.parse(localStorage.getItem('user') as string);
+        const user: User = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) : JSON.parse(sessionStorage.getItem('user') as string);
         this.setState({
             newDevice: {
                 name: '',
@@ -116,13 +126,13 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
 
         return (
             <div>
-                <h2> Your devices </h2>
-                {
-                    !openNewDeviceDialog &&
-                        (<div>
-                            <button name="openAdd" onClick={this.handleOpenAddDevice}> Add Device </button>
-                         </div>)
-                }
+                <span>
+                    <h2> Your devices </h2>
+                    {
+                        !openNewDeviceDialog &&
+                                <button className="deviceAdd" name="openAdd" onClick={this.handleOpenAddDevice}>+</button>
+                    }
+                </span>
                 {
                     openNewDeviceDialog && 
                         (<div>

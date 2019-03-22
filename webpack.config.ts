@@ -5,6 +5,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   entry: {
     build: "./distlib/src/client/index.js",
+    interledger: "./distlib/src/client/services/sw-interledger.js"
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
@@ -30,7 +31,7 @@ module.exports = {
       {
         test: /\.tsx?$/,
         loader: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: [/node_modules/],
         options: {
           appendTsSuffixTo: [/\.vue$/],
         }
@@ -46,7 +47,7 @@ module.exports = {
         }]
       },
       {
-        test: /\.scss$/,
+        test: /\.(scss|css|less)$/,
         use: [
           'style-loader',
           'css-loader',

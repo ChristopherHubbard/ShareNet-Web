@@ -7,8 +7,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { App } from './components';
 import { login, registration, devices, connection, order } from './reducers';
 
-// Import Styles?
-import './styles/test.scss';
+import './assets/Utilities.scss';
 
 // Combine the reducers into a top level reducer
 const rootReducer = combineReducers({

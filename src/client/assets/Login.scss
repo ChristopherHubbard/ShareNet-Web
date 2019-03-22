@@ -1,0 +1,21 @@
+@import 'Colors';
+
+.form-wrapper {
+    width: auto;
+    max-width: 585px;
+    margin: 0 auto 10px;
+    padding: 0 10px;
+    display: block;
+    clear: both;
+    text-align: left;
+}
+
+.page-canvas {
+    width: auto;
+    max-width: 835px;
+    background-color: $very-dark-green;
+    border: 1px solid rgba(0,0,0,0.1);
+    position: relative;
+    margin: 0 auto;
+    display: block;
+}

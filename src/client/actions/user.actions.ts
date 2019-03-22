@@ -9,7 +9,7 @@ import { history } from '../services';
 interface IUserActions
 {
     register: (user: User) => ((dispatch: Dispatch<any>) => void),
-    login: (user: User) => ((dispatch: Dispatch<any>) => void),
+    login: (user: User, checked: boolean) => ((dispatch: Dispatch<any>) => void),
     logout: () => IAction
 }
 
@@ -47,7 +47,7 @@ function register(user: User): (dispatch: Dispatch<any>) => void
             dispatch(alertActions.success('Registration Success'));
 
             // Login after registration
-            dispatch(userActions.login(user));
+            dispatch(userActions.login(user, false));
         }
         catch(error)
         {
@@ -62,7 +62,7 @@ function register(user: User): (dispatch: Dispatch<any>) => void
 }
 
 // Login function
-function login(user: User): (dispatch: Dispatch<any>) => void
+function login(user: User, checked: boolean): (dispatch: Dispatch<any>) => void
 {
     return async (dispatch: Dispatch<any>) =>
     {
@@ -74,7 +74,7 @@ function login(user: User): (dispatch: Dispatch<any>) => void
         try
         {
             // User the service to login
-            await UserService.login(user);
+            await UserService.login(user, checked);
 
             dispatch(<IAction> {
                 type: userConstants.LOGIN_SUCCESS,

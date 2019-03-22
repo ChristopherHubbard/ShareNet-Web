@@ -8,6 +8,9 @@ import { userActions } from '../actions';
 import { User, RegistrationState as RegisterProps } from '../models';
 import { required, validateEmail, validatePassword } from '../services';
 
+
+const spinner: any = require('../assets/loading-spinner.svg');
+
 interface RegisterState
 {
     user: User,
@@ -76,26 +79,32 @@ export class RegisterPage extends React.Component<RegisterProps & DispatchProp<a
 
         // Create the react node -- this is the page markup -- add validators for fields
         return (
-            <div>
-                <h1> Create your Account </h1>
-                <Form onSubmit={this.handleSubmit}>
-                    <div>
-                        <Field name="email" label="Email" type="email" validate={[required, validateEmail]} component={CustomInput} onChange={this.handleChange}/>
-                    </div>
-                    <div>
-                        <Field name="password" label="Password" type="password" validate={[required, validatePassword]} component={CustomInput} onChange={this.handleChange}/>
-                    </div>
-                    <div>
-                        <Field name="firstname" label="First name" type="text" validate={[required]} component={CustomInput} onChange={this.handleChange}/>
-                    </div>
-                    <div>
-                        <Field name="lastname" label="Last name" type="text" validate={[required]} component={CustomInput} onChange={this.handleChange}/>
-                    </div>
-                    <div>
-                        <button type="submit" disabled={registering || invalid}> Submit </button>
-                        <Link to="/home"> Cancel </Link>
-                    </div>
-                </Form>
+            <div className="page-canvas">
+                <div className="form-wrapper">
+                    <h1 className="white-header"> Sign up for ShareNet </h1>
+                    <Form onSubmit={this.handleSubmit}>
+                        <div>
+                            <Field name="email" label="Email" type="email" validate={[required, validateEmail]} component={CustomInput} onChange={this.handleChange}/>
+                        </div>
+                        <div>
+                            <Field name="password" label="Password" type="password" validate={[required, validatePassword]} component={CustomInput} onChange={this.handleChange}/>
+                        </div>
+                        <div>
+                            <Field name="firstname" label="First name" type="text" validate={[required]} component={CustomInput} onChange={this.handleChange}/>
+                        </div>
+                        <div>
+                            <Field name="lastname" label="Last name" type="text" validate={[required]} component={CustomInput} onChange={this.handleChange}/>
+                        </div>
+                        <div>
+                            <button type="submit" disabled={registering || invalid}> Submit </button>
+                            <Link to="/home" className="link-style"> Cancel </Link>
+                        </div>
+                        {
+                            registering &&
+                                <img src={spinner} style={{width: "40px", height: "40px"}}/>
+                        }
+                    </Form>
+                </div>
             </div>
         );
     }

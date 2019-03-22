@@ -1,0 +1,66 @@
+@import 'Colors';
+
+.bm-burger-button {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  left: 36px;
+  top: 5px;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}
+  
+.right .bm-burger-button {
+  left: initial;
+  right: 36px;
+}
+
+.bm-burger-bars {
+  background: #373a47;
+}
+
+.bm-morph-shape {
+  fill: #373a47;
+}
+
+.bm-menu {
+  background: $green;
+  text-align: left;
+
+  a {
+    color: $white;
+    text-decoration: none;
+    border-bottom-color: $white;
+    border-bottom-width: 10px;
+
+    &:hover {
+      background-color: $dark-green
+    }
+
+    img {
+      width: 36px;
+      height: 36px;
+    }
+
+    text {
+      margin-top: 30px;
+      margin-left: 20px;
+      font-size: 1.75rem;
+    }
+  }
+}
+
+.bm-item-list a {
+  padding: 1em;
+
+  span {
+    margin-left: 10px;
+    font-weight: 700;
+  }
+}
+
+.bm-item:focus {
+  outline: none;
+}

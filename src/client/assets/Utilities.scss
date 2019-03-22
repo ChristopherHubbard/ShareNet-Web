@@ -1,0 +1,76 @@
+@import 'Colors';
+
+button {
+    background-color: $green;
+    border: none;
+    color: $white;
+    padding: 6px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    border-radius: 100px
+}
+
+button:focus {
+    outline: 0;
+}
+
+button:hover {
+    background-color: $dark-green
+}
+
+.white-header {
+    color: $white;
+}
+
+.link-style {
+    color: $highlight-blue;
+}
+
+h1 {
+    font-size: 24px;
+    line-height: 0.8;
+    text-rendering: optimizeLegibility;
+    padding: 40px 0 20px 0;
+}
+
+input {
+    width: 97%;
+    max-width: 280px;
+    margin: 0;
+    margin-right: 10px;
+    padding: 4px;
+    display: inline-block;
+    margin-bottom: 15px;
+    line-height: 20px;
+    border-radius: 5px;
+}
+
+.error {
+    color: $error-color;
+    display: inline;
+}
+
+.checkbox {
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 3px 0;
+    display: inline;
+}
+
+header {
+    backface-visibility: hidden;
+    border-bottom: 1px solid #38444d;
+    border-bottom: 1px solid #0000000d;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 700;
+    background: $dark-green;
+    height: 70px;
+    display: block;
+}

@@ -8,7 +8,7 @@
     "build-dev": "npm run copy && tsc -p ./ && webpack --config ./distlib/webpack.config.js --mode development",
     "build-prod": "npm run copy && tsc -p ./ && webpack --config ./distlib/webpack.config.js --mode production",
     "deploy": "npm run build-prod && aws s3 sync dist/ s3://codius-smart-sharing-s3",
-    "copy": "copyfiles src/**/*.png distlib/ && copyfiles src/**/*.scss distlib/ && copyfiles src/**/*.ico distlib/",
+    "copy": "copyfiles src/**/assets/* distlib/ && copyfiles src/**/assets/ilp_icon.png dist/ copyfiles src/**/assets/manifest.json dist/",
     "test": "jest --coverage --collectCoverageFrom=src/**/*.{ts,tsx}"
   },
   "repository": {
@@ -30,6 +30,7 @@
     "@types/koa-send": "^4.1.1",
     "@types/koa-static": "^4.0.0",
     "@types/react": "^16.8.4",
+    "@types/react-burger-menu": "^2.2.2",
     "@types/react-dom": "^16.0.11",
     "@types/react-redux": "^7.0.1",
     "@types/react-router-dom": "^4.3.1",
@@ -54,6 +55,7 @@
     "node-sass": "^4.11.0",
     "payment-request": "^2.0.0",
     "react": "^16.8.2",
+    "react-burger-menu": "^2.6.5",
     "react-dom": "^16.7.0",
     "react-payment-request-api": "^3.1.0",
     "react-redux": "^6.0.0",
@@ -63,8 +65,10 @@
     "redux-thunk": "^2.3.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
+    "styled-components": "^4.1.3",
     "ts-loader": "^5.3.3",
     "typings-for-css-modules-loader": "^1.7.0",
+    "url-loader": "^1.1.2",
     "webpack": "^4.29.1"
   },
   "devDependencies": {

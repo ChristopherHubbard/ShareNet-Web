@@ -1,0 +1,14 @@
+@mixin circle($width) {
+    width: $width;
+    height: $width;
+    border-radius: $width / 2;
+}
+
+.deviceAdd {
+    @include circle(60px);
+    font-size: 40px;
+    padding: 0px;
+    margin: 0 auto;
+    line-height: 60px;
+    display: table-cell;
+}
