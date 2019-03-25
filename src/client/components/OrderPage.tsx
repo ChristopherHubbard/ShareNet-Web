@@ -47,7 +47,7 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
     {
         event.preventDefault();
 
-        const { dispatch, device, paymentPointer, priceInfo, assetScale, supportedMethods } = this.props;
+        const { dispatch, device, priceInfo, assetScale, supportedMethods } = this.props;
         const { selectedAction, infoFieldMap } = this.state;
 
         // Create the method data using the possible supported methods?
@@ -55,7 +55,7 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
             {
                 supportedMethods: 'interledger',
                 data: {
-                    paymentPointer
+                    
                 }
             }
         ];
@@ -74,16 +74,8 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
         {
             const result: PaymentResponse = await new PaymentRequest(methodData, details).show();
 
-            dispatch(orderActions
-                .payInvoice(
-                    device.contractURL,
-                    selectedAction,
-                    paymentPointer,
-                    infoFieldMap,
-                    priceInfo,
-                    assetScale
-                )
-            );
+            // Change this function name -- it sucks
+            dispatch(orderActions.getInvoice(device.contractURL, selectedAction, infoFieldMap, priceInfo, assetScale));
 
             // Emit a successful completion -- but the event was dispatched not fulfilled?
             result.complete('success');
@@ -104,9 +96,6 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
         // Get whether it can be ordered
         dispatch(orderActions.getCanOrder(device.contractURL, selectedName));
 
-        // Get the invoice?
-        dispatch(orderActions.getInvoice(device.contractURL, selectedName));
-
         // Update the state
         this.setState((prevState) => ({
             ...prevState,
@@ -116,7 +105,8 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 
     private onUpdateInfoField(event: React.ChangeEvent<HTMLInputElement>): void
     {
-        const { infoFieldMap } = this.state;
+        const { dispatch, device } = this.props;
+        const { selectedAction, infoFieldMap } = this.state;
         infoFieldMap.set(event.target.name, event.currentTarget.value);
 
         this.setState((prevState) => ({
@@ -127,8 +117,8 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 
     public componentDidUpdate(): void
     {
-        const { dispatch, actions, supportedMethods } = this.props;
-        const { selectedAction, registeredPaymentMethods } = this.state;
+        const { dispatch, device, actions, supportedMethods } = this.props;
+        const { selectedAction, registeredPaymentMethods, infoFieldMap } = this.state;
 
         if (!selectedAction)
         {
@@ -218,7 +208,7 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 function mapStateToProps(state: any): OrderPageProps
 {
     const { connectedDevice } = state.connection;
-    const { actions, priceInfo, assetScale, infoFields, canOrder, ordering, ordered, paymentPointer, supportedMethods } = state.order;
+    const { actions, priceInfo, assetScale, infoFields, canOrder, ordering, ordered, supportedMethods } = state.order;
 
     return {
         device: connectedDevice,
@@ -229,7 +219,6 @@ function mapStateToProps(state: any): OrderPageProps
         canOrder,
         ordering,
         ordered,
-        paymentPointer,
         supportedMethods
     };
 }

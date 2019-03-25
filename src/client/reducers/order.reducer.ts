@@ -17,7 +17,6 @@ const initState: OrderPageState = {
     canOrder: false,
     ordering: false,
     ordered: false,
-    paymentPointer: '',
     supportedMethods: []
 };
 
@@ -83,11 +82,6 @@ export function order(state: OrderPageState = initState, action: IAction): Order
             return <OrderPageState> {
                 ...state,
                 canOrder: false
-            };
-        case orderConstants.GET_INVOICE_SUCCESS:
-            return <OrderPageState> {
-                ...state,
-                paymentPointer: action.paymentPointer
             };
         case orderConstants.PAY_INVOICE_REQUEST:
             return <OrderPageState> {

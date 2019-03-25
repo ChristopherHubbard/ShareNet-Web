@@ -12,8 +12,8 @@ interface IOrderActions
     getPriceInfo: (contractURL: string, selectedAction: string) => ((dispatch: Dispatch<any>) => void)
     getPaymentMethods: (contractURL: string) => ((dispatch: Dispatch<any>) => void)
     getCanOrder: (contractURL: string, selectedAction: string) => ((dispatch: Dispatch<any>) => void)
-    getInvoice: (contractURL: string, selectedAction: string) => ((dispatch: Dispatch<any>) => void)
-    payInvoice: (contractURL: string, selectedAction: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number) => ((dispatch: Dispatch<any>) => void)
+    getInvoice: (contractURL: string, selectedAction: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number) => ((dispatch: Dispatch<any>) => Promise<any>)
+    payInvoice: (contractURL: string, selectedAction: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number, orderHash: string) => ((dispatch: Dispatch<any>) => void)
 }
 
 // Export the user actions
@@ -52,7 +52,7 @@ function getActions(contractURL: string): (dispatch: Dispatch<any>) => void
             dispatch(orderActions.getCanOrder(contractURL, actions[0]));
 
             // Get the invoice?
-            dispatch(orderActions.getInvoice(contractURL, actions[0]));
+            // dispatch(orderActions.getInvoice(contractURL, actions[0]));
 
             dispatch(alertActions.success('Get actions success'));
         }
@@ -194,7 +194,7 @@ function getCanOrder(contractURL: string, selectedAction: string): (dispatch: Di
     }
 }
 
-function getInvoice(contractURL: string, selectedAction: string): (dispatch: Dispatch<any>) => void
+function getInvoice(contractURL: string, selectedAction: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number): (dispatch: Dispatch<any>) => Promise<any>
 {
     return async (dispatch: Dispatch<any>) =>
     {
@@ -204,14 +204,28 @@ function getInvoice(contractURL: string, selectedAction: string): (dispatch: Dis
 
         try
         {
-            const { paymentPointer } = await OrderService.getPaymentPointer(contractURL, selectedAction);
+            const { paymentPointer, orderHash } = await OrderService.getPaymentPointer(contractURL, selectedAction, infoFields);
 
             dispatch(<IAction> {
                 type: orderConstants.GET_INVOICE_SUCCESS,
-                paymentPointer: paymentPointer
+                paymentPointer: paymentPointer,
+                orderHash: orderHash
             });
 
             dispatch(alertActions.success('Get invoice success'));
+
+            // Pay the invoice!
+            dispatch(
+                payInvoice(
+                    contractURL,
+                    selectedAction,
+                    paymentPointer,
+                    infoFields,
+                    priceInfo,
+                    assetScale,
+                    orderHash
+                )
+            );
         }
         catch (error)
         {
@@ -225,7 +239,7 @@ function getInvoice(contractURL: string, selectedAction: string): (dispatch: Dis
     }
 }
 
-function payInvoice(contractURL: string, selectedAction: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number): (dispatch: Dispatch<any>) => void
+function payInvoice(contractURL: string, selectedAction: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number, orderHash: string): (dispatch: Dispatch<any>) => void
 {
     return async (dispatch: Dispatch<any>) =>
     {
@@ -235,7 +249,7 @@ function payInvoice(contractURL: string, selectedAction: string, paymentPointer:
 
         try
         {
-            const receipt: any = await OrderService.payInvoice(contractURL, selectedAction, paymentPointer, infoFields, priceInfo, assetScale);
+            const receipt: any = await OrderService.payInvoice(contractURL, selectedAction, paymentPointer, infoFields, priceInfo, assetScale, orderHash);
 
             dispatch(<IAction> {
                 type: orderConstants.PAY_INVOICE_SUCCESS,

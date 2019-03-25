@@ -1,7 +1,6 @@
 import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import Config from '../config';
 import { PriceInfo } from '../models';
-import config from '../config';
 
 const NUM_RETRIES: number = 3;
 // Abstract since totally static class
@@ -168,21 +167,34 @@ export abstract class OrderService
         }
     }
 
-    public static async getPaymentPointer(contractURL: string, action: string): Promise<any>
+    public static async getPaymentPointer(contractURL: string, action: string, infoFields: Map<string, string>): Promise<any>
     {
+        const infoFieldJSON: any = Array.from(
+                infoFields.entries()
+            )
+            .reduce((o: any, [key, value]) => { 
+                o[key] = value; 
+        
+                return o; 
+            }, {});
+        
         const requestOptions: any =
         {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({
+                action: action,
+                infoFields: JSON.stringify(infoFieldJSON)
+            })
         };
 
         // Try catch for the new Async-Await structure
         try
         {
             // Await the response
-            const response: AxiosResponse = await axios.get(`${contractURL}/invoice`, requestOptions);
+            const response: AxiosResponse = await axios.post(`${contractURL}/interledger/create-payment`, requestOptions);
 
             // Return the paymentPointer to user
             return response.data;
@@ -194,7 +206,7 @@ export abstract class OrderService
         }
     }
 
-    public static async payInvoice(contractURL: string, action: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number): Promise<any>
+    public static async payInvoice(contractURL: string, action: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number, orderHash: string): Promise<any>
     {
         const infoFieldJSON: any = Array.from(
                 infoFields.entries()
@@ -225,36 +237,15 @@ export abstract class OrderService
             },
             body: JSON.stringify({
                 receiver: paymentPointer,
-                amount: priceInfo.price * Math.pow(10, assetScale)
+                amount: priceInfo.price * Math.pow(10, assetScale),
+                orderHash: orderHash
             })
         }
 
         // Try to pay the invoice -- why cant moneyd be connected to?
         try
         {
-            let success: boolean = false;
-            let i: number = 0;
-            while (!success && i < NUM_RETRIES)
-            {
-                try
-                {
-                    const setDataRes: any = await axios.post(`${contractURL}/setData`, contractRequestOptions);
-
-                    success = setDataRes.data.success as boolean;
-                    i++;
-
-                    if (i === NUM_RETRIES)
-                    {
-                        throw new Error('Could not establish connection to set the data. Try again later');
-                    }
-                }
-                catch (err)
-                {
-                    console.error(err);
-                }
-            }
-
-            // Now the data should be set -- call the local moneyd payment -- this should make the order
+            // Now data is set in contracts store -- send the payment request
             const paymentResponse: AxiosResponse = await axios.post(`${Config.moneydUrl}/actions/send`, clientRequestOptions);
 
             // If the payment response is success then the payment did not fail and the order is processed!

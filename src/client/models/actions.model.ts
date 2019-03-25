@@ -19,5 +19,6 @@ export interface IAction
     info?: Array<string>
     paymentPointer?: string
     receipt?: Receipt,
-    supportedMethods?: Array<string>
+    supportedMethods?: Array<string>,
+    orderHash?: string
 }
