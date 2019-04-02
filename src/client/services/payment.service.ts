@@ -32,7 +32,7 @@ export abstract class PaymentService
     {
         return Promise.all([
             registration.paymentManager.instruments.set(
-                '5c077d7a-0a4a-4a08-986a-7fb0f5b08b13',
+                'interledger',
                 {
                     name: 'ILP',
                     method: 'interledger',
@@ -48,10 +48,11 @@ export abstract class PaymentService
                 {
                     name: 'Pay with Paypal',
                     method: 'paypal',
-                    capabilities: {
-                        supportedNetworks: ['visa', 'mastercard', 'amex', 'discover'],
-                        supportedTypes: ['credit', 'debit', 'prepaid']
-                    }
+                    icons: [{
+                        src: '/src/client/assets/paypal_icon.png',
+                        sizes: '32x32',
+                        type: 'image/png'
+                    }]
                 }
             )
         ]);

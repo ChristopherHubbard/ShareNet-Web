@@ -84,7 +84,29 @@ export abstract class OrderService
         }
     }
 
-    public static async getPriceInfo(contractURL: string, action: string, clientAsset: string): Promise<any>
+    public static async getClientPaymentPointer(): Promise<any>
+    {
+        const requestOptions: any =
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        try
+        {
+            const response: AxiosResponse = await axios.get(`${Config.moneydUrl}/receiver`, requestOptions);
+
+            return response.data;
+        }
+        catch (error)
+        {
+            console.error(error);
+        }
+    }
+
+    public static async getPriceInfo(contractURL: string, action: string, clientAsset: string, clientPaymentPointer: string): Promise<any>
     {
         // Create the options for the request -- type?
         const requestOptions: any =
@@ -95,7 +117,8 @@ export abstract class OrderService
             },
             params: {
                 action: action,
-                clientAsset: clientAsset
+                clientAsset: clientAsset,
+                clientPaymentPointer: clientPaymentPointer
             }
         };
 
@@ -180,7 +203,7 @@ export abstract class OrderService
         
         const requestOptions: any =
         {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -208,27 +231,6 @@ export abstract class OrderService
 
     public static async payInvoice(contractURL: string, action: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number, orderHash: string): Promise<any>
     {
-        const infoFieldJSON: any = Array.from(
-                infoFields.entries()
-            )
-            .reduce((o: any, [key, value]) => { 
-                o[key] = value; 
-        
-                return o; 
-            }, {});
-
-        const contractRequestOptions: any =
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: action,
-                infoFields: JSON.stringify(infoFieldJSON)
-            })
-        };
-
         const clientRequestOptions: any =
         {
             method: 'POST',
@@ -255,6 +257,45 @@ export abstract class OrderService
         }
         catch (error)
         {
+            console.error(error);
+        }
+    }
+
+    public static async createPayPalPayment(contractURL: string, action: string, infoFields: Map<string, string>): Promise<any>
+    {
+        const infoFieldJSON: any = Array.from(
+            infoFields.entries()
+        )
+        .reduce((o: any, [key, value]) => { 
+            o[key] = value; 
+    
+            return o; 
+        }, {});
+
+        const requestOptions: any =
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: action,
+                infoFields: JSON.stringify(infoFieldJSON)
+            })
+        };
+
+        // Try catch for the new Async-Await structure
+        try
+        {
+            // Await the response
+            const response: AxiosResponse = await axios.post(`${contractURL}/paypal/create-payment`, requestOptions);
+
+            // Return the paymentPointer to user
+            return response.data;
+        }
+        catch (error)
+        {
+            // Log the error
             console.error(error);
         }
     }

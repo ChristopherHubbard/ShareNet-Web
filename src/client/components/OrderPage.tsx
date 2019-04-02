@@ -4,8 +4,6 @@ import { orderActions, paymentActions } from '../actions';
 import { OrderPageState as OrderPageProps } from '../models';
 import PaymentRequestButton from './PaymentRequestButton';
 
-// Try to work around webpack?
-
 interface OrderPageState
 {
     selectedAction: string,
@@ -33,7 +31,8 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
         dispatch(orderActions.getPaymentMethods(device.contractURL));
 
         this.onActionChange = this.onActionChange.bind(this);
-        this.onOrder = this.onOrder.bind(this);
+        this.onILPOrder = this.onILPOrder.bind(this);
+        this.onPayPalOrder = this.onPayPalOrder.bind(this);
         this.selectionChangeEvent = this.selectionChangeEvent.bind(this);
         this.onUpdateInfoField = this.onUpdateInfoField.bind(this);
     }
@@ -43,11 +42,11 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
         this.selectionChangeEvent(event.target.value);
     }
 
-    private async onOrder(event: React.MouseEvent<HTMLElement>): Promise<void>
+    private async onILPOrder(event: React.MouseEvent<HTMLElement>): Promise<void>
     {
         event.preventDefault();
 
-        const { dispatch, device, priceInfo, assetScale, supportedMethods } = this.props;
+        const { dispatch, device, priceInfo, assetScale } = this.props;
         const { selectedAction, infoFieldMap } = this.state;
 
         // Create the method data using the possible supported methods?
@@ -55,7 +54,6 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
             {
                 supportedMethods: 'interledger',
                 data: {
-                    
                 }
             }
         ];
@@ -75,7 +73,7 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
             const result: PaymentResponse = await new PaymentRequest(methodData, details).show();
 
             // Change this function name -- it sucks
-            dispatch(orderActions.getInvoice(device.contractURL, selectedAction, infoFieldMap, priceInfo, assetScale));
+            dispatch(orderActions.getInvoice(device.contractURL, selectedAction, infoFieldMap, priceInfo, assetScale, 'interledger'));
 
             // Emit a successful completion -- but the event was dispatched not fulfilled?
             result.complete('success');
@@ -84,6 +82,16 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
         {
             console.error('Payment failure!');
         }
+    }
+
+    private onPayPalOrder(event: React.MouseEvent<HTMLElement>): void
+    {
+        event.preventDefault();
+
+        const { dispatch, device, priceInfo, assetScale } = this.props;
+        const { selectedAction, infoFieldMap } = this.state;
+
+        dispatch(orderActions.getInvoice(device.contractURL, selectedAction, infoFieldMap, priceInfo, assetScale, 'paypal'))
     }
 
     private selectionChangeEvent(selectedName: string): void
@@ -169,7 +177,7 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
     public render(): React.ReactNode
     {
         // Extract prop data
-        const { device, actions, priceInfo, assetScale, infoFields, canOrder, ordering, ordered } = this.props;
+        const { device, actions, priceInfo, assetScale, infoFields, canOrder, ordering, ordered, supportedMethods } = this.props;
 
         // Render the props on the combobox -- Make sure there is no issue with map on empty array
         return (
@@ -198,7 +206,8 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 
                     {priceInfo ? <p> Price: {priceInfo.price} {priceInfo.baseCurrency}</p> : null}
 
-                    <PaymentRequestButton show={this.onOrder} disabled={ordering || !canOrder}/>
+                    <PaymentRequestButton show={this.onILPOrder} disabled={ordering || !canOrder}/>
+                    { supportedMethods.find((el) => el === 'paypal') && <button id="paypal-button" onClick={this.onPayPalOrder}> PayPal </button> }
                 </div>
             </div>
         )
