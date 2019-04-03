@@ -72,6 +72,7 @@
     "webpack": "^4.29.1"
   },
   "devDependencies": {
+    "serverless-python-requirements": "^4.2.5",
     "@types/enzyme": "^3.1.18",
     "@types/jest": "^24.0.0",
     "@types/redux-mock-store": "^1.0.0",
