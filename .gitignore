@@ -83,3 +83,6 @@ package-lock.json
 
 # Remove Key-pair files
 *.pem
+
+# Pip-lock
+*.lock
