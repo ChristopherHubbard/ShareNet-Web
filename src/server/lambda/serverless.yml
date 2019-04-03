@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: lambdaServer
+service: sharenet-server
 
 frameworkVersion: ">=1.16.0 <2.0.0"
 
@@ -20,7 +20,18 @@ provider:
   runtime: python3.7
   stage: dev
   region: us-east-2
-  role: arn:aws:iam::198095930852:role/lambdaServer-dev-us-east-2-lambdaRole
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+       - dynamodb:Query
+       - dynamodb:Scan
+       - dynamodb:GetItem
+       - dynamodb:PutItem
+       - dynamodb:UpdateItem
+       - dynamodb:DeleteItem
+      Resource: 
+        - "arn:aws:dynamodb:us-east-2:659125015803:table/user_info"
+        - "arn:aws:dynamodb:us-east-2:659125015803:table/device_info"
       
 
 environment:
@@ -30,10 +41,10 @@ plugins:
   - serverless-python-requirements
 custom:
   pythonRequirements:
-    pythonBin: C:\Users\matth\AppData\Local\Programs\Python\Python37\python
     usePipenv: true
 
 functions:
+
   new_user:
     handler: handler.new_user
     timeout: 30
@@ -41,18 +52,7 @@ functions:
       - http:
           path: /users/register
           method: post
-          cors: 
-            origin: '*'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Access-Control-Allow-Origin
-              - Access-Control-Allow-Headers
-              - Access-Control-Allow-Methods
+          cors: true
 
   new_device:
     handler: handler.new_device
@@ -61,18 +61,8 @@ functions:
       - http:
           path: /devices
           method: post
-          cors: 
-            origin: '*'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Access-Control-Allow-Origin
-              - Access-Control-Allow-Headers
-              - Access-Control-Allow-Methods
+          cors: true
+
   login_user:
     handler: handler.login_user
     timeout: 30
@@ -80,18 +70,8 @@ functions:
       - http:
           path: /users/login
           method: get
-          cors: 
-            origin: '*'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Access-Control-Allow-Origin
-              - Access-Control-Allow-Headers
-              - Access-Control-Allow-Methods
+          cors: true
+
   delete_user:
     handler: handler.delete_user
     timeout: 30
@@ -99,18 +79,8 @@ functions:
       - http:
           path: /users/remove
           method: delete
-          cors: 
-            origin: '*'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Access-Control-Allow-Origin
-              - Access-Control-Allow-Headers
-              - Access-Control-Allow-Methods
+          cors: true
+
   search_devices:
     handler: handler.find_device_by_code
     timeout: 30
@@ -118,18 +88,8 @@ functions:
       - http:
           path: /connect
           method: get
-          cors: 
-            origin: '*'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Access-Control-Allow-Origin
-              - Access-Control-Allow-Headers
-              - Access-Control-Allow-Methods
+          cors: true
+
   get_user_devices:
     handler: handler.get_devices_by_owner
     timeout: 30
@@ -137,18 +97,8 @@ functions:
       - http:
           path: /devices
           method: get
-          cors: 
-            origin: '*'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Access-Control-Allow-Origin
-              - Access-Control-Allow-Headers
-              - Access-Control-Allow-Methods
+          cors: true
+
   remove_device:
     handler: handler.remove_device
     timeout: 30
@@ -156,16 +106,4 @@ functions:
       - http:
           path: /devices
           method: delete
-          cors: 
-            origin: '*'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Access-Control-Allow-Origin
-              - Access-Control-Allow-Headers
-              - Access-Control-Allow-Methods
-
+          cors: true

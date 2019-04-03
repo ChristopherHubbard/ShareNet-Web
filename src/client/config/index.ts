@@ -10,7 +10,8 @@ const allConfigs: any =
     },
     DEV:
     {
-        apiUrl: 'https://8k3zb9t689.execute-api.us-east-2.amazonaws.com/dev',
+        apiUrl: 'https://70es1m90b3.execute-api.us-east-2.amazonaws.com/dev',
+        //apiUrl: 'https://8k3zb9t689.execute-api.us-east-2.amazonaws.com/dev',
         moneydUrl: 'http://localhost:8081'
     },
     PROD:
