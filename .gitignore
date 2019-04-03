@@ -81,5 +81,8 @@ package-lock.json
 # Exclude binaries
 .DS_Store
 
+# Remove Key-pair files
+*.pem
+
 # Pip-lock
 *.lock

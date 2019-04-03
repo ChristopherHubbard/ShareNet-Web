@@ -10,9 +10,10 @@ interface IOrderActions
     getActions: (contractURL: string) => ((dispatch: Dispatch<any>) => void),
     getInfo: (contractURL: string) => ((dispatch: Dispatch<any>) => void),
     getPriceInfo: (contractURL: string, selectedAction: string) => ((dispatch: Dispatch<any>) => void)
+    getPaymentMethods: (contractURL: string) => ((dispatch: Dispatch<any>) => void)
     getCanOrder: (contractURL: string, selectedAction: string) => ((dispatch: Dispatch<any>) => void)
-    getInvoice: (contractURL: string, selectedAction: string) => ((dispatch: Dispatch<any>) => void)
-    payInvoice: (contractURL: string, selectedAction: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number) => ((dispatch: Dispatch<any>) => void)
+    getInvoice: (contractURL: string, selectedAction: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number, method: string) => ((dispatch: Dispatch<any>) => Promise<any>)
+    payInvoice: (contractURL: string, selectedAction: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number, orderHash: string) => ((dispatch: Dispatch<any>) => void)
 }
 
 // Export the user actions
@@ -21,6 +22,7 @@ export const orderActions: IOrderActions =
     getActions: getActions,
     getInfo: getInfo,
     getPriceInfo: getPriceInfo,
+    getPaymentMethods: getPaymentMethods,
     getCanOrder: getCanOrder,
     getInvoice: getInvoice,
     payInvoice: payInvoice
@@ -50,7 +52,7 @@ function getActions(contractURL: string): (dispatch: Dispatch<any>) => void
             dispatch(orderActions.getCanOrder(contractURL, actions[0]));
 
             // Get the invoice?
-            dispatch(orderActions.getInvoice(contractURL, actions[0]));
+            // dispatch(orderActions.getInvoice(contractURL, actions[0]));
 
             dispatch(alertActions.success('Get actions success'));
         }
@@ -107,8 +109,11 @@ function getPriceInfo(contractURL: string, selectedAction: string): (dispatch: D
 
         try
         {
-            const { asset, assetScale } = await OrderService.getClientAsset();
-            const priceInfo: PriceInfo = await OrderService.getPriceInfo(contractURL, selectedAction, asset);
+            const [{ asset, assetScale }, { paymentPointer }] = await Promise.all([
+                OrderService.getClientAsset(),
+                OrderService.getClientPaymentPointer()]
+            );
+            const priceInfo: PriceInfo = await OrderService.getPriceInfo(contractURL, selectedAction, asset, paymentPointer);
             
             dispatch(<IAction> {
                 type: orderConstants.GET_PRICE_SUCCESS,
@@ -126,6 +131,37 @@ function getPriceInfo(contractURL: string, selectedAction: string): (dispatch: D
             });
 
             dispatch(alertActions.error('Get price info error'));
+        }
+    }
+}
+
+function getPaymentMethods(contractURL: string): (dispatch: Dispatch<any>) => void
+{
+    return async (dispatch: Dispatch<any>) =>
+    {
+        dispatch(<IAction> {
+            type: orderConstants.GET_SUPPORTEDMETHODS_REQUEST
+        });
+
+        try
+        {
+            const supportedMethods: Array<string> = await OrderService.getPaymentMethods(contractURL);
+
+            dispatch(<IAction> {
+                type: orderConstants.GET_SUPPORTEDMETHODS_SUCCESS,
+                supportedMethods: supportedMethods
+            });
+
+            dispatch(alertActions.success('Get supported methods success'));
+        }
+        catch (error)
+        {
+            dispatch(<IAction> {
+                type: orderConstants.GET_SUPPORTEDMETHODS_ERROR,
+                error: error.toString()
+            });
+
+            dispatch(alertActions.error('Get supported methods error'));
         }
     }
 }
@@ -161,7 +197,7 @@ function getCanOrder(contractURL: string, selectedAction: string): (dispatch: Di
     }
 }
 
-function getInvoice(contractURL: string, selectedAction: string): (dispatch: Dispatch<any>) => void
+function getInvoice(contractURL: string, selectedAction: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number, method: string): (dispatch: Dispatch<any>) => Promise<any>
 {
     return async (dispatch: Dispatch<any>) =>
     {
@@ -171,12 +207,54 @@ function getInvoice(contractURL: string, selectedAction: string): (dispatch: Dis
 
         try
         {
-            const { paymentPointer } = await OrderService.getPaymentPointer(contractURL, selectedAction);
+            if (method === 'interledger')
+            {
+                const { paymentPointer, orderHash } = await OrderService.getPaymentPointer(contractURL, selectedAction, infoFields);
 
-            dispatch(<IAction> {
-                type: orderConstants.GET_INVOICE_SUCCESS,
-                paymentPointer: paymentPointer
-            });
+                dispatch(<IAction> {
+                    type: orderConstants.GET_INVOICE_SUCCESS,
+                    paymentPointer: paymentPointer,
+                    orderHash: orderHash
+                });
+
+                // Pay the invoice!
+                dispatch(
+                    payInvoice(
+                        contractURL,
+                        selectedAction,
+                        paymentPointer,
+                        infoFields,
+                        priceInfo,
+                        assetScale,
+                        orderHash
+                    )
+                );
+            }
+            else if (method === 'paypal')
+            {
+                const { payment_info } = await OrderService.createPayPalPayment(contractURL, selectedAction, infoFields);
+
+                const links: any = {};
+                payment_info.links.forEach((linkObj: any) =>
+                {
+                    links[linkObj.rel] = {
+                        href: linkObj.href,
+                        method: linkObj.method
+                    };
+                });
+
+                if (links.hasOwnProperty('approval_url'))
+                {
+                    const win: Window = window.open(links['approval_url'].href, '_blank') as Window;
+                    win.focus();
+
+                    // How to close this window when done? -- this is done server side! -- but might want a local notification...
+                }
+                else
+                {
+                    console.error('no redirect URI present');
+                }
+            }
 
             dispatch(alertActions.success('Get invoice success'));
         }
@@ -192,7 +270,7 @@ function getInvoice(contractURL: string, selectedAction: string): (dispatch: Dis
     }
 }
 
-function payInvoice(contractURL: string, selectedAction: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number): (dispatch: Dispatch<any>) => void
+function payInvoice(contractURL: string, selectedAction: string, paymentPointer: string, infoFields: Map<string, string>, priceInfo: PriceInfo, assetScale: number, orderHash: string): (dispatch: Dispatch<any>) => void
 {
     return async (dispatch: Dispatch<any>) =>
     {
@@ -202,7 +280,7 @@ function payInvoice(contractURL: string, selectedAction: string, paymentPointer:
 
         try
         {
-            const receipt: any = await OrderService.payInvoice(contractURL, selectedAction, paymentPointer, infoFields, priceInfo, assetScale);
+            const receipt: any = await OrderService.payInvoice(contractURL, selectedAction, paymentPointer, infoFields, priceInfo, assetScale, orderHash);
 
             dispatch(<IAction> {
                 type: orderConstants.PAY_INVOICE_SUCCESS,

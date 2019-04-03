@@ -1,17 +1,14 @@
 import * as React from 'react';
 import { connect, DispatchProp } from 'react-redux';
-import { orderActions } from '../actions';
+import { orderActions, paymentActions } from '../actions';
 import { OrderPageState as OrderPageProps } from '../models';
-import PaymentButton from './PaymentRequestButton';
 import PaymentRequestButton from './PaymentRequestButton';
-
-// Try to work around webpack?
-const SERVICE_WORKER_URL: string = window.location.origin + '/interledger.js';
 
 interface OrderPageState
 {
     selectedAction: string,
-    infoFieldMap: Map<string, string>
+    infoFieldMap: Map<string, string>,
+    registeredPaymentMethods: Array<string>
 }
 
 export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any>, OrderPageState>
@@ -22,7 +19,8 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 
         this.state = {
             selectedAction: '',
-            infoFieldMap: new Map<string, string>()
+            infoFieldMap: new Map<string, string>(),
+            registeredPaymentMethods: new Array<string>()
         };
 
         // Call the initialization services
@@ -30,15 +28,13 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 
         dispatch(orderActions.getActions(device.contractURL));
         dispatch(orderActions.getInfo(device.contractURL));
+        dispatch(orderActions.getPaymentMethods(device.contractURL));
 
         this.onActionChange = this.onActionChange.bind(this);
-        this.onOrder = this.onOrder.bind(this);
+        this.onILPOrder = this.onILPOrder.bind(this);
+        this.onPayPalOrder = this.onPayPalOrder.bind(this);
         this.selectionChangeEvent = this.selectionChangeEvent.bind(this);
         this.onUpdateInfoField = this.onUpdateInfoField.bind(this);
-        this.registerPaymentService = this.registerPaymentService.bind(this);
-        this.addInstruments = this.addInstruments.bind(this);
-
-        this.registerPaymentService();
     }
 
     private onActionChange(event: React.ChangeEvent<HTMLSelectElement>): void
@@ -46,20 +42,18 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
         this.selectionChangeEvent(event.target.value);
     }
 
-    private async onOrder(event: React.MouseEvent<HTMLElement>): Promise<void>
+    private async onILPOrder(event: React.MouseEvent<HTMLElement>): Promise<void>
     {
         event.preventDefault();
 
-        const { dispatch, device, paymentPointer, priceInfo, assetScale } = this.props;
+        const { dispatch, device, priceInfo, assetScale } = this.props;
         const { selectedAction, infoFieldMap } = this.state;
 
-        // How to get the invoice?
-
+        // Create the method data using the possible supported methods?
         const methodData = [
             {
-                supportedMethods: Array<string>('interledger'),
+                supportedMethods: 'interledger',
                 data: {
-                    paymentPointer
                 }
             }
         ];
@@ -78,16 +72,8 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
         {
             const result: PaymentResponse = await new PaymentRequest(methodData, details).show();
 
-            dispatch(orderActions
-                .payInvoice(
-                    device.contractURL,
-                    selectedAction,
-                    paymentPointer,
-                    infoFieldMap,
-                    priceInfo,
-                    assetScale
-                )
-            );
+            // Change this function name -- it sucks
+            dispatch(orderActions.getInvoice(device.contractURL, selectedAction, infoFieldMap, priceInfo, assetScale, 'interledger'));
 
             // Emit a successful completion -- but the event was dispatched not fulfilled?
             result.complete('success');
@@ -96,6 +82,16 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
         {
             console.error('Payment failure!');
         }
+    }
+
+    private onPayPalOrder(event: React.MouseEvent<HTMLElement>): void
+    {
+        event.preventDefault();
+
+        const { dispatch, device, priceInfo, assetScale } = this.props;
+        const { selectedAction, infoFieldMap } = this.state;
+
+        dispatch(orderActions.getInvoice(device.contractURL, selectedAction, infoFieldMap, priceInfo, assetScale, 'paypal'))
     }
 
     private selectionChangeEvent(selectedName: string): void
@@ -108,9 +104,6 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
         // Get whether it can be ordered
         dispatch(orderActions.getCanOrder(device.contractURL, selectedName));
 
-        // Get the invoice?
-        dispatch(orderActions.getInvoice(device.contractURL, selectedName));
-
         // Update the state
         this.setState((prevState) => ({
             ...prevState,
@@ -120,7 +113,8 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 
     private onUpdateInfoField(event: React.ChangeEvent<HTMLInputElement>): void
     {
-        const { infoFieldMap } = this.state;
+        const { dispatch, device } = this.props;
+        const { selectedAction, infoFieldMap } = this.state;
         infoFieldMap.set(event.target.name, event.currentTarget.value);
 
         this.setState((prevState) => ({
@@ -131,60 +125,59 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 
     public componentDidUpdate(): void
     {
-        const { actions } = this.props;
+        const { dispatch, device, actions, supportedMethods } = this.props;
+        const { selectedAction, registeredPaymentMethods, infoFieldMap } = this.state;
 
-        if (!this.state.selectedAction)
+        if (!selectedAction)
         {
             this.setState((prevState) => ({
                 ...prevState,
                 selectedAction: actions[0]
             }));
         }
-    }
 
-    private registerPaymentService(): void
-    {
-        navigator.serviceWorker.register(SERVICE_WORKER_URL).then((registration: any) =>
+        if (registeredPaymentMethods.length < supportedMethods.length)
         {
-            console.log('registration', registration);
-            if (!registration.paymentManager)
+            // New payment method to register -- register ILP or PayPal basically
+            for (const paymentMethod of supportedMethods)
             {
-                registration.unregister().then((success: any) => {});
-                console.log('Payment app capability not present. Enable flags?');
-                return;
+                if (!registeredPaymentMethods.includes(paymentMethod))
+                {
+                    // Register this payment method
+                    dispatch(paymentActions.registerPaymentMethod(paymentMethod));
+                }
             }
-            this.addInstruments(registration).then(function () {
-              console.log('Successfully registered!');
-            })
-        })
-        .catch((error) =>
-        {
-            console.log('Service worker registration error', error);
-        })
-    }
 
-    private addInstruments(registration: any)
-    {
-        registration.paymentManager.userHint = 'test@interledgerpay.xyz';
-        return Promise.all([
-          registration.paymentManager.instruments.set(
-            '5c077d7a-0a4a-4a08-986a-7fb0f5b08b13',
+            // Set the new registered payment methods
+            this.setState((prevState) => ({
+                ...prevState,
+                registeredPaymentMethods: supportedMethods
+            }));
+        }
+        else if (registeredPaymentMethods.length > supportedMethods.length)
+        {
+            // Remove unnecessary payment methods
+            for (const paymentMethod of registeredPaymentMethods)
             {
-              name: 'ILP',
-              icons: [{
-                src: '/src/client/assets/ilp_icon.png',
-                sizes: '32x32',
-                type: 'image/png'}
-              ],
-              method: 'interledger'
-            })
-        ]);
+                if (!supportedMethods.includes(paymentMethod))
+                {
+                    // Register this payment method
+                    dispatch(paymentActions.unregisterPaymentMethod(paymentMethod));
+                }
+            }
+
+            // Set the new registered payment methods
+            this.setState((prevState) => ({
+                ...prevState,
+                registeredPaymentMethods: supportedMethods
+            }));
+        }
     }
 
     public render(): React.ReactNode
     {
         // Extract prop data
-        const { device, actions, priceInfo, assetScale, infoFields, canOrder, ordering, ordered } = this.props;
+        const { device, actions, priceInfo, assetScale, infoFields, canOrder, ordering, ordered, supportedMethods } = this.props;
 
         // Render the props on the combobox -- Make sure there is no issue with map on empty array
         return (
@@ -213,7 +206,8 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 
                     {priceInfo ? <p> Price: {priceInfo.price} {priceInfo.baseCurrency}</p> : null}
 
-                    <PaymentRequestButton show={this.onOrder} disabled={ordering || !canOrder}/>
+                    <PaymentRequestButton show={this.onILPOrder} disabled={ordering || !canOrder}/>
+                    { supportedMethods.find((el) => el === 'paypal') && <button id="paypal-button" onClick={this.onPayPalOrder}> PayPal </button> }
                 </div>
             </div>
         )
@@ -223,7 +217,7 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
 function mapStateToProps(state: any): OrderPageProps
 {
     const { connectedDevice } = state.connection;
-    const { actions, priceInfo, assetScale, infoFields, canOrder, ordering, ordered, paymentPointer } = state.order;
+    const { actions, priceInfo, assetScale, infoFields, canOrder, ordering, ordered, supportedMethods } = state.order;
 
     return {
         device: connectedDevice,
@@ -234,7 +228,7 @@ function mapStateToProps(state: any): OrderPageProps
         canOrder,
         ordering,
         ordered,
-        paymentPointer
+        supportedMethods
     };
 }
 

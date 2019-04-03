@@ -5,7 +5,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   entry: {
     build: "./distlib/src/client/index.js",
-    interledger: "./distlib/src/client/services/sw-interledger.js"
+    interledger: "./distlib/src/client/services/interledger.js"
   },
   output: {
     path: path.resolve(__dirname, '../dist'),

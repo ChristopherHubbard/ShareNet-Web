@@ -18,5 +18,7 @@ export interface IAction
     assetScale?: number
     info?: Array<string>
     paymentPointer?: string
-    receipt?: Receipt
+    receipt?: Receipt,
+    supportedMethods?: Array<string>,
+    orderHash?: string
 }

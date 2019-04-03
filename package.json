@@ -8,7 +8,7 @@
     "build-dev": "npm run copy && tsc -p ./ && webpack --config ./distlib/webpack.config.js --mode development",
     "build-prod": "npm run copy && tsc -p ./ && webpack --config ./distlib/webpack.config.js --mode production",
     "deploy": "npm run build-prod && aws s3 sync dist/ s3://codius-smart-sharing-s3",
-    "copy": "copyfiles src/**/assets/* distlib/ && copyfiles src/**/assets/ilp_icon.png dist/ copyfiles src/**/assets/manifest.json dist/",
+    "copy": "copyfiles src/**/assets/* distlib/ && copyfiles src/**/assets/ilp_icon.png dist/ copyfiles src/**/assets/paypal_icon.png dist/ copyfiles src/**/assets/manifest.json dist/",
     "test": "jest --coverage --collectCoverageFrom=src/**/*.{ts,tsx}"
   },
   "repository": {
@@ -36,6 +36,7 @@
     "@types/react-router-dom": "^4.3.1",
     "@types/redux-form": "^7.4.16",
     "axios": "^0.18.0",
+    "braintree-web": "^3.44.0",
     "copy-webpack-plugin": "^4.6.0",
     "copyfiles": "^2.1.0",
     "css-loader": "^2.1.0",
