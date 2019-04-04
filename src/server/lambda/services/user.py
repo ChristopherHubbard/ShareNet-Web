@@ -1,4 +1,3 @@
-import json
 import security
 import dynamo_helpers
 
@@ -53,9 +52,9 @@ def login(user):
 
             # Return the user -- less the password
             del user_entry['password']
-            return json.dumps(user_entry)
+            return user_entry
         else:
-            return json.dumps({})
+            return {}
     else:
 
         # Properties missing -- 400 error

@@ -1,4 +1,3 @@
-import json
 import dynamo_helpers
 from boto3.dynamodb.conditions import Key, Attr
 
@@ -24,12 +23,12 @@ def register_device(device):
         # Is the internals needed??
 
         # Return the Device? -- This should probably have a refactor to stay the same as register user
-        return True, json.dumps({
+        return True, {
             'name': device['name'],
             'owner': device['owner'],
             'contractURL': device['contractURL'],
             'code': device['code']
-        })
+        }
 
     elif all(val in device for val in required_props):
 
@@ -38,7 +37,7 @@ def register_device(device):
     else:
 
         # Exists
-        return False, json.dumps({})
+        return False, {}
 
 def connect(code):
 
@@ -50,9 +49,9 @@ def connect(code):
     )
 
     # Return the object with the device
-    return json.dumps({
+    return {
         'device': response['Items'][0]
-    })
+    }
 
 def get_devices(user):
 
@@ -67,9 +66,9 @@ def get_devices(user):
     devices = [createDeviceRecord(device, user) for device in response['Items']]
 
     # Return the body
-    return json.dumps({
+    return {
         'devices': devices
-    })
+    }
 
 def delete_device(code, owner):
 
