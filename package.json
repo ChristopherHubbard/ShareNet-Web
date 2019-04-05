@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/ChristopherHubbard/codius-smart-sharing#readme",
   "dependencies": {
+    "@aws-amplify/auth": "^1.2.20",
+    "@aws-amplify/core": "^1.0.25",
     "@types/enzyme-adapter-react-16": "^1.0.4",
     "@types/koa": "^2.0.48",
     "@types/koa-bodyparser": "^4.2.2",
@@ -35,7 +37,7 @@
     "@types/react-redux": "^7.0.1",
     "@types/react-router-dom": "^4.3.1",
     "@types/redux-form": "^7.4.16",
-    "aws-amplify": "^1.1.23",
+    "aws-amplify-react": "^2.3.4",
     "axios": "^0.18.0",
     "braintree-web": "^3.44.0",
     "copy-webpack-plugin": "^4.6.0",
