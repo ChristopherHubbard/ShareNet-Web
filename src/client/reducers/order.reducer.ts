@@ -1,11 +1,13 @@
 import { orderConstants } from '../constants';
-import { OrderPageState, IAction } from '../models';
+import { OrderPageState, IAction, AccessType, DeviceCategory } from '../models';
 
 const initState: OrderPageState = {
     device: {
         name: '',
         code: '',
-        contractURL: ''
+        contractURL: '',
+        accessType: AccessType.PRIVATE,
+        deviceCategory: DeviceCategory.COMPUTE
     },
     actions: [],
     priceInfo: {

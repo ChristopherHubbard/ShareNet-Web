@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Dispatch } from 'redux';
 import * as Adapter from 'enzyme-adapter-react-16';
 import { configure, shallow, ShallowWrapper, mount } from 'enzyme';
-import { User, Device } from '../models';
+import { User, Device, AccessType, DeviceCategory } from '../models';
 import { DeviceItem } from '../components';
 
 configure({ adapter: new Adapter() });
@@ -21,6 +21,8 @@ describe('DeviceItem component', () =>
         owner: user,
         code: "1234",
         contractURL: "http://hello.com",
+        accessType: AccessType.PRIVATE,
+        deviceCategory: DeviceCategory.COMPUTE
     };
 
     const mockDispatch: Dispatch<any> = jest.fn();

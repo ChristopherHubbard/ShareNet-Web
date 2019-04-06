@@ -71,9 +71,10 @@ export class DeviceItem extends React.Component<DeviceItemProps & DispatchProp<a
             <div className="card" tabIndex={-1} onBlur={this.onBlur} onClick={this.onClick} key={device.code}>
                 <div className="content">
                     <h3> {device.name} </h3>
+                    <h5> {device.deviceCategory} </h5>
                     <div>
                         {selected && (<div>
-                                        <div> Device Name: {device.name} </div>
+                                        <div> Access Type: {device.accessType} </div>
                                         <div> Connection Code: {device.code} </div>
                                         <div> Contract URL: {device.contractURL} </div>
 

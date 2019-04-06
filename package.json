@@ -40,6 +40,7 @@
     "aws-amplify-react": "^2.3.4",
     "axios": "^0.18.0",
     "braintree-web": "^3.44.0",
+    "cachios": "^2.1.0",
     "copy-webpack-plugin": "^4.6.0",
     "copyfiles": "^2.1.0",
     "css-loader": "^2.1.0",

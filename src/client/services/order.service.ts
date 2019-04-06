@@ -2,7 +2,9 @@ import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import Config from '../config';
 import { PriceInfo } from '../models';
 
-const NUM_RETRIES: number = 3;
+// Create the axios caching instance
+const cachios = require('cachios');
+
 // Abstract since totally static class
 export abstract class OrderService
 {
@@ -91,12 +93,14 @@ export abstract class OrderService
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            ttl: 60 // Keep the result for a minute at least
         };
 
         try
         {
-            const response: AxiosResponse = await axios.get(`${Config.moneydUrl}/receiver`, requestOptions);
+            // Get the clients payment pointer -- cache this to reduce latency issues when using cloud config
+            const response: AxiosResponse = await cachios.get(`${Config.moneydUrl}/receiver`, requestOptions);
 
             return response.data;
         }

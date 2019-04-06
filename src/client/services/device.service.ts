@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
-import { User, Device } from '../models';
+import { User, Device, AccessType } from '../models';
 import Config from '../config';
 
 // Abstract since totally static class
@@ -25,6 +25,32 @@ export abstract class DeviceService
             const response: AxiosResponse = await axios.get(`${Config.apiUrl}/devices`, requestOptions);
 
             // Return the devices for this user
+            return response.data.devices;
+        }
+        catch (error)
+        {
+            // Log the error
+            console.error(error);
+        }
+    }
+
+    public static async get_by_access_type(type: AccessType): Promise<any>
+    {
+        const requestOptions: any =
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params: type
+        };
+
+        try
+        {
+            // Await the response
+            const response: AxiosResponse = await axios.get(`${Config.apiUrl}/devices/access`, requestOptions);
+
+            // Return the devices that are in this access type
             return response.data.devices;
         }
         catch (error)

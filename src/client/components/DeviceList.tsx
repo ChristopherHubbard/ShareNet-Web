@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { connect, DispatchProp } from 'react-redux';
 import { deviceActions, alertActions } from '../actions';
-import { DeviceState as DeviceListProps, Device, User } from '../models';
+import { DeviceState as DeviceListProps, Device, User, AccessType, DeviceCategory } from '../models';
 import { CustomInput } from './CustomInput';
 import DeviceItem from './DeviceItem';
 
@@ -54,7 +54,9 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                 name: '',
                 owner: user,
                 code: '',
-                contractURL: ''
+                contractURL: '',
+                accessType: AccessType.PRIVATE,
+                deviceCategory: DeviceCategory.COMPUTE
             },
             openNewDeviceDialog: false
         };
@@ -114,7 +116,9 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                 name: '',
                 owner: user,
                 code: '',
-                contractURL: ''
+                contractURL: '',
+                accessType: AccessType.PRIVATE,
+                deviceCategory: DeviceCategory.COMPUTE
             },
             openNewDeviceDialog: false
         });
@@ -151,6 +155,14 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                             <div>
                                 <label> Enter the contract URL </label>
                                 <input type="text" name="contractURL" onChange={this.handleChange}/>
+                            </div>
+                            <div>
+                                <label> Enter the access type </label>
+                                <input type="text" name="accessType" onChange={this.handleChange}/>
+                            </div>
+                            <div>
+                                <label> Enter the category </label>
+                                <input type="text" name="deviceCategory" onChange={this.handleChange}/>
                             </div>
                             <button name="add" onClick={this.handleAddDevice}> Add </button>
                             <button name="cancelAdd" onClick={this.handleCloseAddDevice}> Cancel </button>

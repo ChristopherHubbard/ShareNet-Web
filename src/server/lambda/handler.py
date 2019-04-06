@@ -72,25 +72,21 @@ def new_device(event, context):
 
     # Call the device service
     try:
-        succeeded, ret_dev = services.register_device(device=device)
+        succeeded = services.register_device(device=device)
 
         if succeeded:
 
-            body = ret_dev
             status = 200
         else:
 
-            body = {}
             status = 409
     except:
 
-        body = {}
         status = 409
 
     # Return the response
     return {
-        'statusCode': status,
-        'body': json.dumps(body)
+        'statusCode': status
     }
 
 @cors_headers

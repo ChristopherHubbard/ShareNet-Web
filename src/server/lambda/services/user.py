@@ -1,9 +1,10 @@
 import security
 import dynamo_helpers
 
+users_table = dynamo_helpers.create_dynamodb_instance('user_info')
+
 def register_user(user):
 
-    users_table = dynamo_helpers.create_dynamodb_instance('user_info')
     required_props = ['email', 'firstname', 'lastname', 'password']
     if all(user[val] and user[val] != '' for val in required_props) and not dynamo_helpers.find_if_items_exist('email', user['email'], users_table):
 
@@ -26,7 +27,6 @@ def register_user(user):
 def login(user):
 
     # Login a existing user if the password matches
-    users_table = dynamo_helpers.create_dynamodb_instance('user_info')
     required_props = ['email', 'password']
 
     # Check that all the properties are there
@@ -63,7 +63,6 @@ def login(user):
 def delete_user(user):
 
     # Remove the user from DynamoDB -- could only throw on DB connection error
-    users_table = dynamo_helpers.create_dynamodb_instance('user_info')
     users_table.delete_item(
         Key={
             "email": user['email']
