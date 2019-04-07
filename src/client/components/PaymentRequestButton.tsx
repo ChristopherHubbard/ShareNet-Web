@@ -1,14 +1,25 @@
 import * as React from 'react';
-import paymentRequest, { PaymentRequestInterface } from 'react-payment-request-api';
 
-export interface OwnProps {
-  style: object;
+import '../assets/Payment.scss';
+
+const ilpIcon: any = require('../assets/ilp_logo.svg');
+
+interface Props
+{
+    show: any
+    isSupported: boolean
+    disabled: boolean
+    className: string
+};
+
+export const PaymentRequestButton: React.StatelessComponent<Props> = ({ show, isSupported, className }) => 
+{
+    return (
+      <div onClick={show} className={className} role="button" id="ilp-button">
+          <img src={ilpIcon}/>
+          <div>
+              <h6> Interledger </h6>
+          </div>
+      </div>
+    )
 }
-
-const Button: React.StatelessComponent<PaymentRequestInterface & OwnProps> = ({
-  show, isSupported, style,
-}) => isSupported
-  ? <button onClick={show} style={style}> Rent now </button>
-  : <span>Payment request not supported</span>;
-
-export default paymentRequest<OwnProps>()(Button);

@@ -2,7 +2,8 @@ import * as React from 'react';
 import { connect, DispatchProp } from 'react-redux';
 import { orderActions, paymentActions } from '../actions';
 import { OrderPageState as OrderPageProps } from '../models';
-import PaymentRequestButton from './PaymentRequestButton';
+import { PaymentRequestButton } from './PaymentRequestButton';
+import { PayPalRequestButton } from './PayPalRequestButton';
 
 interface OrderPageState
 {
@@ -204,10 +205,23 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
                         }
                     </div>
 
-                    {priceInfo ? <p> Price: {priceInfo.price} {priceInfo.baseCurrency}</p> : null}
+                    { priceInfo ? <p> Price: {priceInfo.price} {priceInfo.baseCurrency}</p> : null }
 
-                    <PaymentRequestButton show={this.onILPOrder} disabled={ordering || !canOrder}/>
-                    { supportedMethods.find((el) => el === 'paypal') && <button id="paypal-button" onClick={this.onPayPalOrder}> PayPal </button> }
+                    <div>
+                        {
+                            supportedMethods.map((el) =>
+                            {
+                                if (el === 'interledger')
+                                {
+                                    return <PaymentRequestButton show={this.onILPOrder} isSupported={true} disabled={ordering || !canOrder} className={"interledger"}/>
+                                }
+                                else if (el === 'paypal')
+                                {
+                                    return <PayPalRequestButton show={this.onPayPalOrder} isSupported={true} disabled={ordering || !canOrder} className={"paypal"}/>
+                                }
+                            })
+                        }
+                    </div>
                 </div>
             </div>
         )

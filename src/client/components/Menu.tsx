@@ -29,6 +29,7 @@ export class Menu extends React.Component<DispatchProp<any>, MenuState>
             showMenu: false
         };
 
+        this.onHome = this.onHome.bind(this);
         this.onDevices = this.onDevices.bind(this);
         this.onConnectToNew = this.onConnectToNew.bind(this);
         this.onLogout = this.onLogout.bind(this);
@@ -39,6 +40,15 @@ export class Menu extends React.Component<DispatchProp<any>, MenuState>
     {
         this.setState({
             showMenu: state.isOpen
+        });
+    }
+
+    private onHome(event: any): void
+    {
+        history.push('/home');
+
+        this.setState({
+            showMenu: false
         });
     }
 
@@ -82,7 +92,15 @@ export class Menu extends React.Component<DispatchProp<any>, MenuState>
                           customBurgerIcon={<img className={"bm-burger-button"} src={burgerIcon}/>}
                           isOpen={showMenu}
                           onStateChange={(state) => this.onStateChange(state)}>
-                <a className="menu-item" key="0" onClick={this.onDevices}>
+                <a className="menu-item" key="0" onClick={this.onHome}>
+                    <span>
+                        <img src={deviceIcon}/>
+                        <text>
+                            Home
+                        </text>
+                    </span>
+                </a>
+                <a className="menu-item" key="1" onClick={this.onDevices}>
                     <span>
                         <img src={deviceIcon}/>
                         <text>
@@ -90,7 +108,7 @@ export class Menu extends React.Component<DispatchProp<any>, MenuState>
                         </text>
                     </span>
                 </a>
-                <a className="menu-item" key="1" onClick={this.onConnectToNew}>
+                <a className="menu-item" key="2" onClick={this.onConnectToNew}>
                     <span>
                         <img src={connectionIcon}/>
                         <text>
@@ -98,7 +116,7 @@ export class Menu extends React.Component<DispatchProp<any>, MenuState>
                         </text>
                     </span>
                 </a>
-                <a className="menu-item" key="2" onClick={this.onLogout}> 
+                <a className="menu-item" key="3" onClick={this.onLogout}> 
                     <span>
                         <img src={logoutIcon}/>
                         <text>

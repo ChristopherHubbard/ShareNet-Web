@@ -14,8 +14,6 @@ interface DeviceListState
     openNewDeviceDialog: boolean
 }
 
-const ROW_LENGTH: number = 4;
-
 export class DeviceList extends React.Component<DeviceListProps & DispatchProp<any>, DeviceListState>
 {
     constructor(props: DeviceListProps & DispatchProp<any>)
