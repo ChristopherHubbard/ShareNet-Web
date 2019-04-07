@@ -54,7 +54,22 @@ def get_devices(user):
     )
 
     # Restructure the device records
-    devices = [createDeviceRecord(device, user) for device in response['Items']]
+    devices = [createDeviceRecord(device) for device in response['Items']]
+
+    # Return the body
+    return {
+        'devices': devices
+    }
+
+def get_public_devices():
+
+    # Get all the devices that are labeled as public
+    response = device_table.scan(
+        FilterExpression=Attr('accessType').eq('PUBLIC')
+    )
+
+    # Restructure the device records
+    devices = [createDeviceRecord(device) for device in response['Items']]
 
     # Return the body
     return {
@@ -72,7 +87,7 @@ def delete_device(code, owner):
 
     return True
 
-def createDeviceRecord(device, user):
+def createDeviceRecord(device):
 
     # Return a structured device record
     return {
@@ -80,9 +95,9 @@ def createDeviceRecord(device, user):
         'contractURL': device['contractURL'],
         'code': device['code'],
         'owner': {
-            'firstname': user['firstname'],
-            'lastname': user['lastname'],
-            'email': user['email']
+            'firstname': device['owner']['firstname'],
+            'lastname': device['owner']['lastname'],
+            'email': device['owner']['email']
         },
         'accessType': device['accessType'],
         'deviceCategory': device['deviceCategory']

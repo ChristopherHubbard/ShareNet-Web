@@ -45,15 +45,6 @@ custom:
 
 functions:
 
-  new_user:
-    handler: handler.new_user
-    timeout: 30
-    events:
-      - http:
-          path: /users/register
-          method: post
-          cors: true
-
   new_device:
     handler: handler.new_device
     timeout: 30
@@ -61,24 +52,6 @@ functions:
       - http:
           path: /devices
           method: post
-          cors: true
-
-  login_user:
-    handler: handler.login_user
-    timeout: 30
-    events:
-      - http:
-          path: /users/login
-          method: get
-          cors: true
-
-  delete_user:
-    handler: handler.delete_user
-    timeout: 30
-    events:
-      - http:
-          path: /users/remove
-          method: delete
           cors: true
 
   search_devices:
@@ -96,6 +69,15 @@ functions:
     events:
       - http:
           path: /devices
+          method: get
+          cors: true
+
+  get_public_devices:
+    handler: handler.get_public_devices
+    timeout: 30
+    events:
+      - http:
+          path: /devices/public
           method: get
           cors: true
 

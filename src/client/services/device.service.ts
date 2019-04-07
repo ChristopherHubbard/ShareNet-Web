@@ -34,15 +34,14 @@ export abstract class DeviceService
         }
     }
 
-    public static async get_by_access_type(type: AccessType): Promise<any>
+    public static async get_public_devices(): Promise<any>
     {
         const requestOptions: any =
         {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            params: type
+            }
         };
 
         try

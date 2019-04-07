@@ -12,7 +12,7 @@ export enum DeviceCategory
     COMPUTE = 'COMPUTE',
     STORAGE = 'STORAGE',
     TRANSPORTATION = 'TRANSPORTATION',
-    FOOD_AND_DRINK = 'FOOD_AND_DRINK'
+    FOOD_AND_DRINK = 'FOOD AND DRINK'
 }
 
 export interface Device

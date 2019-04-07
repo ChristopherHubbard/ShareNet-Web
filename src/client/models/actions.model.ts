@@ -10,6 +10,7 @@ export interface IAction
     error?: string
     user?: User
     devices?: Array<Device>
+    publicDevices?: Array<Device>
     device?: Device
     searchedDevice?: Device
     actions?: Array<string>
