@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Dispatch } from 'redux';
 import * as Adapter from 'enzyme-adapter-react-16';
 import { configure, shallow, ShallowWrapper, mount } from 'enzyme';
-import { User, Device } from '../models';
+import { User, Device, AccessType, DeviceCategory } from '../models';
 import { DeviceList } from '../components';
 
 configure({ adapter: new Adapter() });
@@ -21,13 +21,17 @@ describe('DeviceList component', () =>
         name: "Bar",
         owner: user,
         code: "1234",
-        contractURL: "http://hello.com"
+        contractURL: "http://hello.com",
+        accessType: AccessType.PRIVATE,
+        deviceCategory: DeviceCategory.COMPUTE
     },
     {
         name: "Bar2",
         owner: user,
         code: "12345",
-        contractURL: "http://hello2.com"
+        contractURL: "http://hello2.com",
+        accessType: AccessType.PRIVATE,
+        deviceCategory: DeviceCategory.COMPUTE
     }];
 
     const mockDispatch: Dispatch<any> = jest.fn();

@@ -1,0 +1,48 @@
+.payment-btn {
+    border-radius: 4px;
+    line-height: 1.3333333;
+    border-color: transparent;
+    margin: 0 auto;
+    box-shadow: 0px 7px 5px 0px rgba(0,0,0,0.2);
+
+    width: 200px;
+    height: 45px;
+
+    align-self: center;
+
+    margin-bottom: 10px;
+
+    div {
+        display: inline-block;
+
+        h6 {
+            text-shadow: 0px 7px 5px rgba(0, 0, 0, 0.2);
+            font-family: 'Titillium Web', sans-serif;
+            color: #fff;
+            font-weight: 400;
+            padding-left: 5px;
+            font-size: 20px;
+        }
+    }
+
+    img {
+        animation-name: zoomIn;
+        animation-duration: 1.2s;
+        animation-fill-mode: both;
+
+        width: 40px;
+        height: 40px;
+    }
+}
+
+.interledger {
+    @extend .payment-btn;
+
+    background-color: black;
+}
+
+.paypal {
+    @extend .payment-btn;
+    
+    background-color: #ffc439;
+}

@@ -1,5 +1,5 @@
 import { connectionConstants } from '../constants';
-import { DeviceConnectionState, IAction } from '../models';
+import { DeviceConnectionState, IAction, AccessType, DeviceCategory } from '../models';
 
 const initState: DeviceConnectionState = {
     connected: false,
@@ -7,12 +7,16 @@ const initState: DeviceConnectionState = {
     searchedDevice: {
         code: '',
         contractURL: '',
-        name: ''
+        name: '',
+        accessType: AccessType.PRIVATE,
+        deviceCategory: DeviceCategory.COMPUTE
     },
     connectedDevice: {
         code: '',
         contractURL: '',
-        name: ''
+        name: '',
+        accessType: AccessType.PRIVATE,
+        deviceCategory: DeviceCategory.COMPUTE
     }
 };
 

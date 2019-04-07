@@ -23,6 +23,17 @@ export function devices(state: DeviceState = { devices: [] }, action: IAction): 
                 devices: [],
                 error: action.error
             };
+        case deviceConstants.GET_PUBLIC_DEVICES_SUCCESS:
+            return <DeviceState> {
+                ...state,
+                publicDevices: action.publicDevices
+            };
+        case deviceConstants.GET_PUBLIC_DEVICES_ERROR:
+            return <DeviceState> {
+                ...state,
+                publicDevices: [],
+                error: action.error
+            }
         case deviceConstants.ADD_DEVICE_REQUEST:
             return <DeviceState> {
                 ...state,

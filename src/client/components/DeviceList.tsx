@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { connect, DispatchProp } from 'react-redux';
 import { deviceActions, alertActions } from '../actions';
-import { DeviceState as DeviceListProps, Device, User } from '../models';
+import { DeviceState as DeviceListProps, Device, User, AccessType, DeviceCategory } from '../models';
 import { CustomInput } from './CustomInput';
 import DeviceItem from './DeviceItem';
 
@@ -13,8 +13,6 @@ interface DeviceListState
     newDevice: Device,
     openNewDeviceDialog: boolean
 }
-
-const ROW_LENGTH: number = 4;
 
 export class DeviceList extends React.Component<DeviceListProps & DispatchProp<any>, DeviceListState>
 {
@@ -54,7 +52,9 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                 name: '',
                 owner: user,
                 code: '',
-                contractURL: ''
+                contractURL: '',
+                accessType: AccessType.PRIVATE,
+                deviceCategory: DeviceCategory.COMPUTE
             },
             openNewDeviceDialog: false
         };
@@ -114,7 +114,9 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                 name: '',
                 owner: user,
                 code: '',
-                contractURL: ''
+                contractURL: '',
+                accessType: AccessType.PRIVATE,
+                deviceCategory: DeviceCategory.COMPUTE
             },
             openNewDeviceDialog: false
         });
@@ -151,6 +153,48 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                             <div>
                                 <label> Enter the contract URL </label>
                                 <input type="text" name="contractURL" onChange={this.handleChange}/>
+                            </div>
+                            <div>
+                                <label> Enter the access type </label>
+                                <select name="accessType" onChange={this.handleChange}>
+                                    {
+                                        Object.keys(AccessType).map((value, index) =>
+                                            <option key={index} value={value}> 
+                                                {
+                                                    value.toLowerCase().split('_').map(word =>
+                                                    {
+                                                        if (word !== 'and')
+                                                        {
+                                                            word = word.charAt(0).toUpperCase() + word.slice(1);
+                                                        }
+                                                        return word;
+                                                    }).join(' ')
+                                                }
+                                            </option>
+                                        )
+                                    }
+                                </select>
+                            </div>
+                            <div>
+                                <label> Enter the category </label>
+                                <select name="deviceCategory" onChange={this.handleChange}>
+                                    {
+                                        Object.keys(DeviceCategory).map((value, index) =>
+                                            <option key={index} value={value}> 
+                                                {
+                                                    value.toLowerCase().split('_').map(word =>
+                                                    {
+                                                        if (word !== 'and')
+                                                        {
+                                                            word = word.charAt(0).toUpperCase() + word.slice(1);
+                                                        }
+                                                        return word;
+                                                    }).join(' ')
+                                                }
+                                            </option>
+                                        )
+                                    }
+                                </select>
                             </div>
                             <button name="add" onClick={this.handleAddDevice}> Add </button>
                             <button name="cancelAdd" onClick={this.handleCloseAddDevice}> Cancel </button>
