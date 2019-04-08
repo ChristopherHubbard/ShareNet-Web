@@ -89,3 +89,12 @@ functions:
           path: /devices
           method: delete
           cors: true
+
+  update_device:
+    handler: handler.update_device_info
+    timeout: 30
+    events:
+      - http:
+          path: /devices/update
+          method: post
+          cors: true

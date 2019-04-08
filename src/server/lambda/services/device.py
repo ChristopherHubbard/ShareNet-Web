@@ -87,6 +87,32 @@ def delete_device(code, owner):
 
     return True
 
+def update_device(code, update_body):
+
+    # Get the item first -- connect returns the device given code
+    device = connect(code=code)['device']
+
+    # Update the item in the table
+    response = device_table.update_item(
+        Key={
+            "code": code
+        },
+        UpdateExpression='SET #name = :name, contractURL = :contractURL, accessType = :accessType, deviceCategory = :deviceCategory',
+        ExpressionAttributeValues={
+            ':name': update_body['name'] if 'name' in update_body else device['name'],
+            ':contractURL': update_body['contractURL'] if 'contractURL' in update_body else device['contractURL'],
+            ':accessType': update_body['accessType'] if 'accessType' in update_body else device['accessType'],
+            ':deviceCategory': update_body['deviceCategory'] if 'deviceCategory' in update_body else device['deviceCategory']
+        },
+        ExpressionAttributeNames={
+            '#name': 'name'
+        }
+    )
+
+    # Now the device should be updated
+    print(device)
+    print(response)
+
 def createDeviceRecord(device):
 
     # Return a structured device record

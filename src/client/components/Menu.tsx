@@ -10,6 +10,7 @@ import '../assets/Menu.scss';
 
 // Import images
 const burgerIcon: any = require('../assets/burger-menu-icon.png');
+const homeIcon: any = require('../assets/home_icon.png');
 const deviceIcon: any = require('../assets/device-icon.svg');
 const connectionIcon: any = require('../assets/device-connection-icon.png');
 const logoutIcon: any = require('../assets/logout-icon.png');
@@ -94,7 +95,7 @@ export class Menu extends React.Component<DispatchProp<any>, MenuState>
                           onStateChange={(state) => this.onStateChange(state)}>
                 <a className="menu-item" key="0" onClick={this.onHome}>
                     <span>
-                        <img src={deviceIcon}/>
+                        <img src={homeIcon}/>
                         <text>
                             Home
                         </text>

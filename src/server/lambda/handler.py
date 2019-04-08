@@ -81,3 +81,16 @@ def remove_device(event, context):
     return {
         'statusCode': 200
     }
+
+@cors_headers
+def update_device_info(event, context):
+
+    # Update the device info -- this can update the name, category, accesstype, and contract URL. Cannot update the connection code
+    body = json.loads(event['body'])
+
+    # Call device service to updaate
+    services.update_device(code=body['code'], update_body=body)
+
+    return {
+        'statusCode': 200
+    }
