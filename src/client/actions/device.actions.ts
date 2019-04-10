@@ -11,7 +11,8 @@ interface IDeviceActions
     getPublic: () => ((dispatch: Dispatch<any>) => void),
     add: (device: Device) => ((dispatch: Dispatch<any>) => void),
     remove: (device: Device) => ((dispatch: Dispatch<any>) => void),
-    getHealth: (device: Device) => ((dispatch: Dispatch<any>) => void)
+    getHealth: (device: Device) => ((dispatch: Dispatch<any>) => void),
+    updateDevice: (device: Device) => ((dispatch: Dispatch<any>) => void)
 }
 
 // Export the user actions
@@ -21,7 +22,8 @@ export const deviceActions: IDeviceActions =
     getPublic: getPublic,
     add: add,
     remove: remove,
-    getHealth: getHealth
+    getHealth: getHealth,
+    updateDevice: updateDevice
 };
 
 function get(user: User): (dispatch: Dispatch<any>) => void
@@ -185,6 +187,43 @@ function getHealth(device: Device): (dispatch: Dispatch<any>) => void
 
             dispatch(<IAction> {
                 type: deviceConstants.GET_DEVICE_HEALTH_ERROR,
+                device: device,
+                error: error.toString()
+            });
+
+            dispatch(alertActions.error('Get health Error'));
+        }
+    }
+}
+
+function updateDevice(device: Device): (dispatch: Dispatch<any>) => void
+{
+    return async (dispatch: Dispatch<any>) =>
+    {
+        // Call the update service -- follow with a get
+        dispatch(<IAction> {
+            type: deviceConstants.POST_UPDATE_DEVICE_REQUEST,
+            device: device
+        });
+
+        try
+        {
+            const newDevices: Array<Device> = await DeviceService.updateDevice(device);
+
+            // Can dispatch the get devices, since this is essentially doing the same thing
+            dispatch(<IAction> {
+                type: deviceConstants.GET_DEVICES_SUCCESS,
+                devices: newDevices
+            });
+
+            dispatch(alertActions.success('Get health success'));
+        }
+        catch (error)
+        {
+            console.error(error);
+
+            dispatch(<IAction> {
+                type: deviceConstants.POST_UPDATE_DEVICE_ERROR,
                 device: device,
                 error: error.toString()
             });

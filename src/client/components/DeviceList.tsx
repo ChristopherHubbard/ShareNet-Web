@@ -141,64 +141,66 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                 </span>
                 {
                     openNewDeviceDialog && 
-                        (<div>
+                        (
                             <div>
-                                <label> Enter the device name </label>
-                                <input type="text" name="name" onChange={this.handleChange}/>
-                            </div>
-                            <div>
-                                <label> Enter the device code </label>
-                                <input type="text" name="code" onChange={this.handleChange}/>
-                            </div>
-                            <div>
-                                <label> Enter the contract URL </label>
-                                <input type="text" name="contractURL" onChange={this.handleChange}/>
-                            </div>
-                            <div>
-                                <label> Enter the access type </label>
-                                <select name="accessType" onChange={this.handleChange}>
-                                    {
-                                        Object.keys(AccessType).map((value, index) =>
-                                            <option key={index} value={value}> 
-                                                {
-                                                    value.toLowerCase().split('_').map(word =>
+                                <div>
+                                    <label> Enter the device name </label>
+                                    <input type="text" name="name" onChange={this.handleChange}/>
+                                </div>
+                                <div>
+                                    <label> Enter the device code </label>
+                                    <input type="text" name="code" onChange={this.handleChange}/>
+                                </div>
+                                <div>
+                                    <label> Enter the contract URL </label>
+                                    <input type="text" name="contractURL" onChange={this.handleChange}/>
+                                </div>
+                                <div>
+                                    <label> Enter the access type </label>
+                                    <select name="accessType" onChange={this.handleChange}>
+                                        {
+                                            Object.keys(AccessType).map((value, index) =>
+                                                <option key={index} value={value}> 
                                                     {
-                                                        if (word !== 'and')
+                                                        value.toLowerCase().split('_').map(word =>
                                                         {
-                                                            word = word.charAt(0).toUpperCase() + word.slice(1);
-                                                        }
-                                                        return word;
-                                                    }).join(' ')
-                                                }
-                                            </option>
-                                        )
-                                    }
-                                </select>
-                            </div>
-                            <div>
-                                <label> Enter the category </label>
-                                <select name="deviceCategory" onChange={this.handleChange}>
-                                    {
-                                        Object.keys(DeviceCategory).map((value, index) =>
-                                            <option key={index} value={value}> 
-                                                {
-                                                    value.toLowerCase().split('_').map(word =>
+                                                            if (word !== 'and')
+                                                            {
+                                                                word = word.charAt(0).toUpperCase() + word.slice(1);
+                                                            }
+                                                            return word;
+                                                        }).join(' ')
+                                                    }
+                                                </option>
+                                            )
+                                        }
+                                    </select>
+                                </div>
+                                <div>
+                                    <label> Enter the category </label>
+                                    <select name="deviceCategory" onChange={this.handleChange}>
+                                        {
+                                            Object.keys(DeviceCategory).map((value, index) =>
+                                                <option key={index} value={value}> 
                                                     {
-                                                        if (word !== 'and')
+                                                        value.toLowerCase().split('_').map(word =>
                                                         {
-                                                            word = word.charAt(0).toUpperCase() + word.slice(1);
-                                                        }
-                                                        return word;
-                                                    }).join(' ')
-                                                }
-                                            </option>
-                                        )
-                                    }
-                                </select>
+                                                            if (word !== 'and')
+                                                            {
+                                                                word = word.charAt(0).toUpperCase() + word.slice(1);
+                                                            }
+                                                            return word;
+                                                        }).join(' ')
+                                                    }
+                                                </option>
+                                            )
+                                        }
+                                    </select>
+                                </div>
+                                <button name="add" onClick={this.handleAddDevice}> Add </button>
+                                <button name="cancelAdd" onClick={this.handleCloseAddDevice}> Cancel </button>
                             </div>
-                            <button name="add" onClick={this.handleAddDevice}> Add </button>
-                            <button name="cancelAdd" onClick={this.handleCloseAddDevice}> Cancel </button>
-                        </div>)
+                        )
                 }
                 <div className="grid-container">
                     {

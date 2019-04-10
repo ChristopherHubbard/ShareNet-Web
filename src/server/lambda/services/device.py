@@ -92,6 +92,11 @@ def update_device(code, update_body):
     # Get the item first -- connect returns the device given code
     device = connect(code=code)['device']
 
+    if device['owner']['email'] != update_body['owner']['email']:
+
+        # Throw -- the owners dont match
+        raise Exception('Owner mismatch')
+
     # Update the item in the table
     response = device_table.update_item(
         Key={

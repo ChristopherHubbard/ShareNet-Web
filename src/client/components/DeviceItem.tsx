@@ -18,7 +18,8 @@ interface  DeviceItemReduxProps
 
 interface DeviceItemState
 {
-    selected: boolean
+    selected: boolean,
+    updatedDevice: Device
 }
 
 // Not stateless -- should change on the click event
@@ -30,9 +31,12 @@ export class DeviceItem extends React.Component<DeviceItemInputProps & DeviceIte
     {
         super(props);
 
+        const { device } = this.props;
+
         // Set up the initial state
         this.state = {
-            selected: false
+            selected: false,
+            updatedDevice: device
         };
 
         // Bind methods
@@ -87,7 +91,11 @@ export class DeviceItem extends React.Component<DeviceItemInputProps & DeviceIte
         // Prevent default actions?
         event.preventDefault();
 
-        console.log(event);
+        // This should be called with the device state?
+        const { dispatch } = this.props;
+        const { updatedDevice } = this.state;
+
+        dispatch(deviceActions.updateDevice(updatedDevice));
     }
 
     private handleRemoveDevice(): void

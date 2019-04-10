@@ -136,4 +136,28 @@ export abstract class DeviceService
             console.error(error);
         }
     }
+
+    public static async updateDevice(device: Device): Promise<any>
+    {
+        const requestOptions: any =
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: device
+        };
+
+        try
+        {
+            await axios.post(`${Config.apiUrl}/devices/update`, requestOptions);
+
+            // Return the updated devices for this user -- should another get request occur?
+            return await this.get(device.owner as User);
+        }
+        catch (error)
+        {
+            console.error(error);
+        }
+    }
 }
