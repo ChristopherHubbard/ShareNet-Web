@@ -18,7 +18,9 @@ export interface DeviceState
 {
     loadingDevices?: boolean
     devices?: Array<Device>,
-    error?: string
+    error?: string,
+    healthStates?: Map<string, boolean>,
+    loadingHealthStates?: Map<string, boolean>
 }
 
 export interface DeviceConnectionState

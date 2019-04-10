@@ -8,18 +8,20 @@ import { Dispatch } from 'redux';
 interface IDeviceActions
 {
     get: (user: User) => ((dispatch: Dispatch<any>) => void),
-    get_public: () => ((dispatch: Dispatch<any>) => void),
+    getPublic: () => ((dispatch: Dispatch<any>) => void),
     add: (device: Device) => ((dispatch: Dispatch<any>) => void),
-    remove: (device: Device) => ((dispatch: Dispatch<any>) => void)
+    remove: (device: Device) => ((dispatch: Dispatch<any>) => void),
+    getHealth: (device: Device) => ((dispatch: Dispatch<any>) => void)
 }
 
 // Export the user actions
 export const deviceActions: IDeviceActions =
 {
     get: get,
-    get_public: get_public,
+    getPublic: getPublic,
     add: add,
-    remove: remove
+    remove: remove,
+    getHealth: getHealth
 };
 
 function get(user: User): (dispatch: Dispatch<any>) => void
@@ -54,7 +56,7 @@ function get(user: User): (dispatch: Dispatch<any>) => void
     }
 }
 
-function get_public(): (dispatch: Dispatch<any>) => void
+function getPublic(): (dispatch: Dispatch<any>) => void
 {
     return async (dispatch: Dispatch<any>) =>
     {
@@ -64,7 +66,7 @@ function get_public(): (dispatch: Dispatch<any>) => void
 
         try
         {
-            const devices: Array<Device> = await DeviceService.get_public_devices();
+            const devices: Array<Device> = await DeviceService.getPublicDevices();
 
             dispatch(<IAction> {
                 type: deviceConstants.GET_PUBLIC_DEVICES_SUCCESS,
@@ -152,6 +154,42 @@ function remove(device: Device): (dispatch: Dispatch<any>) => void
             });
 
             dispatch(alertActions.error('Device Remove Error'));
+        }
+    }
+}
+
+function getHealth(device: Device): (dispatch: Dispatch<any>) => void
+{
+    return async (dispatch: Dispatch<any>) =>
+    {
+        dispatch(<IAction> {
+            type: deviceConstants.GET_DEVICE_HEALTH_REQUEST,
+            device: device
+        });
+
+        try
+        {
+            const healthy: boolean = await DeviceService.healthCheck(device.contractURL);
+
+            dispatch(<IAction> {
+                type: deviceConstants.GET_DEVICE_HEALTH_SUCCESS,
+                health: healthy,
+                device: device
+            });
+
+            dispatch(alertActions.success('Get health success'));
+        }
+        catch (error)
+        {
+            console.error(error);
+
+            dispatch(<IAction> {
+                type: deviceConstants.GET_DEVICE_HEALTH_ERROR,
+                device: device,
+                error: error.toString()
+            });
+
+            dispatch(alertActions.error('Get health Error'));
         }
     }
 }

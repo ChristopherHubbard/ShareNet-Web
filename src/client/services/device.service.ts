@@ -34,7 +34,7 @@ export abstract class DeviceService
         }
     }
 
-    public static async get_public_devices(): Promise<any>
+    public static async getPublicDevices(): Promise<any>
     {
         const requestOptions: any =
         {
@@ -109,6 +109,30 @@ export abstract class DeviceService
         catch (error)
         {
             // Log the error
+            console.error(error);
+        }
+    }
+
+    public static async healthCheck(contractURL: string): Promise<any>
+    {
+        const requestOptions: any =
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        try
+        {
+            const response = await axios.get(`${contractURL}/health`, requestOptions);
+
+            // Return the health of this device
+            return response.data.healthy;
+        }
+        catch (error)
+        {
+            // Log any errors -- add error handling later?
             console.error(error);
         }
     }

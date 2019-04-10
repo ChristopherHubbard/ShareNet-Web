@@ -124,7 +124,7 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
 
     public render(): React.ReactNode
     {
-        const { devices } = this.props;
+        const { devices} = this.props;
 
         const { openNewDeviceDialog } = this.state;
 
