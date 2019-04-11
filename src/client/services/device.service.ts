@@ -60,6 +60,7 @@ export abstract class DeviceService
         }
     }
 
+    // Fix this method to pass the signed in user instead -- this is not secure
     public static async remove(device: Device): Promise<any>
     {
         // Create the options for the request -- type?

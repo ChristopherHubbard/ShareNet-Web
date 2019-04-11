@@ -85,7 +85,7 @@ export class DeviceConnection extends React.Component<DeviceConnectionProps & Di
                         </div>
                 }
                 <div>
-                    <h2> Public Devices </h2>
+                    <h2> Public </h2>
                     <div className="grid-container">
                         {
                             publicDevices && publicDevices.length > 0 && publicDevices.map((device: Device) => <DeviceItem device={device}/>)
