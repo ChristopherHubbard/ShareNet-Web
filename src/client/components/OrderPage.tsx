@@ -205,7 +205,7 @@ export class OrderPage extends React.Component<OrderPageProps & DispatchProp<any
                         }
                     </div>
 
-                    { priceInfo ? <p> Price: {priceInfo.price} {priceInfo.baseCurrency}</p> : null }
+                    { priceInfo ? <p> Price: {priceInfo.price.toFixed(4)} {priceInfo.baseCurrency}</p> : null }
 
                     <div>
                         {
