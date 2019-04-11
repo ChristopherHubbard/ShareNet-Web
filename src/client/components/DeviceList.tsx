@@ -53,7 +53,7 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                 owner: user,
                 code: '',
                 contractURL: '',
-                accessType: AccessType.PRIVATE,
+                accessType: AccessType.PUBLIC,
                 deviceCategory: DeviceCategory.COMPUTE
             },
             openNewDeviceDialog: false

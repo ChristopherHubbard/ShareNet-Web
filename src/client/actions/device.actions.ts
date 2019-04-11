@@ -8,7 +8,6 @@ import { Dispatch } from 'redux';
 interface IDeviceActions
 {
     get: (user: User) => ((dispatch: Dispatch<any>) => void),
-    getPublic: () => ((dispatch: Dispatch<any>) => void),
     add: (device: Device) => ((dispatch: Dispatch<any>) => void),
     remove: (device: Device) => ((dispatch: Dispatch<any>) => void),
     getHealth: (device: Device) => ((dispatch: Dispatch<any>) => void),
@@ -19,7 +18,6 @@ interface IDeviceActions
 export const deviceActions: IDeviceActions =
 {
     get: get,
-    getPublic: getPublic,
     add: add,
     remove: remove,
     getHealth: getHealth,
@@ -54,38 +52,6 @@ function get(user: User): (dispatch: Dispatch<any>) => void
             });
 
             dispatch(alertActions.error('Error retrieving devices'));
-        }
-    }
-}
-
-function getPublic(): (dispatch: Dispatch<any>) => void
-{
-    return async (dispatch: Dispatch<any>) =>
-    {
-        dispatch(<IAction> {
-            type: deviceConstants.GET_PUBLIC_DEVICES_REQUEST
-        });
-
-        try
-        {
-            const devices: Array<Device> = await DeviceService.getPublicDevices();
-
-            dispatch(<IAction> {
-                type: deviceConstants.GET_PUBLIC_DEVICES_SUCCESS,
-                publicDevices: devices
-            });
-
-            // Dispatch the sucess
-            dispatch(alertActions.success('Get Public Devices Success'));
-        }
-        catch (error)
-        {
-            // Dispatch error actions
-            dispatch(<IAction> {
-                type: deviceConstants.GET_PUBLIC_DEVICES_ERROR,
-                error: error.toString()
-            });
-            dispatch(alertActions.error('Get Public Devices Failure'));
         }
     }
 }

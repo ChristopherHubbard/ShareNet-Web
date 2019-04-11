@@ -34,31 +34,6 @@ export abstract class DeviceService
         }
     }
 
-    public static async getPublicDevices(): Promise<any>
-    {
-        const requestOptions: any =
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-
-        try
-        {
-            // Await the response
-            const response: AxiosResponse = await axios.get(`${Config.apiUrl}/devices/access`, requestOptions);
-
-            // Return the devices that are in this access type
-            return response.data.devices;
-        }
-        catch (error)
-        {
-            // Log the error
-            console.error(error);
-        }
-    }
-
     public static async add(device: Device): Promise<any>
     {
         // Create the options for the request -- type?

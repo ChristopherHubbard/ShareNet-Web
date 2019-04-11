@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { connect, DispatchProp } from 'react-redux';
 import { connectionActions } from '../actions';
-import { DeviceConnectionState as DeviceConnectionProps } from '../models';
+import { DeviceConnectionState as DeviceConnectionProps, Device} from '../models';
 import { history } from '../services';
+import DeviceItem from './DeviceItem';
 
 interface DeviceState
 {
@@ -22,6 +23,13 @@ export class DeviceConnection extends React.Component<DeviceConnectionProps & Di
         this.onCodeChange = this.onCodeChange.bind(this);
         this.onSearch = this.onSearch.bind(this);
         this.onConnect = this.onConnect.bind(this);
+    }
+
+    public componentWillMount(): void
+    {
+        const { dispatch } = this.props;
+
+        dispatch(connectionActions.getPublic());
     }
 
     private onCodeChange(event: any): void
@@ -55,7 +63,7 @@ export class DeviceConnection extends React.Component<DeviceConnectionProps & Di
 
     public render(): React.ReactNode
     {
-        const { connecting, connected, searchedDevice } = this.props;
+        const { connecting, connected, searchedDevice, publicDevices } = this.props;
 
         return (
             <div>
@@ -76,6 +84,14 @@ export class DeviceConnection extends React.Component<DeviceConnectionProps & Di
                             <button onClick={this.onConnect}> Connect </button>
                         </div>
                 }
+                <div>
+                    <h2> Public Devices </h2>
+                    <div className="grid-container">
+                        {
+                            publicDevices && publicDevices.length > 0 && publicDevices.map((device: Device) => <DeviceItem device={device}/>)
+                        }
+                    </div>
+                </div>
             </div>
         );
     }
@@ -83,12 +99,13 @@ export class DeviceConnection extends React.Component<DeviceConnectionProps & Di
 
 function mapStateToProps(state: any): DeviceConnectionProps
 {
-    const { connected, connecting, searchedDevice, connectedDevice } = state.connection;
+    const { connected, connecting, searchedDevice, connectedDevice, publicDevices } = state.connection;
     return {
         connected,
         connecting,
         searchedDevice,
-        connectedDevice
+        connectedDevice,
+        publicDevices
     };
 }
 

@@ -28,7 +28,8 @@ export interface DeviceConnectionState
     connected: boolean,
     connecting: boolean,
     searchedDevice: Device
-    connectedDevice: Device
+    connectedDevice: Device,
+    publicDevices: Array<Device>
 }
 
 export interface OrderPageState

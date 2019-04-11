@@ -34,4 +34,29 @@ export abstract class ConnectionService
             console.error(error);
         }
     }
+
+    public static async getPublicDevices(): Promise<any>
+    {
+        const requestOptions: any =
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        try
+        {
+            // Await the response
+            const response: AxiosResponse = await axios.get(`${Config.apiUrl}/devices/public`, requestOptions);
+
+            // Return the devices that are in this access type
+            return response.data.devices;
+        }
+        catch (error)
+        {
+            // Log the error
+            console.error(error);
+        }
+    }
 }
