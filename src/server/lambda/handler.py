@@ -86,7 +86,8 @@ def remove_device(event, context):
 def update_device_info(event, context):
 
     # Update the device info -- this can update the name, category, accesstype, and contract URL. Cannot update the connection code
-    body = json.loads(event['body'])
+    body = json.loads(event['body'])['body']
+    print(body)
 
     try:
         # Call device service to updaate

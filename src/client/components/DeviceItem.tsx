@@ -8,7 +8,8 @@ const healthStatusIconBad: any = require('../assets/health-status-bad.png');
 
 interface DeviceItemInputProps
 {
-    device: Device
+    device: Device,
+    InnerComponent: any
 }
 
 interface  DeviceItemReduxProps
@@ -42,7 +43,6 @@ export class DeviceItem extends React.Component<DeviceItemInputProps & DeviceIte
         // Bind methods
         this.onBlur = this.onBlur.bind(this);
         this.onClick = this.onClick.bind(this);
-        this.handleRemoveDevice = this.handleRemoveDevice.bind(this);
     }
 
     // Trigger the health check on each rerender
@@ -65,11 +65,13 @@ export class DeviceItem extends React.Component<DeviceItemInputProps & DeviceIte
     private onBlur(event: React.FocusEvent<HTMLElement>): void
     {
         // Set the selected state to false
-        var currentTarget = event.currentTarget;
+        const { currentTarget, relatedTarget } = event;
 
-        setTimeout(() => 
+        setTimeout(() =>
         {
-            if (!currentTarget.contains(document.activeElement))
+            console.log(currentTarget);
+            console.log(relatedTarget);
+            if (!relatedTarget || (relatedTarget instanceof Node && !currentTarget.contains(relatedTarget)))
             {
                 this.setState({
                     selected: false
@@ -86,29 +88,9 @@ export class DeviceItem extends React.Component<DeviceItemInputProps & DeviceIte
         });
     }
 
-    private handleUpdateDevice(event: React.MouseEvent<HTMLElement>): void
-    {
-        // Prevent default actions?
-        event.preventDefault();
-
-        // This should be called with the device state?
-        const { dispatch } = this.props;
-        const { updatedDevice } = this.state;
-
-        dispatch(deviceActions.updateDevice(updatedDevice));
-    }
-
-    private handleRemoveDevice(): void
-    {
-        // Handle the remove event for a device
-        const { dispatch, device } = this.props;
-
-        dispatch(deviceActions.remove(device));
-    }
-
     public render(): React.ReactNode
     {
-        let { device, health } = this.props;
+        let { device, health, InnerComponent } = this.props;
         const { selected } = this.state;
 
         let healthIcon: any;
@@ -141,24 +123,9 @@ export class DeviceItem extends React.Component<DeviceItemInputProps & DeviceIte
         return (
             <div className={`card-${device.deviceCategory.toLowerCase().split(' ').join('')}`} style={style} tabIndex={-1} onBlur={this.onBlur} onClick={this.onClick} key={device.code}>
                 <img src={healthIcon}/>
-                <div className="content" style={{ display: 'inline-block' }}>
-                    <h3> {device.name} </h3>
-                    <h5> {device.deviceCategory} </h5>
-                    <div>
-                        {selected && (<div>
-                                        <div> Access Type: {device.accessType} </div>
-                                        <div> Connection Code: {device.code} </div>
-                                        <div> Contract URL: {device.contractURL} </div>
-
-                                        <div style={{ display: 'inline-block' }}>
-                                            <button onClick={this.handleUpdateDevice}> Update Device </button>
-                                            <button onClick={this.handleRemoveDevice}> Remove Device </button>
-                                        </div>
-                                    </div>)}
-                    </div>
-                </div>
+                <InnerComponent device={device} selected={selected}/>
             </div>
-        )
+        );
     }
 }
 
@@ -172,7 +139,8 @@ function mapStateToProps(state: any, ownProps: DeviceItemInputProps): DeviceItem
     // Map only this device's health to the state
     return {
         device: ownProps.device,
-        health: healthStates.get(JSON.stringify(ownProps.device as Device))
+        health: healthStates.get(JSON.stringify(ownProps.device as Device)),
+        InnerComponent: ownProps.InnerComponent
     }
 }
 

@@ -1,4 +1,4 @@
-import { connectionConstants } from '../constants';
+import { connectionConstants, deviceConstants } from '../constants';
 import { IAction, Device } from '../models';
 import { ConnectionService, DeviceService } from '../services';
 import { alertActions } from './alert.actions';
@@ -66,6 +66,11 @@ function getPublic(): (dispatch: Dispatch<any>) => void
     {
         dispatch(<IAction> {
             type: connectionConstants.GET_PUBLIC_DEVICES_REQUEST
+        });
+
+        // Dispatch a get devices to trigger loading?
+        dispatch(<IAction> {
+            type: deviceConstants.GET_DEVICES_REQUEST
         });
 
         try

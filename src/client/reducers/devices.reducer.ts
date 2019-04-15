@@ -16,7 +16,9 @@ export function devices(state: DeviceState = initDeviceState, action: IAction): 
         case deviceConstants.GET_DEVICES_REQUEST:
             return <DeviceState> {
                 ...state,
-                loadingDevices: true
+                loadingDevices: true,
+                healthStates: new Map<string, boolean>(),
+                loadingHealthStates: new Map<string, boolean>()
             };
         case deviceConstants.GET_DEVICES_SUCCESS:
             return <DeviceState> {

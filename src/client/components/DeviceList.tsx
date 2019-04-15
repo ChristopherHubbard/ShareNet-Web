@@ -5,6 +5,7 @@ import { deviceActions, alertActions } from '../actions';
 import { DeviceState as DeviceListProps, Device, User, AccessType, DeviceCategory } from '../models';
 import { CustomInput } from './CustomInput';
 import DeviceItem from './DeviceItem';
+import DeviceItemAdminInner from './DeviceItemAdminInner';
 
 import '../assets/Device.scss';
 
@@ -204,7 +205,7 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                 }
                 <div className="grid-container">
                     {
-                        sortedDevices.length > 0 && sortedDevices.map((device) => <DeviceItem device={device}/>)
+                        sortedDevices.length > 0 && sortedDevices.map((device) => <DeviceItem device={device} InnerComponent={DeviceItemAdminInner}/>)
                     }
                 </div>
             </div>

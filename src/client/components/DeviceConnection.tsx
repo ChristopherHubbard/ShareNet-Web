@@ -4,6 +4,7 @@ import { connectionActions } from '../actions';
 import { DeviceConnectionState as DeviceConnectionProps, Device} from '../models';
 import { history } from '../services';
 import DeviceItem from './DeviceItem';
+import DeviceItemPublicInner from './DeviceItemPublicInner';
 
 interface DeviceState
 {
@@ -85,10 +86,13 @@ export class DeviceConnection extends React.Component<DeviceConnectionProps & Di
                         </div>
                 }
                 <div>
-                    <h2> Public </h2>
+                    <h2 className="headerAlignLeft"> Public </h2>
                     <div className="grid-container">
                         {
-                            publicDevices && publicDevices.length > 0 && publicDevices.map((device: Device) => <DeviceItem device={device}/>)
+                            publicDevices && publicDevices.length > 0 &&
+                            publicDevices.map((device: Device) => 
+                                <DeviceItem device={device} InnerComponent={DeviceItemPublicInner}/>
+                            )
                         }
                     </div>
                 </div>

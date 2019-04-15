@@ -30,7 +30,7 @@ describe('DeviceItem component', () =>
     it('should render non-connected component', () =>
     {
         const wrapper: ShallowWrapper = shallow(
-            <DeviceItem device={device} dispatch={mockDispatch} health={true}/>
+            <DeviceItem device={device} dispatch={mockDispatch} health={true} InnerComponent={{}}/>
         );
 
         expect(wrapper.exists()).toBeTruthy;
@@ -39,7 +39,7 @@ describe('DeviceItem component', () =>
     it('should select this device', () =>
     {
         const wrapper = mount(
-            <DeviceItem device={device} dispatch={mockDispatch} health={true}/>
+            <DeviceItem device={device} dispatch={mockDispatch} health={true} InnerComponent={{}}/>
         );
 
         wrapper.find('li').simulate('click');
@@ -49,7 +49,7 @@ describe('DeviceItem component', () =>
     it('should unselect this device', () => 
     {
         const wrapper = mount(
-            <DeviceItem device={device} dispatch={mockDispatch} health={true}/>
+            <DeviceItem device={device} dispatch={mockDispatch} health={true} InnerComponent={{}}/>
         );
 
         wrapper.find('li').simulate('click');
@@ -59,7 +59,7 @@ describe('DeviceItem component', () =>
     it('should remove the device', () =>
     {
         const wrapper = mount(
-            <DeviceItem device={device} dispatch={mockDispatch} health={true}/>
+            <DeviceItem device={device} dispatch={mockDispatch} health={true} InnerComponent={{}}/>
         );
 
         wrapper.find('li').simulate('click');

@@ -27,22 +27,26 @@ export function connection(state: DeviceConnectionState = initState, action: IAc
     {
         case connectionConstants.GET_CONNECTION_REQUEST:
             return <DeviceConnectionState> {
+                ...state,
                 connecting: true,
                 connectedDevice: initState.connectedDevice
             };
         case connectionConstants.GET_CONNECTION_SUCCESS:
             return <DeviceConnectionState> {
+                ...state,
                 connected: true,
                 connecting: false,
                 searchedDevice: action.searchedDevice
             };
         case connectionConstants.GET_CONNECTION_ERROR:
             return <DeviceConnectionState> {
+                ...state,
                 connected: false,
                 connecting: false
             };
         case connectionConstants.CONNECT_SUCCESS:
             return <DeviceConnectionState> {
+                ...state,
                 connected: true,
                 connecting: false,
                 connectedDevice: action.device
