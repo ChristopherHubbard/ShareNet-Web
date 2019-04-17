@@ -8,10 +8,10 @@ import { Dispatch } from 'redux';
 interface IDeviceActions
 {
     get: (user: User) => ((dispatch: Dispatch<any>) => void),
-    add: (device: Device) => ((dispatch: Dispatch<any>) => void),
+    add: (device: Device, devicePassword: string) => ((dispatch: Dispatch<any>) => void),
     remove: (device: Device) => ((dispatch: Dispatch<any>) => void),
     getHealth: (device: Device) => ((dispatch: Dispatch<any>) => void),
-    updateDevice: (device: Device) => ((dispatch: Dispatch<any>) => void)
+    updateDevice: (device: Device, devicePassword: string) => ((dispatch: Dispatch<any>) => void)
 }
 
 // Export the user actions
@@ -56,8 +56,8 @@ function get(user: User): (dispatch: Dispatch<any>) => void
     }
 }
 
-// Function to create register user
-function add(device: Device): (dispatch: Dispatch<any>) => void
+// Function to create register device -- setup the device with the contract as well
+function add(device: Device, devicePassword: string): (dispatch: Dispatch<any>) => void
 {
     return async (dispatch: Dispatch<any>) => 
     {
@@ -70,6 +70,14 @@ function add(device: Device): (dispatch: Dispatch<any>) => void
         try
         {
             // Should be a post so no real response
+            const { success } = await DeviceService.setupDevice(device, devicePassword);
+
+            // If setup failed then the device should not be added to the backend
+            if (!success)
+            {
+                throw new Error('Could not setup the device correctly');
+            }
+
             const devices: Array<Device> = await DeviceService.add(device);
 
             // Send success dispatches
@@ -89,6 +97,9 @@ function add(device: Device): (dispatch: Dispatch<any>) => void
                 error: error.toString()
             });
             dispatch(alertActions.error('Add Device Failure'));
+
+            // Try a get devices -- this is just to avoid all the devices leaving
+            dispatch(deviceActions.get(device.owner as User));
         }
     }
 }
@@ -162,7 +173,7 @@ function getHealth(device: Device): (dispatch: Dispatch<any>) => void
     }
 }
 
-function updateDevice(device: Device): (dispatch: Dispatch<any>) => void
+function updateDevice(device: Device, devicePassword: string): (dispatch: Dispatch<any>) => void
 {
     return async (dispatch: Dispatch<any>) =>
     {
@@ -174,7 +185,7 @@ function updateDevice(device: Device): (dispatch: Dispatch<any>) => void
 
         try
         {
-            const newDevices: Array<Device> = await DeviceService.updateDevice(device);
+            const newDevices: Array<Device> = await DeviceService.updateDevice(device, devicePassword);
 
             // Can dispatch the get devices, since this is essentially doing the same thing
             dispatch(<IAction> {

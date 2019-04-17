@@ -12,7 +12,8 @@ import '../assets/Device.scss';
 interface DeviceListState
 {
     newDevice: Device,
-    openNewDeviceDialog: boolean
+    openNewDeviceDialog: boolean,
+    newDevicePassword: string
 }
 
 export class DeviceList extends React.Component<DeviceListProps & DispatchProp<any>, DeviceListState>
@@ -57,7 +58,8 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                 accessType: AccessType.PUBLIC,
                 deviceCategory: DeviceCategory.COMPUTE
             },
-            openNewDeviceDialog: false
+            openNewDeviceDialog: false,
+            newDevicePassword: ''
         };
 
         // Bind methods
@@ -73,13 +75,23 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
         const { name, value } = event.target;
 
         // Update state -- why does this method not work?
-        this.setState((prevState) => ({
-            ...prevState,
-            newDevice: {
-                ...prevState.newDevice,
+        if (name !== 'newDevicePassword')
+        {
+            this.setState((prevState) => ({
+                ...prevState,
+                newDevice: {
+                    ...prevState.newDevice,
+                    [name]: value
+                }
+            }));
+        }
+        else
+        {
+            this.setState((prevState) => ({
+                ...prevState,
                 [name]: value
-            }
-        }));
+            }));
+        }
     }
 
     private handleOpenAddDevice(): void
@@ -104,9 +116,9 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
         const { dispatch } = this.props;
 
         // This is just a test device
-        const { newDevice }  = this.state;
+        const { newDevice, newDevicePassword }  = this.state;
 
-        dispatch(deviceActions.add(newDevice));
+        dispatch(deviceActions.add(newDevice, newDevicePassword));
 
         // Close the dialog box and reset the new device state
         const user: User = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) : JSON.parse(sessionStorage.getItem('user') as string);
@@ -119,7 +131,8 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                 accessType: AccessType.PRIVATE,
                 deviceCategory: DeviceCategory.COMPUTE
             },
-            openNewDeviceDialog: false
+            openNewDeviceDialog: false,
+            newDevicePassword: ''
         });
     }
 
@@ -155,6 +168,10 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                                 <div>
                                     <label> Enter the contract URL </label>
                                     <input type="text" name="contractURL" onChange={this.handleChange}/>
+                                </div>
+                                <div>
+                                    <label> Enter the device password </label>
+                                    <input type="password" name="newDevicePassword" onChange={this.handleChange}/>
                                 </div>
                                 <div>
                                     <label> Enter the access type </label>

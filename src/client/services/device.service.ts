@@ -113,11 +113,37 @@ export abstract class DeviceService
         }
     }
 
-    public static async updateDevice(device: Device): Promise<any>
+    public static async setupDevice(device: Device, devicePassword: string): Promise<any>
     {
         const requestOptions: any =
         {
-            method: 'GET',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: {
+                password: devicePassword
+            }
+        };
+
+        try
+        {
+            const response: AxiosResponse = await axios.post(`${device.contractURL}/device/setup`, requestOptions);
+
+            return response.data;
+        }
+        catch (error)
+        {
+            // As always need better error handling
+            console.error(error);
+        }
+    }
+
+    public static async updateDevice(device: Device, devicePassword: string): Promise<any>
+    {
+        const requestOptions: any =
+        {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -126,6 +152,8 @@ export abstract class DeviceService
 
         try
         {
+            // Call the setup route if the contract URL was updated
+            await this.setupDevice(device, devicePassword);
             await axios.post(`${Config.apiUrl}/devices/update`, requestOptions);
 
             // Return the updated devices for this user -- should another get request occur?

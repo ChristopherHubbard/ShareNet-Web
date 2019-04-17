@@ -12,7 +12,8 @@ interface DeviceItemAdminInnerProps
 interface DeviceItemState
 {
     updating: boolean,
-    updatedDevice: Device
+    updatedDevice: Device,
+    password: string
 }
 
 // Not stateless -- should change on the click event
@@ -27,7 +28,8 @@ export class DeviceItemAdminInner extends React.Component<DeviceItemAdminInnerPr
         // Set up the initial state
         this.state = {
             updating: false,
-            updatedDevice: device
+            updatedDevice: device,
+            password: ''
         };
 
         // Bind methods
@@ -43,9 +45,9 @@ export class DeviceItemAdminInner extends React.Component<DeviceItemAdminInnerPr
 
         // This should be called with the device state?
         const { dispatch } = this.props;
-        const { updatedDevice } = this.state;
+        const { updatedDevice, password } = this.state;
 
-        dispatch(deviceActions.updateDevice(updatedDevice));
+        dispatch(deviceActions.updateDevice(updatedDevice, password));
     }
 
     private handleRemoveDevice(): void
@@ -74,7 +76,7 @@ export class DeviceItemAdminInner extends React.Component<DeviceItemAdminInnerPr
                 }
             }));
         }
-        else
+        else if (name !== 'password')
         {
             this.setState((prevState) => ({
                 ...prevState,
@@ -83,6 +85,13 @@ export class DeviceItemAdminInner extends React.Component<DeviceItemAdminInnerPr
                     ...updatedDevice,
                     [name]: value
                 }
+            }));
+        }
+        else
+        {
+            this.setState((prevState) => ({
+                ...prevState,
+                [name]: value
             }));
         }
     }
@@ -97,7 +106,8 @@ export class DeviceItemAdminInner extends React.Component<DeviceItemAdminInnerPr
             this.setState((prevState) => ({
                 ...prevState,
                 updatedDevice: device,
-                updating: false
+                updating: false,
+                password: ''
             }));
         }
     }
@@ -114,14 +124,17 @@ export class DeviceItemAdminInner extends React.Component<DeviceItemAdminInnerPr
                 {
                     selected && (
                         <div>
+                            <div>
+                                Connection Code: {device.code}
+                            </div>
                             <div> 
                                 Access Type: <input onChange={this.onUpdateDeviceChange} name="accessType" defaultValue={device.accessType}/>
                             </div>
                             <div> 
                                 Contract URL: <input onChange={this.onUpdateDeviceChange} name="contractURL" defaultValue={device.contractURL}/>
                             </div>
-                            <div>
-                                Connection Code: {device.code}
+                            <div> 
+                                Device Setup Password: <input onChange={this.onUpdateDeviceChange} name="password" type="password"/>
                             </div>
 
                             <div style={{ display: 'inline-block' }}>
