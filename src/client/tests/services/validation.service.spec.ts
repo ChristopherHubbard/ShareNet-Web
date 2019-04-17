@@ -1,4 +1,4 @@
-import { required, validateEmail, validatePassword } from '../services';
+import { required, validateEmail, validatePassword } from '../../services';
 
 describe('Validation service', () =>
 {

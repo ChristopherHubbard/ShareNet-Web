@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as TestUtils from 'react-dom/test-utils';
-import { alertConstants } from '../constants';
-import { alertActions } from '../actions';
+import { alertConstants } from '../../constants';
+import { alertActions } from '../../actions';
 
 describe('Alert actions', () =>
 {

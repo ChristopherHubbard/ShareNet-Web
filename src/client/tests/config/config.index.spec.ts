@@ -1,5 +1,5 @@
 process.env.ENV = "LOCAL";
-import Config from '../config';
+import Config from '../../config';
 
 describe('Config import', () =>
 {

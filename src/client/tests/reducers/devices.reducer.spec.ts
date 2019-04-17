@@ -1,6 +1,6 @@
-import { devices } from '../reducers';
-import { deviceConstants } from '../constants';
-import { DeviceState, IAction } from '../models';
+import { devices } from '../../reducers';
+import { deviceConstants } from '../../constants';
+import { DeviceState, IAction } from '../../models';
 
 describe('Device reducer', () =>
 {

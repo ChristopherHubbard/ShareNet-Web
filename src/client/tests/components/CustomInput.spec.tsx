@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as Adapter from 'enzyme-adapter-react-16';
 import { configure, shallow, ShallowWrapper } from 'enzyme';
 
-import { CustomInput } from '../components';
+import { CustomInput } from '../../components';
 
 configure({ adapter: new Adapter() });
 

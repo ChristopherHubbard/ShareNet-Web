@@ -1,7 +1,7 @@
-import { deviceActions } from '../actions';
-import { deviceConstants } from '../constants';
-import { User, IAction, Device } from '../models';
-import { DeviceService } from '../services';
+import { deviceActions } from '../../actions';
+import { deviceConstants } from '../../constants';
+import { User, IAction, Device, DeviceCategory, AccessType } from '../../models';
+import { DeviceService } from '../../services';
 import { Dispatch } from 'redux';
 
 describe('Device actions', () =>
@@ -18,6 +18,8 @@ describe('Device actions', () =>
         owner: user,
         code: "1234",
         contractURL: "http://hello.com",
+        accessType: AccessType.PRIVATE,
+        deviceCategory: DeviceCategory.FOOD_AND_DRINK
     }
 
     const mockDispatch: Dispatch<any> = jest.fn();
@@ -49,7 +51,7 @@ describe('Device actions', () =>
     it('should add the device to this user', async () =>
     {
         DeviceService.add = jest.fn((device: Device) => Promise.resolve(new Array<Device>()));
-        const res: any = await deviceActions.add(device)(mockDispatch);
+        const res: any = await deviceActions.add(device, '')(mockDispatch);
 
         expect(DeviceService.add).toBeCalled();
         expect(mockDispatch).toBeCalledWith(<IAction> {
@@ -61,7 +63,7 @@ describe('Device actions', () =>
     it('should have error adding the device for this user', async () =>
     {
         DeviceService.add = jest.fn((device: Device) => Promise.reject("ERR"));
-        const res: any = await deviceActions.add(device)(mockDispatch);
+        const res: any = await deviceActions.add(device, '')(mockDispatch);
 
         expect(DeviceService.add).toBeCalled();
         expect(mockDispatch).toBeCalledWith(<IAction> {

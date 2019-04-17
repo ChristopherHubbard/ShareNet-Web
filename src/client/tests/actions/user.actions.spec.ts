@@ -1,7 +1,7 @@
-import { userActions } from '../actions';
-import { userConstants } from '../constants';
-import { User, IAction, Device } from '../models';
-import { UserService } from '../services';
+import { userActions } from '../../actions';
+import { userConstants } from '../../constants';
+import { User, IAction, Device } from '../../models';
+import { UserService } from '../../services';
 import { Dispatch } from 'redux';
 
 describe('User actions', () =>
@@ -42,7 +42,7 @@ describe('User actions', () =>
     it('should login user', async () =>
     {
         UserService.login = jest.fn((user: User) => Promise.resolve({}));
-        const res: any = await userActions.login(user)(mockDispatch);
+        const res: any = await userActions.login(user, false)(mockDispatch);
 
         expect(UserService.login).toBeCalled();
         expect(mockDispatch).toBeCalledWith(<IAction> {
@@ -54,7 +54,7 @@ describe('User actions', () =>
     it('should have error logining in user', async () =>
     {
         UserService.login = jest.fn((user: User) => Promise.reject("ERR"));
-        const res: any = await userActions.login(user)(mockDispatch);
+        const res: any = await userActions.login(user, false)(mockDispatch);
 
         expect(UserService.login).toBeCalled();
         expect(mockDispatch).toBeCalledWith(<IAction> {
@@ -65,7 +65,7 @@ describe('User actions', () =>
 
     it('should logout user', async () =>
     {
-        UserService.logout = jest.fn(() => {});
+        UserService.logout = jest.fn(async () => new Promise<void>(() => {}));
         const res: any = await userActions.logout();
 
         expect(UserService.logout).toBeCalled();

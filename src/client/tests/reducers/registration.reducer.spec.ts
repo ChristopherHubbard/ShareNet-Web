@@ -1,6 +1,6 @@
-import { registration } from '../reducers';
-import { userConstants } from '../constants';
-import { RegistrationState, IAction, User } from '../models';
+import { registration } from '../../reducers';
+import { userConstants } from '../../constants';
+import { RegistrationState, IAction, User } from '../../models';
 
 describe('Login reducer', () =>
 {
