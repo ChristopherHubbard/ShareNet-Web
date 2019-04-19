@@ -12,8 +12,9 @@ interface Props
     className: string
 };
 
-export const PayPalRequestButton: React.StatelessComponent<Props> = ({ show, isSupported, className }) => 
+export const PayPalRequestButton: React.StatelessComponent<Props> = ({ show, isSupported, disabled, className }) => 
 {
+    // Add the ability to disable here
     return (
       <div onClick={show} className={className} role="button" id="paypal-button">
           <img src={paypalIcon}/>
