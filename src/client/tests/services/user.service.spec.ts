@@ -1,8 +1,8 @@
 process.env.ENV = "LOCAL"
 
-import { User } from '../models';
-import { UserService } from '../services';
-import Config from '../config';
+import { User } from '../../models';
+import { UserService } from '../../services';
+import Config from '../../config';
 import axios from 'axios';
 import { SinonStub, stub } from 'sinon';
 
@@ -55,7 +55,7 @@ describe('User service', () =>
             data: user
         });
 
-        const res: any = await UserService.login(user);
+        const res: any = await UserService.login(user, false);
         expect(res).toEqual(user);
         expect(JSON.parse(localStorage.getItem('user') as string)).toEqual(user);
         localStorage.removeItem('user');
@@ -67,7 +67,7 @@ describe('User service', () =>
             data: user
         });
 
-        const res: any = await UserService.login(user);
+        const res: any = await UserService.login(user, false);
         expect(res).toBeFalsy;
         expect(localStorage.getItem('user')).toBeNull;
     });

@@ -1,8 +1,8 @@
 process.env.ENV = "LOCAL"
 
-import { User, Device } from '../models';
-import { DeviceService } from '../services';
-import Config from '../config';
+import { User, Device, DeviceCategory, AccessType } from '../../models';
+import { DeviceService } from '../../services';
+import Config from '../../config';
 import axios from 'axios';
 import { SinonStub, stub } from 'sinon';
 
@@ -38,6 +38,8 @@ describe('Device service', () =>
         owner: user,
         code: "1234",
         contractURL: "http://hello.com",
+        accessType: AccessType.PRIVATE,
+        deviceCategory: DeviceCategory.FOOD_AND_DRINK
     };
 
     it('should get devices', async () =>

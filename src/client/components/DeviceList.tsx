@@ -5,13 +5,15 @@ import { deviceActions, alertActions } from '../actions';
 import { DeviceState as DeviceListProps, Device, User, AccessType, DeviceCategory } from '../models';
 import { CustomInput } from './CustomInput';
 import DeviceItem from './DeviceItem';
+import DeviceItemAdminInner from './DeviceItemAdminInner';
 
 import '../assets/Device.scss';
 
 interface DeviceListState
 {
     newDevice: Device,
-    openNewDeviceDialog: boolean
+    openNewDeviceDialog: boolean,
+    newDevicePassword: string
 }
 
 export class DeviceList extends React.Component<DeviceListProps & DispatchProp<any>, DeviceListState>
@@ -53,10 +55,11 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                 owner: user,
                 code: '',
                 contractURL: '',
-                accessType: AccessType.PRIVATE,
+                accessType: AccessType.PUBLIC,
                 deviceCategory: DeviceCategory.COMPUTE
             },
-            openNewDeviceDialog: false
+            openNewDeviceDialog: false,
+            newDevicePassword: ''
         };
 
         // Bind methods
@@ -72,13 +75,23 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
         const { name, value } = event.target;
 
         // Update state -- why does this method not work?
-        this.setState((prevState) => ({
-            ...prevState,
-            newDevice: {
-                ...prevState.newDevice,
+        if (name !== 'newDevicePassword')
+        {
+            this.setState((prevState) => ({
+                ...prevState,
+                newDevice: {
+                    ...prevState.newDevice,
+                    [name]: value
+                }
+            }));
+        }
+        else
+        {
+            this.setState((prevState) => ({
+                ...prevState,
                 [name]: value
-            }
-        }));
+            }));
+        }
     }
 
     private handleOpenAddDevice(): void
@@ -103,9 +116,9 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
         const { dispatch } = this.props;
 
         // This is just a test device
-        const { newDevice }  = this.state;
+        const { newDevice, newDevicePassword }  = this.state;
 
-        dispatch(deviceActions.add(newDevice));
+        dispatch(deviceActions.add(newDevice, newDevicePassword));
 
         // Close the dialog box and reset the new device state
         const user: User = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) : JSON.parse(sessionStorage.getItem('user') as string);
@@ -118,13 +131,14 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                 accessType: AccessType.PRIVATE,
                 deviceCategory: DeviceCategory.COMPUTE
             },
-            openNewDeviceDialog: false
+            openNewDeviceDialog: false,
+            newDevicePassword: ''
         });
     }
 
     public render(): React.ReactNode
     {
-        const { devices } = this.props;
+        const { devices} = this.props;
 
         const { openNewDeviceDialog } = this.state;
 
@@ -141,68 +155,74 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                 </span>
                 {
                     openNewDeviceDialog && 
-                        (<div>
+                        (
                             <div>
-                                <label> Enter the device name </label>
-                                <input type="text" name="name" onChange={this.handleChange}/>
-                            </div>
-                            <div>
-                                <label> Enter the device code </label>
-                                <input type="text" name="code" onChange={this.handleChange}/>
-                            </div>
-                            <div>
-                                <label> Enter the contract URL </label>
-                                <input type="text" name="contractURL" onChange={this.handleChange}/>
-                            </div>
-                            <div>
-                                <label> Enter the access type </label>
-                                <select name="accessType" onChange={this.handleChange}>
-                                    {
-                                        Object.keys(AccessType).map((value, index) =>
-                                            <option key={index} value={value}> 
-                                                {
-                                                    value.toLowerCase().split('_').map(word =>
+                                <div>
+                                    <label> Enter the device name </label>
+                                    <input type="text" name="name" onChange={this.handleChange}/>
+                                </div>
+                                <div>
+                                    <label> Enter the device code </label>
+                                    <input type="text" name="code" onChange={this.handleChange}/>
+                                </div>
+                                <div>
+                                    <label> Enter the contract URL </label>
+                                    <input type="text" name="contractURL" onChange={this.handleChange}/>
+                                </div>
+                                <div>
+                                    <label> Enter the device password </label>
+                                    <input type="password" name="newDevicePassword" onChange={this.handleChange}/>
+                                </div>
+                                <div>
+                                    <label> Enter the access type </label>
+                                    <select name="accessType" onChange={this.handleChange}>
+                                        {
+                                            Object.keys(AccessType).map((value, index) =>
+                                                <option key={index} value={value}> 
                                                     {
-                                                        if (word !== 'and')
+                                                        value.toLowerCase().split('_').map(word =>
                                                         {
-                                                            word = word.charAt(0).toUpperCase() + word.slice(1);
-                                                        }
-                                                        return word;
-                                                    }).join(' ')
-                                                }
-                                            </option>
-                                        )
-                                    }
-                                </select>
-                            </div>
-                            <div>
-                                <label> Enter the category </label>
-                                <select name="deviceCategory" onChange={this.handleChange}>
-                                    {
-                                        Object.keys(DeviceCategory).map((value, index) =>
-                                            <option key={index} value={value}> 
-                                                {
-                                                    value.toLowerCase().split('_').map(word =>
+                                                            if (word !== 'and')
+                                                            {
+                                                                word = word.charAt(0).toUpperCase() + word.slice(1);
+                                                            }
+                                                            return word;
+                                                        }).join(' ')
+                                                    }
+                                                </option>
+                                            )
+                                        }
+                                    </select>
+                                </div>
+                                <div>
+                                    <label> Enter the category </label>
+                                    <select name="deviceCategory" onChange={this.handleChange}>
+                                        {
+                                            Object.keys(DeviceCategory).map((value, index) =>
+                                                <option key={index} value={value}> 
                                                     {
-                                                        if (word !== 'and')
+                                                        value.toLowerCase().split('_').map(word =>
                                                         {
-                                                            word = word.charAt(0).toUpperCase() + word.slice(1);
-                                                        }
-                                                        return word;
-                                                    }).join(' ')
-                                                }
-                                            </option>
-                                        )
-                                    }
-                                </select>
+                                                            if (word !== 'and')
+                                                            {
+                                                                word = word.charAt(0).toUpperCase() + word.slice(1);
+                                                            }
+                                                            return word;
+                                                        }).join(' ')
+                                                    }
+                                                </option>
+                                            )
+                                        }
+                                    </select>
+                                </div>
+                                <button name="add" onClick={this.handleAddDevice}> Add </button>
+                                <button name="cancelAdd" onClick={this.handleCloseAddDevice}> Cancel </button>
                             </div>
-                            <button name="add" onClick={this.handleAddDevice}> Add </button>
-                            <button name="cancelAdd" onClick={this.handleCloseAddDevice}> Cancel </button>
-                        </div>)
+                        )
                 }
                 <div className="grid-container">
                     {
-                        sortedDevices.length > 0 && sortedDevices.map((device) => <DeviceItem device={device}/>)
+                        sortedDevices.length > 0 && sortedDevices.map((device) => <DeviceItem device={device} InnerComponent={DeviceItemAdminInner}/>)
                     }
                 </div>
             </div>

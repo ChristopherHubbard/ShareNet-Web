@@ -38,9 +38,14 @@ def register_device(device):
 
 def connect(code):
 
+    print('Searching for code: ' + code)
+
     response = device_table.query(
         KeyConditionExpression=Key('code').eq(code)
     )
+
+    print('Query on code response: ')
+    print(response)
 
     # Return the object with the device
     return {
@@ -69,7 +74,7 @@ def get_public_devices():
     )
 
     # Restructure the device records
-    devices = [createDeviceRecord(device) for device in response['Items']]
+    devices = [createPublicDeviceRecord(device) for device in response['Items']]
 
     # Return the body
     return {
@@ -92,6 +97,16 @@ def update_device(code, update_body):
     # Get the item first -- connect returns the device given code
     device = connect(code=code)['device']
 
+    print('Device: ')
+    print(device)
+    print('Update request: ')
+    print(update_body)
+
+    if device['owner']['email'] != update_body['owner']['email']:
+
+        # Throw -- the owners dont match
+        raise Exception('Owner mismatch')
+
     # Update the item in the table
     response = device_table.update_item(
         Key={
@@ -112,6 +127,19 @@ def update_device(code, update_body):
     # Now the device should be updated
     print(device)
     print(response)
+
+def createPublicDeviceRecord(device):
+
+    record = createDeviceRecord(device)
+
+    # Public records should have the owner deleted
+    return {
+        'name': record['name'],
+        'contractURL': record['contractURL'],
+        'code': record['code'],
+        'accessType': record['accessType'],
+        'deviceCategory': record['deviceCategory']
+    }
 
 def createDeviceRecord(device):
 

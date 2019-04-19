@@ -86,11 +86,17 @@ def remove_device(event, context):
 def update_device_info(event, context):
 
     # Update the device info -- this can update the name, category, accesstype, and contract URL. Cannot update the connection code
-    body = json.loads(event['body'])
+    body = json.loads(event['body'])['body']
+    print(body)
 
-    # Call device service to updaate
-    services.update_device(code=body['code'], update_body=body)
+    try:
+        # Call device service to updaate
+        services.update_device(code=body['code'], update_body=body)
+        statusCode = 200
+    except:
+        print('Error updating a device - is it owned by the caller?')
+        statusCode = 400
 
     return {
-        'statusCode': 200
+        'statusCode': statusCode
     }

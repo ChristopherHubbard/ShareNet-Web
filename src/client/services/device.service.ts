@@ -34,31 +34,6 @@ export abstract class DeviceService
         }
     }
 
-    public static async get_public_devices(): Promise<any>
-    {
-        const requestOptions: any =
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-
-        try
-        {
-            // Await the response
-            const response: AxiosResponse = await axios.get(`${Config.apiUrl}/devices/access`, requestOptions);
-
-            // Return the devices that are in this access type
-            return response.data.devices;
-        }
-        catch (error)
-        {
-            // Log the error
-            console.error(error);
-        }
-    }
-
     public static async add(device: Device): Promise<any>
     {
         // Create the options for the request -- type?
@@ -85,6 +60,7 @@ export abstract class DeviceService
         }
     }
 
+    // Fix this method to pass the signed in user instead -- this is not secure
     public static async remove(device: Device): Promise<any>
     {
         // Create the options for the request -- type?
@@ -109,6 +85,82 @@ export abstract class DeviceService
         catch (error)
         {
             // Log the error
+            console.error(error);
+        }
+    }
+
+    public static async healthCheck(contractURL: string): Promise<any>
+    {
+        const requestOptions: any =
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        try
+        {
+            const response = await axios.get(`${contractURL}/health`, requestOptions);
+
+            // Return the health of this device
+            return response.data.healthy;
+        }
+        catch (error)
+        {
+            // Log any errors -- add error handling later?
+            console.error(error);
+        }
+    }
+
+    public static async setupDevice(device: Device, devicePassword: string): Promise<any>
+    {
+        const requestOptions: any =
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: {
+                password: devicePassword
+            }
+        };
+
+        try
+        {
+            const response: AxiosResponse = await axios.post(`${device.contractURL}/device/setup`, requestOptions);
+
+            return response.data;
+        }
+        catch (error)
+        {
+            // As always need better error handling
+            console.error(error);
+        }
+    }
+
+    public static async updateDevice(device: Device, devicePassword: string): Promise<any>
+    {
+        const requestOptions: any =
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: device
+        };
+
+        try
+        {
+            // Call the setup route if the contract URL was updated
+            await this.setupDevice(device, devicePassword);
+            await axios.post(`${Config.apiUrl}/devices/update`, requestOptions);
+
+            // Return the updated devices for this user -- should another get request occur?
+            return await this.get(device.owner as User);
+        }
+        catch (error)
+        {
             console.error(error);
         }
     }

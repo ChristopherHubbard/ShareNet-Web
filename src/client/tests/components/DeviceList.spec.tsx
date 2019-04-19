@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Dispatch } from 'redux';
 import * as Adapter from 'enzyme-adapter-react-16';
 import { configure, shallow, ShallowWrapper, mount } from 'enzyme';
-import { User, Device, AccessType, DeviceCategory } from '../models';
-import { DeviceList } from '../components';
+import { User, Device, AccessType, DeviceCategory } from '../../models';
+import { DeviceList } from '../../components';
 
 configure({ adapter: new Adapter() });
 

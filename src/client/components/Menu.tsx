@@ -3,7 +3,7 @@ import { connect, DispatchProp } from 'react-redux';
 import { history } from '../services';
 import { userActions } from '../actions';
 
-import { stack as CollapseMenu } from 'react-burger-menu';
+import { slide as CollapseMenu } from 'react-burger-menu';
 
 // Import styles
 import '../assets/Menu.scss';
@@ -95,7 +95,7 @@ export class Menu extends React.Component<DispatchProp<any>, MenuState>
                           onStateChange={(state) => this.onStateChange(state)}>
                 <a className="menu-item" key="0" onClick={this.onHome}>
                     <span>
-                        <img src={homeIcon}/>
+                        <img src={homeIcon} style={{ height: '27px', width: '32px'}}/>
                         <text>
                             Home
                         </text>

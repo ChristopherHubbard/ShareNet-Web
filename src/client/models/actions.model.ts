@@ -21,5 +21,6 @@ export interface IAction
     paymentPointer?: string
     receipt?: Receipt,
     supportedMethods?: Array<string>,
-    orderHash?: string
+    orderHash?: string,
+    health?: boolean
 }

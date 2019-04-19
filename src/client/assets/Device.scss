@@ -28,16 +28,18 @@
     border-left-width: 2rem;
     border-radius: .25rem;
     text-align: left;
-    width: 30rem;
-    height: 20rem;
-
-    &:focus {
-        width: 30rem;
-        height: 25rem;
-    }
 
     h5 {
         color: lightgray;
+    }
+
+    img {
+        width: 25px;
+        height: 25px;
+        float: right;
+        margin-right: 10px;
+        margin-top: 10px;
+        filter: brightness(70%);
     }
 }
 

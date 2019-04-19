@@ -7,7 +7,8 @@ import DeviceList from './DeviceList';
 import DeviceConnection from './DeviceConnection';
 import OrderPage from './OrderPage';
 
-const headerIcon: any = require('../assets/header-logo.svg');
+//const headerIcon: any = require('../assets/header-logo.svg');
+const headerIcon: any = require('../assets/favicon-96x96.png');
 
 export default class HomePage extends React.Component<{}, {}>
 {
@@ -27,7 +28,7 @@ export default class HomePage extends React.Component<{}, {}>
                 <header style={{textAlign: "center"}}>
                     <Menu/>
                     <div style={{display: "inline"}}>
-                        <img src={headerIcon} style={{width: "55px", height: "55px"}}/>
+                        <img src={headerIcon} style={{width: "50px", height: "50px"}}/>
                         <h1 className="white-header" style={{textAlign: "center", verticalAlign: "middle", lineHeight: "70px", display: "inline"}}> ShareNet </h1>
                     </div>
                 </header>
