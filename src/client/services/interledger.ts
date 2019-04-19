@@ -21,12 +21,8 @@ self.addEventListener('paymentrequest', async (e: any) =>
     }
 
     // This needs to be edited to use multiple methods
-    await e.respondWith([{
+    await e.respondWith({
         methodName: e.methodData[0].supportedMethods,
         details: e.total
-    },
-    {
-        methodName: 'paypal',
-        details: e.total
-    }]);
+    });
 });

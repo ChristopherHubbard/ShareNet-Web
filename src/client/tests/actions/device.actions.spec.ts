@@ -3,6 +3,7 @@ import { deviceConstants } from '../../constants';
 import { User, IAction, Device, DeviceCategory, AccessType } from '../../models';
 import { DeviceService } from '../../services';
 import { Dispatch } from 'redux';
+import { String } from '../../../../node_modules/aws-sdk/clients/eks';
 
 describe('Device actions', () =>
 {
@@ -50,9 +51,11 @@ describe('Device actions', () =>
 
     it('should add the device to this user', async () =>
     {
+        DeviceService.setupDevice = jest.fn((device: Device, devicePassword: string) => Promise.resolve({ success: true }));
         DeviceService.add = jest.fn((device: Device) => Promise.resolve(new Array<Device>()));
         const res: any = await deviceActions.add(device, '')(mockDispatch);
 
+        expect(DeviceService.setupDevice).toBeCalled();
         expect(DeviceService.add).toBeCalled();
         expect(mockDispatch).toBeCalledWith(<IAction> {
             type: deviceConstants.ADD_DEVICE_SUCCESS,
@@ -62,13 +65,15 @@ describe('Device actions', () =>
 
     it('should have error adding the device for this user', async () =>
     {
+        DeviceService.setupDevice = jest.fn((device: Device, devicePassword: string) => Promise.resolve({ success: false }));
         DeviceService.add = jest.fn((device: Device) => Promise.reject("ERR"));
         const res: any = await deviceActions.add(device, '')(mockDispatch);
 
-        expect(DeviceService.add).toBeCalled();
+        expect(DeviceService.setupDevice).toBeCalled();
+        // expect(DeviceService.add).toBeCalled();
         expect(mockDispatch).toBeCalledWith(<IAction> {
             type: deviceConstants.ADD_DEVICE_ERROR,
-            error: "ERR"
+            error: "Error: Could not setup the device correctly"
         });
     });
 
@@ -93,6 +98,56 @@ describe('Device actions', () =>
         expect(mockDispatch).toBeCalledWith(<IAction> {
             type: deviceConstants.REMOVE_DEVICE_ERROR,
             error: "ERR"
+        });
+    });
+
+    it('should get the device health', async () =>
+    {
+        DeviceService.healthCheck = jest.fn((contractURL: string) => Promise.resolve(true));
+        const res: any = await deviceActions.getHealth(device)(mockDispatch);
+
+        expect(DeviceService.healthCheck).toBeCalled();
+        expect(mockDispatch).toBeCalledWith(<IAction> {
+            type: deviceConstants.GET_DEVICE_HEALTH_SUCCESS,
+            health: true,
+            device: device
+        });
+    });
+
+    it('should have error getting the device health', async () =>   
+    {
+        DeviceService.healthCheck = jest.fn((contractURL: string) => Promise.reject('ERR'));
+        const res: any = await deviceActions.getHealth(device)(mockDispatch);
+
+        expect(DeviceService.healthCheck).toBeCalled();
+        expect(mockDispatch).toBeCalledWith(<IAction> {
+            type: deviceConstants.GET_DEVICE_HEALTH_ERROR,
+            device: device,
+            error: "ERR"
+        });
+    });
+
+    it('should update the device', async () =>
+    {
+        DeviceService.updateDevice = jest.fn((device: Device, devicePassword: string) => Promise.resolve(new Array<Device>()));
+        const res: any = await deviceActions.updateDevice(device, '')(mockDispatch);
+
+        expect(DeviceService.updateDevice).toBeCalled();
+        expect(mockDispatch).toBeCalledWith(<IAction> {
+            type: deviceConstants.GET_DEVICES_SUCCESS,
+            devices: [],
+        });
+    });
+
+    it('should have error trying to update the device', async () =>
+    {
+        DeviceService.updateDevice = jest.fn((device: Device, devicePassword: string) => Promise.reject('ERR'));
+        const res: any = await deviceActions.updateDevice(device, '')(mockDispatch);
+
+        expect(DeviceService.updateDevice).toBeCalled();
+        expect(mockDispatch).toBeCalledWith(<IAction> {
+            type: deviceConstants.GET_DEVICES_SUCCESS,
+            devices: [],
         });
     });
 });

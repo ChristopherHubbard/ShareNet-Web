@@ -3,7 +3,7 @@ import Config from '../config';
 const SERVICE_WORKER_URLS: Map<string, string> = new Map<string, string>(
     [
         ['interledger', `/interledger.js`],
-        ['paypal', '/paypal.js']
+        // ['paypal', '/paypal.js']
     ]
 );
 
@@ -11,11 +11,14 @@ export abstract class PaymentService
 {
     public static async registerPaymentMethod(paymentMethod: string): Promise<void>
     {
-        const registration: ServiceWorkerRegistration = await navigator.serviceWorker.register(SERVICE_WORKER_URLS.get(paymentMethod) as string)
-        console.log('registration', registration);
+        if (SERVICE_WORKER_URLS.get(paymentMethod))
+        {
+            const registration: ServiceWorkerRegistration = await navigator.serviceWorker.register(SERVICE_WORKER_URLS.get(paymentMethod) as string)
+            console.log('registration', registration);
 
-        await PaymentService.addInstruments(registration);
-        console.log('Successfully registered!');
+            await PaymentService.addInstruments(registration);
+            console.log('Successfully registered!');
+        }
     }
 
     public static async unregisterPaymentMethod(paymentMethod: string): Promise<void>
