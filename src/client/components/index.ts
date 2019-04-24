@@ -10,3 +10,5 @@ export * from './DeviceConnection';
 export * from './Menu';
 export * from './OrderPage';
 export * from './DeviceItemAdminInner';
+export * from './DeviceItemPublicInner';
+export * from './DeviceItemPrivateInner';

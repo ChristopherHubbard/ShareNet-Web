@@ -94,3 +94,18 @@ header {
     padding-left: 3rem;
     float: left;
 }
+
+.pageHeaderLeft {
+    padding-left: 3rem;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.pageHeaderContainer {
+    text-align: left;
+    page-break-after: always;
+}
+
+.pageBreak {
+    size: 2px;
+}

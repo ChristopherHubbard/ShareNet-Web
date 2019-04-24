@@ -4,17 +4,17 @@ import { Device, User } from '../models';
 import { connectionActions } from '../actions';
 import { history } from '../services';
 
-interface DeviceItemPublicInnerProps
+interface DeviceItemPrivateInnerProps
 {
     device: Device,
     selected: boolean
 }
 
 // Not stateless -- should change on the click event
-export class DeviceItemPublicInner extends React.Component<DeviceItemPublicInnerProps & DispatchProp<any>, void>
+export class DeviceItemPrivateInner extends React.Component<DeviceItemPrivateInnerProps & DispatchProp<any>, void>
 {
 
-    public constructor(props: DeviceItemPublicInnerProps & DispatchProp<any>)
+    public constructor(props: DeviceItemPrivateInnerProps & DispatchProp<any>)
     {
         super(props);
 
@@ -58,7 +58,7 @@ export class DeviceItemPublicInner extends React.Component<DeviceItemPublicInner
     }
 }
 
-function mapStateToProps(state: any, ownProps: DeviceItemPublicInnerProps): DeviceItemPublicInnerProps
+function mapStateToProps(state: any, ownProps: DeviceItemPrivateInnerProps): DeviceItemPrivateInnerProps
 {
     // Map only this device's health to the state
     return {
@@ -68,6 +68,6 @@ function mapStateToProps(state: any, ownProps: DeviceItemPublicInnerProps): Devi
 }
 
 // Connect store and set up redux form
-export default connect<{}, {}, DeviceItemPublicInnerProps>(
+export default connect<{}, {}, DeviceItemPrivateInnerProps>(
     mapStateToProps
-)(DeviceItemPublicInner as any);
+)(DeviceItemPrivateInner as any);

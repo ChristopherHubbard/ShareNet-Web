@@ -2,9 +2,9 @@ import * as React from 'react';
 import { connect, DispatchProp } from 'react-redux';
 import { connectionActions } from '../actions';
 import { DeviceConnectionState as DeviceConnectionProps, Device} from '../models';
-import { history } from '../services';
 import DeviceItem from './DeviceItem';
 import DeviceItemPublicInner from './DeviceItemPublicInner';
+import DeviceItemPrivateInner from './DeviceItemPrivateInner';
 
 interface DeviceState
 {
@@ -23,7 +23,6 @@ export class DeviceConnection extends React.Component<DeviceConnectionProps & Di
 
         this.onCodeChange = this.onCodeChange.bind(this);
         this.onSearch = this.onSearch.bind(this);
-        this.onConnect = this.onConnect.bind(this);
     }
 
     public componentWillMount(): void
@@ -52,39 +51,32 @@ export class DeviceConnection extends React.Component<DeviceConnectionProps & Di
         dispatch(connectionActions.get(code));
     }
 
-    private onConnect(event: React.MouseEvent<HTMLElement>): void
-    {
-        // Connect to the searched device
-        const { dispatch, searchedDevice } = this.props;
-        dispatch(connectionActions.connect(searchedDevice));
-
-        // Forward to the order page
-        history.push('/home/order');
-    }
-
     public render(): React.ReactNode
     {
         const { connecting, connected, searchedDevice, publicDevices } = this.props;
 
         return (
             <div>
-                <h2> Use a smart device! </h2>
-                <h3> Enter a connection code </h3>
-                <input onChange={this.onCodeChange} name="code"/>
-                {
-                    !connecting &&
-                        <div>
-                            <button onClick={this.onSearch}> Search for device </button>
-                        </div>
-                }
-                {
-                    connected && searchedDevice &&
-                        <div>
-                            <div> Device Name: {searchedDevice.name} </div>
-                            <div> Connection Code: {searchedDevice.code} </div>
-                            <button onClick={this.onConnect}> Connect </button>
-                        </div>
-                }
+                <div className="pageHeaderContainer">
+                    <h1 className="pageHeaderLeft"> Connect </h1>
+                </div>
+                <hr className="pageBreak"/>
+                <div>
+                    <h2 className="headerAlignLeft"> Private </h2>
+                    <input onChange={this.onCodeChange} name="code"/>
+                        {
+                            !connecting &&
+                                <div>
+                                    <button onClick={this.onSearch}> Search for device </button>
+                                </div>
+                        }
+                </div>
+                <div className="grid-container">
+                    {
+                        connected && searchedDevice &&
+                            <DeviceItem device={searchedDevice} InnerComponent={DeviceItemPrivateInner}/>
+                    }
+                </div>
                 <div>
                     <h2 className="headerAlignLeft"> Public </h2>
                     <div className="grid-container">
