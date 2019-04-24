@@ -32,6 +32,15 @@ export class DeviceConnection extends React.Component<DeviceConnectionProps & Di
         dispatch(connectionActions.getPublic());
     }
 
+    // // On unmount try to search for code '' ?
+    // public componentWillUnmount(): void
+    // {
+    //     const { dispatch } = this.props;
+
+    //     // Bit of a hack -- should probably just have an unload action in connection reducer
+    //     dispatch(connectionActions.get(''));
+    // }
+
     private onCodeChange(event: any): void
     {
         event = event as React.ChangeEvent<HTMLInputElement>;
@@ -61,12 +70,12 @@ export class DeviceConnection extends React.Component<DeviceConnectionProps & Di
                     <h1 className="pageHeaderLeft"> Connect </h1>
                 </div>
                 <hr className="pageBreak"/>
-                <div>
-                    <h2 className="headerAlignLeft"> Private </h2>
+                <div className="pageHeaderContainer">
+                    <h2 className="headerAlignLeft" style={{display: 'inline-block', paddingRight: '3rem'}}> Private </h2>
                     <input onChange={this.onCodeChange} name="code"/>
                         {
                             !connecting &&
-                                <div>
+                                <div style={{display: 'inline-block'}}>
                                     <button onClick={this.onSearch}> Search for device </button>
                                 </div>
                         }
@@ -77,7 +86,8 @@ export class DeviceConnection extends React.Component<DeviceConnectionProps & Di
                             <DeviceItem device={searchedDevice} InnerComponent={DeviceItemPrivateInner}/>
                     }
                 </div>
-                <div>
+                <hr className="pageBreak"/>
+                <div className="pageHeaderContainer">
                     <h2 className="headerAlignLeft"> Public </h2>
                     <div className="grid-container">
                         {

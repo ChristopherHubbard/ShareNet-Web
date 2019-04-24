@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect, DispatchProp } from 'react-redux';
-import { Device, User } from '../models';
+import { Device, User, AccessType } from '../models';
 import { deviceActions } from '../actions';
 
 interface DeviceItemAdminInnerProps
@@ -58,7 +58,7 @@ export class DeviceItemAdminInner extends React.Component<DeviceItemAdminInnerPr
         dispatch(deviceActions.remove(device));
     }
 
-    private onUpdateDeviceChange(event: React.ChangeEvent<HTMLInputElement>): void
+    private onUpdateDeviceChange(event: any): void
     {
         const { device } = this.props;
         const { updatedDevice } = this.state;
@@ -127,14 +127,34 @@ export class DeviceItemAdminInner extends React.Component<DeviceItemAdminInnerPr
                             <div>
                                 Connection Code: {device.code}
                             </div>
-                            <div> 
-                                Access Type: <input onChange={this.onUpdateDeviceChange} name="accessType" defaultValue={device.accessType}/>
+                            <div>
+                                <div style={{paddingRight: '4px', display: 'inline-block'}}>
+                                    Access Type:
+                                </div>
+                                <select name="accessType" onChange={this.onUpdateDeviceChange} defaultValue={device.accessType}>
+                                    {
+                                        Object.keys(AccessType).map((value, index) =>
+                                            <option key={index} value={value}> 
+                                                {
+                                                    value.toLowerCase().split('_').map(word =>
+                                                    {
+                                                        if (word !== 'and')
+                                                        {
+                                                            word = word.charAt(0).toUpperCase() + word.slice(1);
+                                                        }
+                                                        return word;
+                                                    }).join(' ')
+                                                }
+                                            </option>
+                                        )
+                                    }
+                                </select>
                             </div>
                             <div> 
-                                Contract URL: <input onChange={this.onUpdateDeviceChange} name="contractURL" defaultValue={device.contractURL}/>
+                                Contract URL: <input className="deviceInput" onChange={this.onUpdateDeviceChange} name="contractURL" defaultValue={device.contractURL}/>
                             </div>
                             <div> 
-                                Device Setup Password: <input onChange={this.onUpdateDeviceChange} name="password" type="password"/>
+                                Setup Password: <input className="deviceInput" onChange={this.onUpdateDeviceChange} name="password" type="password"/>
                             </div>
 
                             <div style={{ display: 'inline-block' }}>

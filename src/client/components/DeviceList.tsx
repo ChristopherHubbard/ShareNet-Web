@@ -146,13 +146,13 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
 
         return (
             <div>
-                <span>
-                    <h2> Your devices </h2>
+                <div className="pageHeaderContainer">
+                    <h1 className="pageHeaderLeft" style={{display: 'inline-block', paddingRight: '3rem'}}> Your Devices </h1>
                     {
                         !openNewDeviceDialog &&
-                                <button className="deviceAdd" name="openAdd" onClick={this.handleOpenAddDevice}>+</button>
+                            <button className="deviceAdd" name="openAdd" onClick={this.handleOpenAddDevice}>+</button>
                     }
-                </span>
+                </div>
                 {
                     openNewDeviceDialog && 
                         (
@@ -220,6 +220,7 @@ export class DeviceList extends React.Component<DeviceListProps & DispatchProp<a
                             </div>
                         )
                 }
+                <hr className="pageBreak"/>
                 <div className="grid-container">
                     {
                         sortedDevices.length > 0 && sortedDevices.map((device) => <DeviceItem device={device} InnerComponent={DeviceItemAdminInner}/>)
