@@ -3,8 +3,8 @@ import * as combineRouters from "koa-combine-routers";
 import * as serve from "koa-static";
 import { UserRouter, DeviceRouter, OrderRouter } from "./routers";
 
-let path: any = require("path");
-let bodyParser: any = require('koa-bodyparser');
+const path: any = require("path");
+const bodyParser: any = require('koa-bodyparser');
 
 // Set the port to listen on -- may want to make this more customizable
 const PORT: number = 8000;
